@@ -1,0 +1,11 @@
+{
+    "dart.analyzerPath": null,
+    "[dart]": {
+
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.detectIndentation": false,
+        "editor.suggest.insertMode": "replace"
+    },
+    "dart.flutterSdkPath": null
+}
