@@ -10,8 +10,8 @@ class MyApp extends StatelessWidget {
       title: 'Pa Donde',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: const Color.fromRGBO(94, 153, 45, 1),
-      ),
+          primaryColor: const Color.fromRGBO(94, 153, 45, 1),
+          primaryColorLight: const Color.fromRGBO(232, 119, 29, 1)),
       initialRoute: 'login',
       routes: generarRutas(),
     );

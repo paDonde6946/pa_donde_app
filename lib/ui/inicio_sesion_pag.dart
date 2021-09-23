@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
+import 'package:pa_donde_app/ui/global_widgets/labels/labels.dart';
 
 class InicioSesionPag extends StatefulWidget {
   @override
@@ -6,7 +9,7 @@ class InicioSesionPag extends StatefulWidget {
 }
 
 class _InicioSesionPagState extends State<InicioSesionPag> {
-  final radius = const Radius.circular(50);
+  final radius = const Radius.circular(40);
   final radiusAll = const Radius.circular(100);
 
   int bottomSelectedIndex = 0;
@@ -19,125 +22,147 @@ class _InicioSesionPagState extends State<InicioSesionPag> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-          child: PageView(
-        controller: PageController(viewportFraction: 0.7),
-        onPageChanged: (index) {
-          pageChanged(index);
-        },
-        scrollDirection: Axis.vertical,
+      body: ListView(
         children: [
-          Container(
-            color: Theme.of(context).primaryColor,
-            child: Stack(
-              children: [
-                Container(
-                  height: 600,
-                  color: Colors.red,
+          const SizedBox(height: 10),
+          panelInicioSesion(),
+          Stack(
+            children: [
+              Container(
+                  height: 150,
+                  width: double.infinity,
+                  color: Theme.of(context).primaryColor,
+                  child: Text("ff")),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: radius,
+                    bottomRight: radius,
+                  ),
+                  color: Colors.white,
                 ),
-                Positioned(
-                    bottom: 110,
-                    right: 200,
-                    left: 120,
-                    child: Container(
-                      height: 80,
-                      width: 100,
-                      child: IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.arrow_drop_up_outlined,
-                            color: Colors.black,
-                            size: 100,
-                          )),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(radius),
-                          color: Colors.red),
-                    )),
-                Positioned(
-                    bottom: 110,
-                    right: 100,
-                    left: 230,
-                    child: Container(
-                      height: 80,
-                      width: 80,
-                      child: IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.arrow_drop_down_outlined,
-                            color: Colors.black,
-                            size: 100,
-                          )),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(radius),
-                          color: Colors.red),
-                    ))
-              ],
-            ),
+                height: 80,
+                width: double.infinity,
+              ),
+              Positioned(
+                bottom: 70,
+                left: 100,
+                right: 210,
+                child: Container(
+                  height: 50,
+                  width: 80,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: radiusAll,
+                      topRight: radiusAll,
+                    ),
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  child: Icon(
+                    Icons.keyboard_arrow_up_outlined,
+                    size: 70,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 20,
+                left: 202,
+                right: 110,
+                child: Container(
+                  padding: EdgeInsets.only(bottom: 40),
+                  height: 70,
+                  width: 80,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: radiusAll,
+                      bottomRight: radiusAll,
+                    ),
+                    color: Colors.white,
+                  ),
+                  child: Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    size: 80,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+              ),
+            ],
           ),
+
           /////////////////////////////////////////////////
-          Container(
-            color: Theme.of(context).primaryColor,
-            child: Stack(
-              children: [
-                Container(
-                  height: 200,
-                  color: Colors.blue,
-                ),
-                Positioned(
-                    top: 160,
-                    right: 200,
-                    left: 120,
-                    child: Container(
-                      height: 80,
-                      width: 100,
-                      child: IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.arrow_drop_up_outlined,
-                            color: Colors.black,
-                            size: 100,
-                          )),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(radius),
-                          color: Colors.red),
-                    )),
-                Positioned(
-                    top: 150,
-                    right: 100,
-                    left: 230,
-                    child: Container(
-                      height: 80,
-                      width: 80,
-                      child: IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.arrow_drop_down_outlined,
-                            color: Colors.black,
-                            size: 100,
-                          )),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(radius),
-                          color: Colors.red),
-                    ))
-              ],
-            ),
-          ),
+          panelRegistro()
         ],
-      )),
+      ),
     );
   }
 
-  void pageChanged(int index) {
-    setState(() {
-      bottomSelectedIndex = index;
-    });
+  Widget panelRegistro() {
+    return Container(
+      height: 400,
+      color: Theme.of(context).primaryColor,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 40),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 100,
+              child: Text(
+                'Crear Cuenta',
+                style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            formularioInicioSesion(),
+            const SizedBox(height: 35),
+            Center(child: BtnAnaranja()),
+          ],
+        ),
+      ),
+    );
   }
 
-  void bottomTapped(int index) {
-    setState(() {
-      bottomSelectedIndex = index;
-      pageController.animateToPage(index,
-          duration: Duration(milliseconds: 500), curve: Curves.ease);
-    });
+  Widget panelInicioSesion() {
+    final size = MediaQuery.of(context).size;
+    return Container(
+        height: 500,
+        padding: EdgeInsets.symmetric(horizontal: 40),
+        color: Colors.white,
+        child: Column(
+          children: [
+            Image(
+                height: size.height * 0.23,
+                image: AssetImage('img/logo/logo_PaDonde.png')),
+            const SizedBox(height: 20),
+            formularioInicioSesion(),
+            const SizedBox(height: 35),
+            BtnAnaranja(),
+            const SizedBox(height: 20),
+            Labels(ruta: 'holi', titulo: "¿Olvido su contraseña?")
+          ],
+        ));
+  }
+
+  Widget formularioInicioSesion() {
+    final size = MediaQuery.of(context).size;
+    return Container(
+      child: Column(
+        children: [
+          TextFormField(
+            decoration: const InputDecoration(
+                border: UnderlineInputBorder(),
+                labelText: 'Correo institucional'),
+          ),
+          const SizedBox(height: 10),
+          TextFormField(
+            decoration: const InputDecoration(
+                border: UnderlineInputBorder(), labelText: 'Contraseña'),
+          ),
+        ],
+      ),
+    );
   }
 }
