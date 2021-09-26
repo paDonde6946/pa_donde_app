@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pa_donde_app/data/services/autencicacion_service.dart';
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
+import 'package:pa_donde_app/ui/global_widgets/forms/inicio_sesion_form.dart';
+import 'package:pa_donde_app/ui/global_widgets/forms/registro_usuario_form.dart';
 import 'package:pa_donde_app/ui/global_widgets/labels/labels.dart';
 
 class InicioSesionPag extends StatefulWidget {
@@ -9,15 +12,13 @@ class InicioSesionPag extends StatefulWidget {
 }
 
 class _InicioSesionPagState extends State<InicioSesionPag> {
+  double tamanioDispostivo = 768;
+
+  String email = "";
+  String contrasenia = "";
+
   final radius = const Radius.circular(40);
   final radiusAll = const Radius.circular(100);
-
-  int bottomSelectedIndex = 0;
-
-  PageController pageController = PageController(
-    initialPage: 0,
-    keepPage: true,
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +100,6 @@ class _InicioSesionPagState extends State<InicioSesionPag> {
 
   Widget panelRegistro() {
     return Container(
-      height: 400,
       color: Theme.of(context).primaryColor,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 40),
@@ -116,9 +116,7 @@ class _InicioSesionPagState extends State<InicioSesionPag> {
                     fontWeight: FontWeight.bold),
               ),
             ),
-            formularioInicioSesion(),
-            const SizedBox(height: 35),
-            Center(child: BtnAnaranja()),
+            const FormRegistroUsuario(),
           ],
         ),
       ),
@@ -137,32 +135,10 @@ class _InicioSesionPagState extends State<InicioSesionPag> {
                 height: size.height * 0.23,
                 image: AssetImage('img/logo/logo_PaDonde.png')),
             const SizedBox(height: 20),
-            formularioInicioSesion(),
-            const SizedBox(height: 35),
-            BtnAnaranja(),
-            const SizedBox(height: 20),
+            const FormInicioSesion(),
+            // const SizedBox(height: 10),
             Labels(ruta: 'holi', titulo: "¿Olvido su contraseña?")
           ],
         ));
-  }
-
-  Widget formularioInicioSesion() {
-    final size = MediaQuery.of(context).size;
-    return Container(
-      child: Column(
-        children: [
-          TextFormField(
-            decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
-                labelText: 'Correo institucional'),
-          ),
-          const SizedBox(height: 10),
-          TextFormField(
-            decoration: const InputDecoration(
-                border: UnderlineInputBorder(), labelText: 'Contraseña'),
-          ),
-        ],
-      ),
-    );
   }
 }

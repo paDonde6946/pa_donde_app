@@ -1,18 +1,18 @@
 class Usuario {
-  Usuario(correo, tipoUsuario, uid) {
-    this.correo = correo;
-    this.tipoUsuario = tipoUsuario;
-    this.uid = uid;
+  Usuario({String? pCorreo, int? pTipoUsuario, String? pUid}) {
+    correo = pCorreo;
+    tipoUsuario = pTipoUsuario;
+    uid = pUid;
   }
 
-  String _correo;
-  int _tipoUsuario;
-  String _uid;
+  String? _correo;
+  int? _tipoUsuario;
+  String? _uid;
 
   factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
-        correo: json["correo"],
-        tipoUsuario: json["tipoUsuario"],
-        uid: json["uid"],
+        pCorreo: json["correo"],
+        pTipoUsuario: json["tipoUsuario"],
+        pUid: json["uid"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -20,4 +20,16 @@ class Usuario {
         "tipoUsuario": tipoUsuario,
         "uid": uid,
       };
+
+  get correo => _correo;
+
+  set correo(value) => _correo = value;
+
+  get tipoUsuario => _tipoUsuario;
+
+  set tipoUsuario(value) => _tipoUsuario = value;
+
+  get uid => _uid;
+
+  set uid(value) => _uid = value;
 }

@@ -37,6 +37,10 @@ dependencies:
 
   http: ^0.13.3
 
+
+  # Para poder guardar el token en el celular
+  # flutter_secure_storage: 3.3.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
