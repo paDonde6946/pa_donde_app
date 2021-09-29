@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pa_donde_app/data/models/usuario_modelo.dart';
+import 'package:pa_donde_app/data/services/usuario_servicio.dart';
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 import 'package:pa_donde_app/ui/global_widgets/inputs/input_form.dart' as input;
+import 'package:pa_donde_app/ui/global_widgets/inputs/input_form_redondo.dart'
+    as inputRedondo;
+
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
 import 'package:pa_donde_app/ui/utils/snack_bars.dart';
 import 'package:pa_donde_app/ui/utils/validaciones_generales.dart'
@@ -26,10 +30,11 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
   TextEditingController inputControllerConContrasenia = TextEditingController();
   TextEditingController inputControllerContrasenia = TextEditingController();
 
-  String email = "";
   String contrasenia = "";
 
   Usuario usuario = Usuario();
+
+  final styleInput = const TextStyle(height: 0.4);
 
   @override
   Widget build(BuildContext context) {
@@ -83,11 +88,11 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
     await Future.delayed(const Duration(seconds: 1));
     Navigator.pop(context);
 
-    //TODO: CREAR USUARIO CONECTAR A SERVICIO
-
+    UsuarioServicio usuarioServicio = UsuarioServicio();
+    usuarioServicio.crearUsuarioServicio(usuario);
     //Si todo esta bien redirige a la siguiente página
-    // keyForm.currentState!.save();
-    // //  Navigator.pushNamed(context, 'login');
+    keyForm.currentState!.save();
+    Navigator.pushNamed(context, 'inicio');
 
     mostrarShowDialogCargando(context: context, titulo: 'REGISTRO EXITO');
     await Future.delayed(const Duration(seconds: 1));
@@ -101,11 +106,12 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
   ///  Input - Campo del nombre
   Widget _crearNombre(Usuario usuario) {
     return TextFormField(
+      style: styleInput,
       controller: inputControllerNombre,
-      decoration: input.inputDecoration(
+      decoration: inputRedondo.inputDecorationRedondo(
           'Nombre', 'Ingresa tu nombre', context, Colors.white),
-      // onSaved: (value) => usuario.nombre = value,
-      // onChanged: (value) => usuario.nombre = value,
+      onSaved: (value) => usuario.nombre = value,
+      onChanged: (value) => usuario.nombre = value,
       validator: (value) =>
           (value!.isEmpty) ? 'Es Obligatorio este campo' : null,
     );
@@ -114,11 +120,12 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
   ///  Input - Campo del nombre
   Widget _crearApellido(Usuario usuario) {
     return TextFormField(
+      style: styleInput,
       controller: inputControllerApellido,
-      decoration: input.inputDecoration(
+      decoration: inputRedondo.inputDecorationRedondo(
           'Apellido', 'Ingresa tu apellido', context, Colors.white),
-      // onSaved: (value) => usuario.nombre = value,
-      // onChanged: (value) => usuario.nombre = value,
+      onSaved: (value) => usuario.apellido = value,
+      onChanged: (value) => usuario.apellido = value,
       validator: (value) =>
           (value!.isEmpty) ? 'Es Obligatorio este campo' : null,
     );
@@ -127,11 +134,12 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
   /// Input - Campo número de celular
   Widget _crearNumCelular(Usuario usuario) {
     return TextFormField(
+      style: styleInput,
       controller: inputControllerTelefono,
-      // onSaved: (value) => usuario.numeroCelular = value,
-      // onChanged: (value) => usuario.numeroCelular = value,
+      onSaved: (value) => usuario.celular = int.parse(value!),
+      onChanged: (value) => usuario.celular = int.parse(value),
       keyboardType: TextInputType.number,
-      decoration: input.inputDecoration('Número de celular',
+      decoration: inputRedondo.inputDecorationRedondo('Número de celular',
           'Ingresa tu número celular', context, Colors.white),
       validator: (value) => (validaciones_generales.isNumber(value!))
           ? null
@@ -142,11 +150,13 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
   /// Input - Campo correo eléctronico
   Widget _crearEmail() {
     return TextFormField(
+      style: styleInput,
       controller: inputControllerCorreo,
       keyboardType: TextInputType.emailAddress,
-      decoration: input.inputDecoration(
+      decoration: inputRedondo.inputDecorationRedondo(
           'Correo institucional', 'Ingresa tu correo', context, Colors.white),
-      onChanged: (value) => email = value,
+      onSaved: (value) => usuario.correo = value,
+      onChanged: (value) => usuario.correo = value,
       validator: (value) => (validaciones_generales.validarEmail(value))
           ? 'El correo ingresado no es valido'
           : null,
@@ -156,11 +166,13 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
   /// Input - Campo de la contraseña
   Widget _crearContrasenia() {
     return TextFormField(
+      style: styleInput,
       controller: inputControllerContrasenia,
       scrollPadding: const EdgeInsets.all(1),
       obscureText: true,
-      onChanged: (value) => contrasenia = value,
-      decoration: input.inputDecoration(
+      onSaved: (value) => usuario.contrasenia = value,
+      onChanged: (value) => usuario.contrasenia = value,
+      decoration: inputRedondo.inputDecorationRedondo(
           'Contraseña', 'Ingresa tu contraseña', context, Colors.white),
       validator: (value) =>
           (value!.isEmpty) ? 'El correo ingresado no es valido' : null,
@@ -170,11 +182,12 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
   /// Input - Campo confirmarción de la contraseña
   Widget _crearConContrasenia() {
     return TextFormField(
+      style: styleInput,
       controller: inputControllerConContrasenia,
       scrollPadding: const EdgeInsets.all(1),
       obscureText: true,
       onChanged: (value) => contrasenia = value,
-      decoration: input.inputDecoration('Confirmar Contraseña',
+      decoration: inputRedondo.inputDecorationRedondo('Confirmar Contraseña',
           'Ingresa tu contraseña', context, Colors.white),
       validator: (value) =>
           (value!.isEmpty) ? 'El correo ingresado no es valido' : null,
