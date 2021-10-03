@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pa_donde_app/data/services/autencicacion_service.dart';
-import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
+
 import 'package:pa_donde_app/ui/global_widgets/forms/inicio_sesion_form.dart';
 import 'package:pa_donde_app/ui/global_widgets/forms/registro_usuario_form.dart';
 import 'package:pa_donde_app/ui/global_widgets/labels/labels.dart';
@@ -137,7 +136,19 @@ class _InicioSesionPagState extends State<InicioSesionPag> {
             const SizedBox(height: 20),
             const FormInicioSesion(),
             // const SizedBox(height: 10),
-            Labels(ruta: 'holi', titulo: "¿Olvido su contraseña?")
+            GestureDetector(
+              onTap: () {
+                print("hola");
+                Navigator.pushReplacementNamed(context, "recuperarContrasenia");
+              },
+              child: const Text(
+                "¿Olvido su contraseña?",
+                style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w300),
+              ),
+            )
           ],
         ));
   }

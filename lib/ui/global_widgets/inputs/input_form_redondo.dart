@@ -11,10 +11,8 @@ InputDecoration inputDecorationRedondo(
       borderRadius: BorderRadius.circular(20),
       borderSide: BorderSide(color: color),
     ),
-    // labelStyle: TextStyle(
-    //     color: Theme.of(context).primaryColor, fontSize: size.height * 0.015),
-    // labelText: label,
-    hintStyle: TextStyle(color: Theme.of(context).primaryColor, fontSize: 14),
+    hintStyle: TextStyle(
+        color: Theme.of(context).primaryColor, fontSize: size.width * 0.035),
     hintText: hint,
   );
 }

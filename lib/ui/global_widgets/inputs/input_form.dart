@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/* Método auxiliar para darle estilo al input */
+/// Método auxiliar para darle estilo al input
 InputDecoration inputDecoration(
     String label, String hint, BuildContext context, Color color) {
   final size = MediaQuery.of(context).size;

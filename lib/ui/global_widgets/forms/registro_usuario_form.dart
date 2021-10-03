@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:pa_donde_app/data/models/usuario_modelo.dart';
-import 'package:pa_donde_app/data/services/usuario_servicio.dart';
-import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
-import 'package:pa_donde_app/ui/global_widgets/inputs/input_form.dart' as input;
-import 'package:pa_donde_app/ui/global_widgets/inputs/input_form_redondo.dart'
-    as inputRedondo;
 
+//------------------IMPORTACIONES LOCALES------------------------------
+import 'package:pa_donde_app/data/models/usuario_modelo.dart';
+
+import 'package:pa_donde_app/data/services/usuario_servicio.dart';
+
+import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
+import 'package:pa_donde_app/ui/global_widgets/inputs/input_form_redondo.dart'
+    as input_redondo;
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
+
 import 'package:pa_donde_app/ui/utils/snack_bars.dart';
 import 'package:pa_donde_app/ui/utils/validaciones_generales.dart'
     as validaciones_generales;
@@ -21,6 +24,9 @@ class FormRegistroUsuario extends StatefulWidget {
 class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
   final keyForm = GlobalKey<FormState>();
   final keySnackbar = GlobalKey<ScaffoldState>();
+  String conContrasenia = "";
+
+  Usuario usuario = Usuario();
 
   // CONTROLADORES DE CADA INPUT
   TextEditingController inputControllerCorreo = TextEditingController();
@@ -29,10 +35,6 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
   TextEditingController inputControllerTelefono = TextEditingController();
   TextEditingController inputControllerConContrasenia = TextEditingController();
   TextEditingController inputControllerContrasenia = TextEditingController();
-
-  String contrasenia = "";
-
-  Usuario usuario = Usuario();
 
   final styleInput = const TextStyle(height: 0.4);
 
@@ -108,7 +110,7 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
     return TextFormField(
       style: styleInput,
       controller: inputControllerNombre,
-      decoration: inputRedondo.inputDecorationRedondo(
+      decoration: input_redondo.inputDecorationRedondo(
           'Nombre', 'Ingresa tu nombre', context, Colors.white),
       onSaved: (value) => usuario.nombre = value,
       onChanged: (value) => usuario.nombre = value,
@@ -122,7 +124,7 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
     return TextFormField(
       style: styleInput,
       controller: inputControllerApellido,
-      decoration: inputRedondo.inputDecorationRedondo(
+      decoration: input_redondo.inputDecorationRedondo(
           'Apellido', 'Ingresa tu apellido', context, Colors.white),
       onSaved: (value) => usuario.apellido = value,
       onChanged: (value) => usuario.apellido = value,
@@ -139,7 +141,7 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
       onSaved: (value) => usuario.celular = int.parse(value!),
       onChanged: (value) => usuario.celular = int.parse(value),
       keyboardType: TextInputType.number,
-      decoration: inputRedondo.inputDecorationRedondo('Número de celular',
+      decoration: input_redondo.inputDecorationRedondo('Número de celular',
           'Ingresa tu número celular', context, Colors.white),
       validator: (value) => (validaciones_generales.isNumber(value!))
           ? null
@@ -153,7 +155,7 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
       style: styleInput,
       controller: inputControllerCorreo,
       keyboardType: TextInputType.emailAddress,
-      decoration: inputRedondo.inputDecorationRedondo(
+      decoration: input_redondo.inputDecorationRedondo(
           'Correo institucional', 'Ingresa tu correo', context, Colors.white),
       onSaved: (value) => usuario.correo = value,
       onChanged: (value) => usuario.correo = value,
@@ -172,7 +174,7 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
       obscureText: true,
       onSaved: (value) => usuario.contrasenia = value,
       onChanged: (value) => usuario.contrasenia = value,
-      decoration: inputRedondo.inputDecorationRedondo(
+      decoration: input_redondo.inputDecorationRedondo(
           'Contraseña', 'Ingresa tu contraseña', context, Colors.white),
       validator: (value) =>
           (value!.isEmpty) ? 'El correo ingresado no es valido' : null,
@@ -186,15 +188,15 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
       controller: inputControllerConContrasenia,
       scrollPadding: const EdgeInsets.all(1),
       obscureText: true,
-      onChanged: (value) => contrasenia = value,
-      decoration: inputRedondo.inputDecorationRedondo('Confirmar Contraseña',
+      onChanged: (value) => conContrasenia = value,
+      decoration: input_redondo.inputDecorationRedondo('Confirmar Contraseña',
           'Ingresa tu contraseña', context, Colors.white),
       validator: (value) =>
           (value!.isEmpty) ? 'El correo ingresado no es valido' : null,
     );
   }
 
-  /// _____________________________________________________________________
+  ///_____________________________________________________________________
 
   // Se crea el boton registro que es el encargado de validar la información y redirigir a la siguiente página
   Widget _crearBotonRegistro(Usuario usuario) {

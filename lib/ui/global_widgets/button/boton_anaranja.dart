@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:pa_donde_app/data/services/autencicacion_service.dart';
 
 class BtnAnaranja extends StatelessWidget {
   final String? titulo;
   final double? tamanioLetra;
   final void Function()? function;
 
-  BtnAnaranja({Key? key, this.titulo, this.tamanioLetra = 18.0, this.function});
+  const BtnAnaranja(
+      {Key? key, this.titulo, this.tamanioLetra = 18.0, this.function});
 
   @override
   Widget build(BuildContext context) {
+    /// Crear un boton de color anaranjado personalizado
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),

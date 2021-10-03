@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+
 Usuario usuarioFromJson(String str) => Usuario.fromJson(json.decode(str));
 
 String usuarioToJson(Usuario data) => json.encode(data.toJson());
 
-class Usuario {
+class Usuario with ChangeNotifier {
   Usuario(
       {String? pCorreo,
       int? pTipoUsuario,
@@ -31,7 +33,7 @@ class Usuario {
   String? _uid;
   String? _contrasenia;
 
-  /// Constructor
+  /// Constructor para transformar de un Mapa dinamico a json
   factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
         pCorreo: json["correo"],
         pTipoUsuario: json["tipoUsuario"],
@@ -50,31 +52,65 @@ class Usuario {
         "contrasenia": contrasenia,
       };
 
+  // MÉTODOS GET AND SET DE LOS ATRIBUTOS
+
+  /// Método que retorna el valor nombre del usuario
   get nombre => _nombre;
 
-  set nombre(value) => _nombre = value;
+  /// Método que cambia el valor nombre del usuario
+  set nombre(value) {
+    _nombre = value;
+    notifyListeners();
+  }
 
+  /// Método que retorna el valor del apellido del usuario
   get apellido => _apellido;
 
-  set apellido(value) => _apellido = value;
+  /// Método que cambia el valor del apellido del usuario
+  set apellido(value) {
+    _apellido = value;
+    notifyListeners();
+  }
 
+  /// Método que retorna el valor del número celular
   get celular => _celular;
 
-  set celular(value) => _celular = value;
+  /// Método que cambia el valor del número celular
+  set celular(value) {
+    _celular = value;
+    notifyListeners();
+  }
 
+  /// Método que retorna el valor correo electronico
   get correo => _correo;
 
-  set correo(value) => _correo = value;
+  /// Método que cambia el valor correo electronico
+  set correo(value) {
+    _correo = value;
+    notifyListeners();
+  }
 
+  /// Método que retorna el valor del tipo de usuario que esta ingresando
   get tipoUsuario => _tipoUsuario;
 
-  set tipoUsuario(value) => _tipoUsuario = value;
+  /// Método que cambia el valor del tipo de usuario que esta ingresando
+  set tipoUsuario(value) {
+    _tipoUsuario = value;
+    notifyListeners();
+  }
 
+  /// Método que retorna el valor de la contraseña del usuario
   get contrasenia => _contrasenia;
 
-  set contrasenia(value) => _contrasenia = value;
+  /// Método que cambia el valor de la contraseña del usuario
+  set contrasenia(value) {
+    _contrasenia = value;
+    notifyListeners();
+  }
 
+  /// Método que retorna el valor de uid (Identificador para inicio de sesión)
   get uid => _uid;
 
+  /// Método que cambia el valor de uid (Identificador para inicio de sesión)
   set uid(value) => _uid = value;
 }
