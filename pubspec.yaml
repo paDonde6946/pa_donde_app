@@ -40,6 +40,9 @@ dependencies:
   # Para poder guardar el token en el celular
   flutter_secure_storage: 
 
+  # Tuberia
+  provider:
+
 
   # Para poder guardar el token en el celular
   # flutter_secure_storage: 3.3.3

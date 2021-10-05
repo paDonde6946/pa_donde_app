@@ -40,13 +40,15 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     // Espacio entre cada input
     const tamanioSeparador = 15.0;
     // Formulario del registro del usuario
     return Form(
       key: keyForm,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        padding: EdgeInsets.symmetric(horizontal: size.width * 0.06),
         child: Column(
           children: [
             const SizedBox(height: tamanioSeparador),

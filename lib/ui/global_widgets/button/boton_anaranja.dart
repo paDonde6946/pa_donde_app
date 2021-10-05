@@ -5,8 +5,7 @@ class BtnAnaranja extends StatelessWidget {
   final double? tamanioLetra;
   final void Function()? function;
 
-  const BtnAnaranja(
-      {Key? key, this.titulo, this.tamanioLetra = 18.0, this.function});
+  const BtnAnaranja({this.titulo, this.tamanioLetra = 18.0, this.function});
 
   @override
   Widget build(BuildContext context) {
