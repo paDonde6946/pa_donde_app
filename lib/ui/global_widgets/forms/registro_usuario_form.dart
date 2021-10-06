@@ -13,6 +13,7 @@ import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
 import 'package:pa_donde_app/ui/utils/snack_bars.dart';
 import 'package:pa_donde_app/ui/utils/validaciones_generales.dart'
     as validaciones_generales;
+import 'package:pa_donde_app/ui/utils/validaciones_generales.dart';
 
 class FormRegistroUsuario extends StatefulWidget {
   const FormRegistroUsuario({Key? key}) : super(key: key);
@@ -85,6 +86,14 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
     if (inputControllerContrasenia.text != inputControllerConContrasenia.text) {
       customShapeSnackBar(
           context: context, titulo: 'Las contraseñas no coinciden');
+      return;
+    }
+
+    if (!validaciones_generales
+        .validarEmailDominio(inputControllerCorreo.text.trim())) {
+      customShapeSnackBar(
+          context: context,
+          titulo: "Solo se permiten correos de la universidad");
       return;
     }
 
@@ -161,7 +170,8 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
           'Correo institucional', 'Ingresa tu correo', context, Colors.white),
       onSaved: (value) => usuario.correo = value,
       onChanged: (value) => usuario.correo = value,
-      validator: (value) => (validaciones_generales.validarEmail(value))
+      validator: (value) => (validaciones_generales.validarEmail(value) ||
+              !validaciones_generales.validarEmailDominio(value))
           ? 'El correo ingresado no es valido'
           : null,
     );
@@ -202,7 +212,6 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
 
   // Se crea el boton registro que es el encargado de validar la información y redirigir a la siguiente página
   Widget _crearBotonRegistro(Usuario usuario) {
-    final size = MediaQuery.of(context).size;
     return Center(
       child: BtnAnaranja(
           function: () => _validarFormulario(usuario), titulo: 'Registrarse'),

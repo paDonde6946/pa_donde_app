@@ -19,3 +19,13 @@ bool validarEmail(String? email) {
     return true;
   }
 }
+
+/* Método para validar un correo eléctronico tenga el dominio de la universidad*/
+bool validarEmailDominio(String? email) {
+  String pattern = "@unbosque.edu.co";
+
+  if (email!.contains(pattern)) {
+    return true;
+  }
+  return false;
+}
