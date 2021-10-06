@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pa_donde_app/data/services/autencicacion_service.dart';
 import 'package:pa_donde_app/routes/routes.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart'
+    show ChangeNotifierProvider, MultiProvider;
 
 void main() => runApp(MyApp());
 
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider(
+        ChangeNotifierProvider(
           create: (context) => AutenticacionServicio(),
         ),
       ],

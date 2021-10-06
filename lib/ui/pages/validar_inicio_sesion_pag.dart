@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:pa_donde_app/ui/pages/inicio_pag.dart';
+import 'package:pa_donde_app/ui/pages/inicio_sesion_pag.dart';
 import 'package:provider/provider.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
@@ -48,7 +49,7 @@ class ValidarInicioSesion extends StatelessWidget {
     // final sockettServicce = Provider.of<SocketServicio>(context);
 
     final autenticado = await authService.logeado();
-
+    await Future.delayed(const Duration(seconds: 3));
     if (autenticado) {
       // sockettServicce.connect();
       SchedulerBinding.instance!.addPostFrameCallback((_) {
@@ -63,7 +64,7 @@ class ValidarInicioSesion extends StatelessWidget {
         Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-                pageBuilder: (_, __, ___) => InicioPag(),
+                pageBuilder: (_, __, ___) => InicioSesionPag(),
                 transitionDuration: const Duration(milliseconds: 0)));
       });
     }

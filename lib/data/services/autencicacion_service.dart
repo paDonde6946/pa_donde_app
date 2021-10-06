@@ -32,7 +32,7 @@ class AutenticacionServicio with ChangeNotifier {
 
       usuarioServiciosActual = loginResponse.usuario!;
       autenticando = false;
-      // await this._guardarToken(loginResponse.token);
+      await _guardarToken(loginResponse.token);
       return usuarioServiciosActual;
     } else {
       autenticando = false;
@@ -40,25 +40,24 @@ class AutenticacionServicio with ChangeNotifier {
     }
   }
 
-  // ///
+  /// Valida que el token que se guardo por ultima vez en el dispositivo para dar automaticamente acceso al usuario
   Future<bool> logeado() async {
-    final token = await this._storage.read(key: 'token');
+    final token = await _storage.read(key: 'token');
 
     if (token != null) {
-      // Se crea la peticion GET para enviar al Backend
-      final resp = await http.get(
-        //TODO: Corregir falta por hablar con Hernan (Backend)
-        Uri(host: '${EntornoVariable.host}/login/renovarJWT'),
-        headers: {
-          'Content-Type': 'application/json',
-          'x-token': token,
-        },
-      );
+      String path = "/web/usuario/renovarToken";
+
+      final uri = Uri.http(EntornoVariable.host, path);
+      final headers = {
+        "x-token": token,
+        HttpHeaders.contentTypeHeader: 'application/json'
+      };
+      final response = await http.get(uri, headers: headers);
 
       // Verificar si la informacion que viene del Backend es correcta y el status es 200
-      if (resp.statusCode == 200) {
+      if (response.statusCode == 200) {
         // Se transforma el JSON de respuesta a una modelo dentro de Flutter
-        final loginResponse = inicioSesionResponseFromJson(resp.body);
+        final loginResponse = inicioSesionResponseFromJson(response.body);
         usuarioServiciosActual = loginResponse.usuario;
 
         await _guardarToken(loginResponse.token);
@@ -92,6 +91,7 @@ class AutenticacionServicio with ChangeNotifier {
 
   ///==========================================================================
   /// METODOS GET AND SET
+  ///==========================================================================
 
   /// Getters del token de forma estatica
   static Future<String?> getToken() async {
