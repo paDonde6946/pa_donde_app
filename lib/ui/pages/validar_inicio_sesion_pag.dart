@@ -5,7 +5,7 @@ import 'package:pa_donde_app/ui/pages/inicio_sesion_pag.dart';
 import 'package:provider/provider.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
-import 'package:pa_donde_app/data/services/autencicacion_service.dart';
+import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
 //---------------------------------------------------------------------
 
 class ValidarInicioSesion extends StatelessWidget {

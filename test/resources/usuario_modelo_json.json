@@ -1,0 +1,12 @@
+{
+    "correo": "juan@unbosque.edu.co",
+    "tipoUsuario": 1,
+    "nombre": "Juan",
+    "apellido": "Perez",
+    "celular": 3004503102,
+    "estado": 1,
+    "createdAt": "2021-10-06T03:49:18.624Z",
+    "updatedAt": "2021-10-07T14:23:04.131Z",
+    "cambio_contrasenia": 1,
+    "uid": "1cbe1bdb7392188991"
+}

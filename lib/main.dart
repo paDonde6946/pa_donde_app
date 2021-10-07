@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pa_donde_app/data/services/autencicacion_service.dart';
+import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
 import 'package:pa_donde_app/routes/routes.dart';
 import 'package:provider/provider.dart'
     show ChangeNotifierProvider, MultiProvider;

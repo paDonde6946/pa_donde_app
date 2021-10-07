@@ -14,6 +14,7 @@ class Usuario with ChangeNotifier {
       String? pApellido,
       int? pCelular,
       String? pConstrasenia,
+      int? pCambioContrasenia,
       String? pUid}) {
     correo = pCorreo;
     tipoUsuario = pTipoUsuario;
@@ -21,6 +22,7 @@ class Usuario with ChangeNotifier {
     apellido = pApellido;
     celular = pCelular;
     contrasenia = pConstrasenia;
+    cambio_contrasenia = pCambioContrasenia;
     uid = pUid;
   }
 
@@ -30,8 +32,9 @@ class Usuario with ChangeNotifier {
   int? _celular;
   String? _correo;
   int? _tipoUsuario;
-  String? _uid;
   String? _contrasenia;
+  int? _cambio_contrasenia;
+  String? _uid;
 
   /// Constructor para transformar de un Mapa dinamico a json
   factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
@@ -41,6 +44,7 @@ class Usuario with ChangeNotifier {
         pApellido: json["apellido"],
         pCelular: json["celular"],
         pConstrasenia: json["contrasenia"],
+        pCambioContrasenia: json["cambio_contrasenia"],
         pUid: json["uid"],
       );
 
@@ -50,6 +54,7 @@ class Usuario with ChangeNotifier {
         "apellido": apellido,
         "celular": celular,
         "contrasenia": contrasenia,
+        "cambio_contrasenia": cambio_contrasenia
       };
 
   // MÉTODOS GET AND SET DE LOS ATRIBUTOS
@@ -105,6 +110,15 @@ class Usuario with ChangeNotifier {
   /// Método que cambia el valor de la contraseña del usuario
   set contrasenia(value) {
     _contrasenia = value;
+    notifyListeners();
+  }
+
+  /// Método que retorna el valor de cabmiar la contrasenia
+  get cambio_contrasenia => _cambio_contrasenia;
+
+  /// Método que cambia el valor de la contraseña del usuario
+  set cambio_contrasenia(value) {
+    _cambio_contrasenia = value;
     notifyListeners();
   }
 

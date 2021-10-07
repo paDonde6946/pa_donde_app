@@ -1,0 +1,16 @@
+{
+    "ok": true,
+    "usuario": {
+        "correo": "felipe@unbosque.edu.co",
+        "tipoUsuario": 1,
+        "nombre": "Felipe",
+        "apellido": "Martinez",
+        "celular": 1234567,
+        "estado": 1,
+        "createdAt": "2021-10-06T03:49:18.624Z",
+        "updatedAt": "2021-10-07T14:23:04.131Z",
+        "cambio_contrasenia": 1,
+        "uid": "asdfsdg34"
+    },
+    "token": "2MTVkMWNiZTFiZGI3MzkyMTg4OTkxMDCpd5jb4i9LuXn6qQmx-k70x8"
+}
