@@ -5,8 +5,11 @@ import 'package:pa_donde_app/ui/global_widgets/inputs/input_form.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 
+import 'package:pa_donde_app/data/services/autencicacion_service.dart';
+
 import 'package:pa_donde_app/ui/utils/snack_bars.dart';
-import 'package:pa_donde_app/ui/utils/validaciones_generales.dart';
+import 'package:pa_donde_app/ui/utils/validaciones_generales.dart'
+    as validaciones_generales;
 //---------------------------------------------------------------------
 
 class RecuperarContraseniaForm extends StatefulWidget {
@@ -52,19 +55,22 @@ class _RecuperarContraseniaFormState extends State<RecuperarContraseniaForm> {
       return;
     }
 
-    mostrarShowDialogCargando(context: context, titulo: 'ENVIANDO INFORMACIÓN');
-    await Future.delayed(const Duration(seconds: 1));
+    mostrarShowDialogCargando(context: context, titulo: 'INFORMACIÓN ENVIADA');
+    await Future.delayed(const Duration(seconds: 2));
     Navigator.pop(context);
 
-    //TODO:Validar informacion con el backend
-    const response = null;
+    // Validar informacion con el backend
+    AutenticacionServicio autenticacionServicio = AutenticacionServicio();
+    bool response = await autenticacionServicio
+        .recuperarContrasenia(inputControllerCorreo.text);
 
-    if (response == null) {
+    if (!response) {
       customShapeSnackBar(context: context, titulo: 'Información invalida');
     } else {
       // Si todo esta bien redirige a la siguiente página
       keyForm.currentState!.save();
-      Navigator.pushNamed(context, 'inicio');
+      // Navigator.pushNamed(context, 'inicio');
+      Navigator.pop(context);
     }
   }
 
@@ -79,8 +85,10 @@ class _RecuperarContraseniaFormState extends State<RecuperarContraseniaForm> {
       keyboardType: TextInputType.emailAddress,
       decoration: inputDecoration(
           'Correo institucional', 'Ingresa tu correo', context, Colors.black),
-      validator: (value) =>
-          (validarEmail(value)) ? 'El correo ingresado no es valido' : null,
+      validator: (value) => (validaciones_generales.validarEmail(value) ||
+              !validaciones_generales.validarEmailDominio(value))
+          ? 'El correo ingresado no es valido'
+          : null,
     );
   }
 
@@ -88,7 +96,7 @@ class _RecuperarContraseniaFormState extends State<RecuperarContraseniaForm> {
   Widget _crearBtnInicioSesion() {
     return Center(
       child: BtnAnaranja(
-          function: () => _validarFormulario(), titulo: 'Recuperar '),
+          function: () => _validarFormulario(), titulo: 'Recuperar'),
     );
   }
 }

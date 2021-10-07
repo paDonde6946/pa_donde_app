@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -67,6 +68,24 @@ class AutenticacionServicio with ChangeNotifier {
         _logout();
         return false;
       }
+    }
+    return false;
+  }
+
+  ///
+  Future<bool> recuperarContrasenia(String correo) async {
+    String path = "app/login/olvidarContrasenia";
+    final uri = Uri.http(EntornoVariable.host, path);
+    final headers = {HttpHeaders.contentTypeHeader: 'application/json'};
+    final response = await http.post(uri,
+        headers: headers, body: json.encode({"correo": correo}));
+
+    // Se transforma el JSON de respuesta a un mapa
+    final resp = jsonDecode(response.body)["ok"];
+
+    // Verificar si la informacion que viene del Backend es correcta y el status es 200
+    if (response.statusCode == 200 && resp) {
+      return true;
     }
     return false;
   }

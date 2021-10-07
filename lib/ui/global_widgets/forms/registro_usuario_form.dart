@@ -13,7 +13,7 @@ import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
 import 'package:pa_donde_app/ui/utils/snack_bars.dart';
 import 'package:pa_donde_app/ui/utils/validaciones_generales.dart'
     as validaciones_generales;
-import 'package:pa_donde_app/ui/utils/validaciones_generales.dart';
+//---------------------------------------------------------------------
 
 class FormRegistroUsuario extends StatefulWidget {
   const FormRegistroUsuario({Key? key}) : super(key: key);
