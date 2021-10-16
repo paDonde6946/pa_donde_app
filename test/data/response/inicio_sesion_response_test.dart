@@ -25,9 +25,9 @@ void main() {
     Usuario usuarioTest = Usuario();
     usuarioTest.nombre = "Felipe";
     usuarioTest.apellido = "Martinez";
-    usuarioTest.celular = 123455;
+    usuarioTest.celular = 1234567;
     usuarioTest.correo = "felipe@unbosque.edu.co";
-    usuarioTest.cambio_contrasenia = 0;
+    usuarioTest.cambio_contrasenia = 1;
 
     expect(inicioSesionResponse.ok, true);
     expect(inicioSesionResponse.usuario.correo, usuarioTest.correo);

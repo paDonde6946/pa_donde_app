@@ -46,7 +46,7 @@ class AutenticacionServicio with ChangeNotifier {
     final token = await _storage.read(key: 'token');
 
     if (token != null) {
-      String path = "/web/usuario/renovarToken";
+      String path = "/app/login/renovarToken";
 
       final uri = Uri.http(EntornoVariable.host, path);
       final headers = {

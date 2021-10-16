@@ -73,6 +73,7 @@ class _FormInicioSesionState extends State<FormInicioSesion> {
       // Si todo esta bien redirige a la siguiente página
       keyForm.currentState!.save();
       Navigator.pushNamed(context, 'inicio');
+      autenticacionServicio.usuarioServiciosActual = response;
     }
   }
 

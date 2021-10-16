@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
             primaryColor: const Color.fromRGBO(94, 153, 45, 1),
             primaryColorLight: const Color.fromRGBO(232, 119, 29, 1)),
-        initialRoute: 'login',
+        initialRoute: 'valiarInicioSesion',
         routes: generarRutas(),
       ),
     );

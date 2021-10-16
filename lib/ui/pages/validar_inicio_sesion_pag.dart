@@ -49,7 +49,7 @@ class ValidarInicioSesion extends StatelessWidget {
     // final sockettServicce = Provider.of<SocketServicio>(context);
 
     final autenticado = await authService.logeado();
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 1));
     if (autenticado) {
       // sockettServicce.connect();
       SchedulerBinding.instance!.addPostFrameCallback((_) {
@@ -64,7 +64,7 @@ class ValidarInicioSesion extends StatelessWidget {
         Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-                pageBuilder: (_, __, ___) => InicioSesionPag(),
+                pageBuilder: (_, __, ___) => const InicioSesionPag(),
                 transitionDuration: const Duration(milliseconds: 0)));
       });
     }

@@ -130,7 +130,7 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
     );
   }
 
-  ///  Input - Campo del nombre
+  ///  Input - Campo del apellido
   Widget _crearApellido(Usuario usuario) {
     return TextFormField(
       style: styleInput,
