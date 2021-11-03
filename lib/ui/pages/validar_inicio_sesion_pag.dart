@@ -9,7 +9,7 @@ import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
 //---------------------------------------------------------------------
 
 class ValidarInicioSesion extends StatelessWidget {
-  const ValidarInicioSesion({Key? key}) : super(key: key);
+  ValidarInicioSesion({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -49,14 +49,14 @@ class ValidarInicioSesion extends StatelessWidget {
     // final sockettServicce = Provider.of<SocketServicio>(context);
 
     final autenticado = await authService.logeado();
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 4));
     if (autenticado) {
       // sockettServicce.connect();
       SchedulerBinding.instance!.addPostFrameCallback((_) {
         Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-                pageBuilder: (_, __, ___) => InicioPag(),
+                pageBuilder: (context, __, ___) => InicioPag(),
                 transitionDuration: const Duration(milliseconds: 0)));
       });
     } else {
@@ -64,7 +64,7 @@ class ValidarInicioSesion extends StatelessWidget {
         Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-                pageBuilder: (_, __, ___) => const InicioSesionPag(),
+                pageBuilder: (context, __, ___) => InicioSesionPag(),
                 transitionDuration: const Duration(milliseconds: 0)));
       });
     }

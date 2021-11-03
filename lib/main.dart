@@ -6,8 +6,17 @@ import 'package:provider/provider.dart'
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +32,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
             primaryColor: const Color.fromRGBO(94, 153, 45, 1),
             primaryColorLight: const Color.fromRGBO(232, 119, 29, 1)),
-        initialRoute: 'valiarInicioSesion',
+        initialRoute: 'login',
         routes: generarRutas(),
       ),
     );

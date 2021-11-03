@@ -10,11 +10,11 @@ import 'package:pa_donde_app/ui/pages/validar_inicio_sesion_pag.dart';
 
 Map<String, WidgetBuilder> generarRutas() {
   final _rutas = <String, WidgetBuilder>{
-    'login': (_) => const InicioSesionPag(),
-    'inicio': (_) => InicioPag(),
-    'recuperarContrasenia': (_) => const RecuperarContraseniaPag(),
-    'valiarInicioSesion': (_) => const ValidarInicioSesion(),
-    'editarPerfil': (_) => EditarPerfilPag(),
+    'login': (BuildContext context) => InicioSesionPag(),
+    'inicio': (BuildContext context) => InicioPag(),
+    'recuperarContrasenia': (BuildContext context) => RecuperarContraseniaPag(),
+    'validarInicioSesion': (BuildContext context) => ValidarInicioSesion(),
+    'editarPerfil': (BuildContext context) => EditarPerfilPag(),
   };
 
   return _rutas;

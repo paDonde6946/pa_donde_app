@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/models/usuario_modelo.dart';
+import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
 
 import 'package:pa_donde_app/data/services/usuario_servicio.dart';
 
@@ -102,14 +103,17 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
     Navigator.pop(context);
 
     UsuarioServicio usuarioServicio = UsuarioServicio();
-    usuarioServicio.crearUsuarioServicio(usuario);
-    //Si todo esta bien redirige a la siguiente página
+    AutenticacionServicio autenticacionServicio = AutenticacionServicio();
+    final Usuario? response =
+        await usuarioServicio.crearUsuarioServicio(usuario);
+    // Si todo esta bien redirige a la siguiente página
     keyForm.currentState!.save();
-    Navigator.pushNamed(context, 'inicio');
 
     mostrarShowDialogCargando(context: context, titulo: 'REGISTRO EXITO');
     await Future.delayed(const Duration(seconds: 1));
     Navigator.pop(context);
+    autenticacionServicio.usuarioServiciosActual = response!;
+    Navigator.pushReplacementNamed(context, 'inicio');
   }
 
   /*____________________________________________________________*/

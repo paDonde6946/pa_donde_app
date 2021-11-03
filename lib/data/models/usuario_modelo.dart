@@ -126,5 +126,8 @@ class Usuario with ChangeNotifier {
   get uid => _uid;
 
   /// Método que cambia el valor de uid (Identificador para inicio de sesión)
-  set uid(value) => _uid = value;
+  set uid(value) {
+    _uid = value;
+    notifyListeners();
+  }
 }

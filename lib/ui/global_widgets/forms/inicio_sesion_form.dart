@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pa_donde_app/data/models/usuario_modelo.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
@@ -9,6 +10,7 @@ import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
 
 import 'package:pa_donde_app/ui/utils/snack_bars.dart';
 import 'package:pa_donde_app/ui/utils/validaciones_generales.dart';
+import 'package:provider/provider.dart';
 //---------------------------------------------------------------------
 
 class FormInicioSesion extends StatefulWidget {
@@ -70,10 +72,16 @@ class _FormInicioSesionState extends State<FormInicioSesion> {
     if (response == null) {
       customShapeSnackBar(context: context, titulo: 'Información invalida');
     } else {
+      FocusScope.of(context).unfocus();
       // Si todo esta bien redirige a la siguiente página
       keyForm.currentState!.save();
-      Navigator.pushNamed(context, 'inicio');
-      autenticacionServicio.usuarioServiciosActual = response;
+      autenticacionServicio.autenticando = true;
+      final authService =
+          Provider.of<AutenticacionServicio>(context, listen: false);
+
+      print(authService.usuarioServiciosActual.apellido);
+      Navigator.pushNamed(context, 'inicio',
+          arguments: autenticacionServicio.usuarioServiciosActual);
     }
   }
 

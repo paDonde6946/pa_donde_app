@@ -12,15 +12,17 @@ import 'package:pa_donde_app/global/entorno_variable_global.dart';
 //---------------------------------------------------------------------
 
 class AutenticacionServicio with ChangeNotifier {
-  Usuario usuarioServiciosActual = Usuario();
-  bool _autenticado = false;
+  Usuario usuarioServiciosActual =
+      Usuario(pApellido: "Estradaaaaa", pNombre: "aaaaaa");
+
+  bool _autenticando = false;
 
   /// Create storage que permite almacenar el token en el dispositivo fisico
-  final _storage = const FlutterSecureStorage();
+  final _storage = FlutterSecureStorage();
 
   /// Realiza el proceso de login y de verificacion con el backend
   Future<Usuario?> login(String correo, String contrasenia) async {
-    _autenticado = true;
+    autenticando = true;
 
     String path = "/app/login/usuario/$correo/$contrasenia";
 
@@ -30,11 +32,14 @@ class AutenticacionServicio with ChangeNotifier {
 
     if (response.statusCode == 200) {
       final loginResponse = inicioSesionResponseFromJson(response.body);
+      usuarioServiciosActual = loginResponse.usuario;
 
-      usuarioServiciosActual = loginResponse.usuario!;
       autenticando = false;
       await _guardarToken(loginResponse.token);
-      return usuarioServiciosActual;
+
+      final _usuario = Usuario.fromJson(json.decode(response.body)["usuario"]);
+
+      return _usuario;
     } else {
       autenticando = false;
       return null;
@@ -43,8 +48,8 @@ class AutenticacionServicio with ChangeNotifier {
 
   /// Valida que el token que se guardo por ultima vez en el dispositivo para dar automaticamente acceso al usuario
   Future<bool> logeado() async {
-    final token = await _storage.read(key: 'token');
-
+    String? token = await _storage.read(key: 'token');
+    token = "";
     if (token != null) {
       String path = "/app/login/renovarToken";
 
@@ -104,7 +109,7 @@ class AutenticacionServicio with ChangeNotifier {
   /// Elimina el token que se tine almacenado
   /// Cierra la cesion creada y se elimina el token del dispoitivo
   static Future<void> eliminarToken() async {
-    const _storage = FlutterSecureStorage();
+    final _storage = FlutterSecureStorage();
     await _storage.delete(key: 'token');
   }
 
@@ -114,17 +119,24 @@ class AutenticacionServicio with ChangeNotifier {
 
   /// Getters del token de forma estatica
   static Future<String?> getToken() async {
-    const _storage = FlutterSecureStorage();
+    final _storage = FlutterSecureStorage();
     final token = await _storage.read(key: 'token');
     return token;
   }
 
   /// Devuleve la variable atenticando
-  bool get autenticando => _autenticado;
+  bool get autenticando => _autenticando;
 
   ///Cambia el estado de la variable autenticando y notifica a los que lo esten escuchando
   set autenticando(bool valor) {
-    _autenticado = valor;
+    _autenticando = valor;
     notifyListeners();
   }
+
+  // set usuarioServiciosActual(Usuario usuario) {
+  //   _usuarioServiciosActual = usuario;
+  //   notifyListeners();
+  // }
+
+  // Usuario get usuarioServiciosActual => _usuarioServiciosActual;
 }

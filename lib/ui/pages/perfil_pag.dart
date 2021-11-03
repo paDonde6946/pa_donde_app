@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pa_donde_app/data/models/usuario_modelo.dart';
 import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
@@ -16,10 +17,12 @@ class PerfilPag extends StatefulWidget {
 class _PerfilPagState extends State<PerfilPag> {
   @override
   Widget build(BuildContext context) {
+    Usuario usuarioServicio =
+        Provider.of<AutenticacionServicio>(context).usuarioServiciosActual;
     return Scaffold(
       body: ListView(children: [
         Stack(
-          children: [fondo(), informacion()],
+          children: [fondo(), informacion(usuarioServicio)],
         ),
       ]),
     );
@@ -41,10 +44,8 @@ class _PerfilPagState extends State<PerfilPag> {
     );
   }
 
-  Widget informacion() {
+  Widget informacion(Usuario usuarioServicio) {
     final size = MediaQuery.of(context).size;
-    final usuarioServicio =
-        Provider.of<AutenticacionServicio>(context).usuarioServiciosActual;
 
     return Column(
       children: [
@@ -101,10 +102,8 @@ class _PerfilPagState extends State<PerfilPag> {
                   context: context, titulo: 'CERRANDO SESIÓN');
               await Future.delayed(const Duration(seconds: 1));
               Navigator.pop(context);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const InicioSesionPag()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => InicioSesionPag()));
               AutenticacionServicio.eliminarToken();
             },
             icon: Icon(Icons.login, size: size.width * 0.075)),
@@ -119,7 +118,7 @@ class _PerfilPagState extends State<PerfilPag> {
         width: 200,
         child: FadeInImage(
           image: NetworkImage(
-              'https://cdn.pixabay.com/photo/2018/05/02/08/44/pkw-3367993_1280.jpg'),
+              'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/User.svg/768px-User.svg.png'),
           placeholder: AssetImage('img/gif/cargando.gif'),
           fadeInDuration: Duration(milliseconds: 200),
           height: 300.0,
