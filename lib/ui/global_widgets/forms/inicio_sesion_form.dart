@@ -64,10 +64,16 @@ class _FormInicioSesionState extends State<FormInicioSesion> {
     Navigator.pop(context);
 
     // Validar informacion con el backend
-    AutenticacionServicio autenticacionServicio = AutenticacionServicio();
+    // AutenticacionServicio autenticacionServicio = AutenticacionServicio();
+    AutenticacionServicio autenticacionServicio =
+        Provider.of<AutenticacionServicio>(context, listen: false);
     final response = await autenticacionServicio.login(
         inputControllerCorreo.text.trim(),
         inputControllerContrasenia.text.trim());
+
+    // final response = await autenticacionServicio.login(
+    //     inputControllerCorreo.text.trim(),
+    //     inputControllerContrasenia.text.trim());
 
     if (response == null) {
       customShapeSnackBar(context: context, titulo: 'Información invalida');

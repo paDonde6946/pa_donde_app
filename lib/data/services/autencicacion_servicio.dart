@@ -12,8 +12,7 @@ import 'package:pa_donde_app/global/entorno_variable_global.dart';
 //---------------------------------------------------------------------
 
 class AutenticacionServicio with ChangeNotifier {
-  Usuario usuarioServiciosActual =
-      Usuario(pApellido: "Estradaaaaa", pNombre: "aaaaaa");
+  Usuario usuarioServiciosActual = Usuario();
 
   bool _autenticando = false;
 
