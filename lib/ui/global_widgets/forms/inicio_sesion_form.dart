@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pa_donde_app/data/models/usuario_modelo.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
@@ -64,16 +63,12 @@ class _FormInicioSesionState extends State<FormInicioSesion> {
     Navigator.pop(context);
 
     // Validar informacion con el backend
-    // AutenticacionServicio autenticacionServicio = AutenticacionServicio();
     AutenticacionServicio autenticacionServicio =
         Provider.of<AutenticacionServicio>(context, listen: false);
+
     final response = await autenticacionServicio.login(
         inputControllerCorreo.text.trim(),
         inputControllerContrasenia.text.trim());
-
-    // final response = await autenticacionServicio.login(
-    //     inputControllerCorreo.text.trim(),
-    //     inputControllerContrasenia.text.trim());
 
     if (response == null) {
       customShapeSnackBar(context: context, titulo: 'Información invalida');
@@ -82,12 +77,7 @@ class _FormInicioSesionState extends State<FormInicioSesion> {
       // Si todo esta bien redirige a la siguiente página
       keyForm.currentState!.save();
       autenticacionServicio.autenticando = true;
-      final authService =
-          Provider.of<AutenticacionServicio>(context, listen: false);
-
-      print(authService.usuarioServiciosActual.apellido);
-      Navigator.pushNamed(context, 'inicio',
-          arguments: autenticacionServicio.usuarioServiciosActual);
+      Navigator.pushNamed(context, 'inicio');
     }
   }
 

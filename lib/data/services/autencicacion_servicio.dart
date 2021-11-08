@@ -17,7 +17,7 @@ class AutenticacionServicio with ChangeNotifier {
   bool _autenticando = false;
 
   /// Create storage que permite almacenar el token en el dispositivo fisico
-  final _storage = FlutterSecureStorage();
+  final _storage = const FlutterSecureStorage();
 
   /// Realiza el proceso de login y de verificacion con el backend
   Future<Usuario?> login(String correo, String contrasenia) async {
@@ -35,10 +35,7 @@ class AutenticacionServicio with ChangeNotifier {
 
       autenticando = false;
       await _guardarToken(loginResponse.token);
-
-      final _usuario = Usuario.fromJson(json.decode(response.body)["usuario"]);
-
-      return _usuario;
+      return usuarioServiciosActual;
     } else {
       autenticando = false;
       return null;
@@ -48,7 +45,7 @@ class AutenticacionServicio with ChangeNotifier {
   /// Valida que el token que se guardo por ultima vez en el dispositivo para dar automaticamente acceso al usuario
   Future<bool> logeado() async {
     String? token = await _storage.read(key: 'token');
-    token = "";
+
     if (token != null) {
       String path = "/app/login/renovarToken";
 
@@ -76,7 +73,7 @@ class AutenticacionServicio with ChangeNotifier {
     return false;
   }
 
-  ///
+  /// Petición para poder recuperar la contraseña y validar la autenticacion del usuario
   Future<bool> recuperarContrasenia(String correo) async {
     String path = "app/login/olvidarContrasenia";
     final uri = Uri.http(EntornoVariable.host, path);
@@ -108,7 +105,7 @@ class AutenticacionServicio with ChangeNotifier {
   /// Elimina el token que se tine almacenado
   /// Cierra la cesion creada y se elimina el token del dispoitivo
   static Future<void> eliminarToken() async {
-    final _storage = FlutterSecureStorage();
+    const _storage = FlutterSecureStorage();
     await _storage.delete(key: 'token');
   }
 
@@ -118,7 +115,7 @@ class AutenticacionServicio with ChangeNotifier {
 
   /// Getters del token de forma estatica
   static Future<String?> getToken() async {
-    final _storage = FlutterSecureStorage();
+    const _storage = FlutterSecureStorage();
     final token = await _storage.read(key: 'token');
     return token;
   }
@@ -131,11 +128,4 @@ class AutenticacionServicio with ChangeNotifier {
     _autenticando = valor;
     notifyListeners();
   }
-
-  // set usuarioServiciosActual(Usuario usuario) {
-  //   _usuarioServiciosActual = usuario;
-  //   notifyListeners();
-  // }
-
-  // Usuario get usuarioServiciosActual => _usuarioServiciosActual;
 }

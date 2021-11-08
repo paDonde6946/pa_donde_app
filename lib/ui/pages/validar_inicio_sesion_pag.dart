@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:pa_donde_app/ui/pages/inicio_pag.dart';
-import 'package:pa_donde_app/ui/pages/inicio_sesion_pag.dart';
 import 'package:provider/provider.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
+
+import 'package:pa_donde_app/ui/pages/inicio_pag.dart';
+import 'package:pa_donde_app/ui/pages/inicio_sesion_pag.dart';
 //---------------------------------------------------------------------
 
 class ValidarInicioSesion extends StatelessWidget {
@@ -56,7 +57,7 @@ class ValidarInicioSesion extends StatelessWidget {
         Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-                pageBuilder: (context, __, ___) => InicioPag(),
+                pageBuilder: (context, __, ___) => const InicioPag(),
                 transitionDuration: const Duration(milliseconds: 0)));
       });
     } else {

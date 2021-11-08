@@ -32,7 +32,7 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
             primaryColor: const Color.fromRGBO(94, 153, 45, 1),
             primaryColorLight: const Color.fromRGBO(232, 119, 29, 1)),
-        initialRoute: 'login',
+        initialRoute: 'validarInicioSesion',
         routes: generarRutas(),
       ),
     );
