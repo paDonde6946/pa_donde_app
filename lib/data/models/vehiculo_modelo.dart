@@ -14,6 +14,7 @@ class Vehiculo with ChangeNotifier {
     String? pMarca,
     String? pAnio,
     String? pModelo,
+    int? pDocumentoTitular,
     int? pEstado,
   }) {
     uid = pUid;
@@ -33,18 +34,19 @@ class Vehiculo with ChangeNotifier {
   String? _marca;
   String? _anio;
   String? _modelo;
+  int? _documentoTitular;
   int? _estado;
 
   factory Vehiculo.fromJson(Map<String, dynamic> json) => Vehiculo(
-        pUid: json["uid"],
-        pPlaca: json["placa"],
-        pTipoVehiculo: json["tipoVehiculo"],
-        pColor: json["color"],
-        pMarca: json["marca"],
-        pAnio: json["anio"],
-        pModelo: json["modelo"],
-        pEstado: json["estado"],
-      );
+      pUid: json["uid"],
+      pPlaca: json["placa"],
+      pTipoVehiculo: json["tipoVehiculo"],
+      pColor: json["color"],
+      pMarca: json["marca"],
+      pAnio: json["anio"],
+      pModelo: json["modelo"],
+      pDocumentoTitular: json["documentoTitular"],
+      pEstado: json["estado"]);
 
   Map<String, dynamic> toJson() => {
         "uid": uid,
@@ -54,6 +56,7 @@ class Vehiculo with ChangeNotifier {
         "marca": marca,
         "anio": anio,
         "modelo": modelo,
+        "documentoTitular": documentoTitular,
         "estado": estado,
       };
 
@@ -122,10 +125,19 @@ class Vehiculo with ChangeNotifier {
     notifyListeners();
   }
 
-  /// Método que retorna el valor del tipo del vehiculo
+  /// Método que retorna el valor del documento de identidad del titular del vehiculo
+  get documentoTitular => _documentoTitular;
+
+  /// Método que cambia el valor del documento de identidad del titular del vehiculo
+  set documentoTitular(value) {
+    _documentoTitular = value;
+    notifyListeners();
+  }
+
+  /// Método que retorna el valor del estado del vehiculo
   get estado => _estado;
 
-  /// Método que cambia el valor del tipo del vehiculo
+  /// Método que cambia el valor del estado del vehiculo
   set estado(value) {
     _estado = value;
     notifyListeners();

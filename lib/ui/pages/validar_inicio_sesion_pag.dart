@@ -4,13 +4,12 @@ import 'package:provider/provider.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
-
 import 'package:pa_donde_app/ui/pages/inicio_pag.dart';
 import 'package:pa_donde_app/ui/pages/inicio_sesion_pag.dart';
 //---------------------------------------------------------------------
 
 class ValidarInicioSesion extends StatelessWidget {
-  ValidarInicioSesion({Key? key}) : super(key: key);
+  const ValidarInicioSesion({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +42,7 @@ class ValidarInicioSesion extends StatelessWidget {
     );
   }
 
-  /// Validar
+  /// Validar que el usuario tenga su token activo y si es asi valida el login del usuario
   Future checkLoginState(BuildContext context) async {
     final authService =
         Provider.of<AutenticacionServicio>(context, listen: false);
