@@ -1,4 +1,6 @@
+import 'package:custom_navigator/custom_navigator.dart';
 import 'package:flutter/material.dart';
+import 'package:pa_donde_app/ui/pages/cargando_gps_pag.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/ui/pages/perfil_pag.dart';
@@ -9,7 +11,9 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 //---------------------------------------------------------------------
 
 class InicioPag extends StatefulWidget {
-  const InicioPag({Key? key}) : super(key: key);
+  const InicioPag({Key? key, this.titulo}) : super(key: key);
+
+  final String? titulo;
 
   @override
   _InicioPagState createState() => _InicioPagState();
@@ -17,36 +21,36 @@ class InicioPag extends StatefulWidget {
 
 class _InicioPagState extends State<InicioPag> {
   /* Variables Auxiliares */
-  int _index = 1;
   final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
+
+  final List<Widget> _children = [
+    const PrincipalPag(),
+    CargandoGPSPag(),
+    const VehiculoPag(),
+    PerfilPag(),
+  ];
   /*----------------------*/
+
+  Widget _page = CargandoGPSPag();
+  int _currentIndex = 1;
+
+  GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: _llamarPagina(_index), bottomNavigationBar: footerCustom());
+        body: CustomNavigator(
+          navigatorKey: navigatorKey,
+          home: _page,
+          //Specify your page route [PageRoutes.materialPageRoute] or [PageRoutes.cupertinoPageRoute]
+          pageRoute: PageRoutes.materialPageRoute,
+        ),
+        bottomNavigationBar: footerCustom());
   }
 
   /// Método al hacer tap sobre algún icono del BottomNavigationBar
   void onTabTapped(int index) {
-    setState(() => _index = index);
-  }
-
-  /// Widget para cambio de páginas con respecto al BottomNavigationBar
-  Widget _llamarPagina(int paginaActual) {
-    switch (paginaActual) {
-      case 0:
-        return const PrincipalPag();
-      case 2:
-        return const VehiculoPag();
-      case 3:
-        return PerfilPag();
-      case 1:
-        return RutaPag();
-
-      default:
-        return const PrincipalPag();
-    }
+    setState(() => _currentIndex = index);
   }
 
   /// Widget encargado de la creación del BottomNavigationBar
@@ -57,7 +61,7 @@ class _InicioPagState extends State<InicioPag> {
         (media.height <= 780) ? media.width * 0.05 : media.width * 0.07;
     return CurvedNavigationBar(
       key: _bottomNavigationKey,
-      index: 1,
+      index: _currentIndex,
       height: 60.0,
       items: [
         Icon(Icons.home_outlined, size: tammanioIconos, color: Colors.black),
@@ -68,7 +72,11 @@ class _InicioPagState extends State<InicioPag> {
       ],
       color: Theme.of(context).primaryColor,
       backgroundColor: Colors.transparent,
-      onTap: onTabTapped,
+      onTap: (index) {
+        navigatorKey.currentState!.maybePop();
+        setState(() => _page = _children[index]);
+        _currentIndex = index;
+      },
       buttonBackgroundColor: Theme.of(context).primaryColor,
       animationCurve: Curves.easeInSine,
       animationDuration: const Duration(milliseconds: 600),

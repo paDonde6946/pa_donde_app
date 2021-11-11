@@ -25,19 +25,18 @@ class _PrincipalPagState extends State<PrincipalPag> {
   Widget body() {
     final usuario = Provider.of<AutenticacionServicio>(context, listen: false)
         .usuarioServiciosActual;
-
-    if (usuario.cambio_contrasenia == 1) {
-      print("aaaaaaaaaaaaaa");
-      SchedulerBinding.instance!.addPostFrameCallback((_) {
-        mostrarShowDialogConfirmar(
-            context: context,
-            titulo: "Cambio de Contraseña",
-            contenido:
-                "Hemos notado que has cambiado tu contraseña. Para mayor seguridad cambia la contraseña por una personal.",
-            paginaRetorno: 'editarPerfil');
-        // add your code here.
-      });
-    }
+    //TODO: Cambiar cuando este listo
+    // if (usuario.cambio_contrasenia == 0) {
+    //   SchedulerBinding.instance!.addPostFrameCallback((_) {
+    //     mostrarShowDialogConfirmar(
+    //         context: context,
+    //         titulo: "Cambio de Contraseña",
+    //         contenido:
+    //             "Hemos notado que has cambiado tu contraseña. Para mayor seguridad cambia la contraseña por una personal.",
+    //         paginaRetorno: 'editarPerfil');
+    //     // add your code here.
+    //   });
+    // }
 
     return const Center(
       child: Text("Principal"),
