@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/ui/pages/perfil_pag.dart';
 import 'package:pa_donde_app/ui/pages/principal_pag.dart';
+import 'package:pa_donde_app/ui/pages/ruta_pag.dart';
 import 'package:pa_donde_app/ui/pages/vehiculo_pag.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 //---------------------------------------------------------------------
@@ -34,12 +35,14 @@ class _InicioPagState extends State<InicioPag> {
   /// Widget para cambio de páginas con respecto al BottomNavigationBar
   Widget _llamarPagina(int paginaActual) {
     switch (paginaActual) {
-      case 1:
-        return const PrincipalPag();
       case 0:
-        return const VehiculoPag();
+        return const PrincipalPag();
       case 2:
+        return const VehiculoPag();
+      case 3:
         return PerfilPag();
+      case 1:
+        return RutaPag();
 
       default:
         return const PrincipalPag();
@@ -57,13 +60,14 @@ class _InicioPagState extends State<InicioPag> {
       index: 1,
       height: 60.0,
       items: [
+        Icon(Icons.home_outlined, size: tammanioIconos, color: Colors.black),
+        Icon(Icons.map_outlined, size: tammanioIconos, color: Colors.black),
         Icon(Icons.directions_car_filled_outlined,
             size: tammanioIconos, color: Colors.black),
-        Icon(Icons.home_outlined, size: tammanioIconos, color: Colors.black),
         Icon(Icons.person_outlined, size: tammanioIconos, color: Colors.black),
       ],
       color: Theme.of(context).primaryColor,
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.transparent,
       onTap: onTabTapped,
       buttonBackgroundColor: Theme.of(context).primaryColor,
       animationCurve: Curves.easeInSine,

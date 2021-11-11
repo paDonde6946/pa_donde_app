@@ -43,9 +43,22 @@ dependencies:
   # Tuberia
   provider: ^4.3.2+2
 
+  # Footer Bar
   curved_navigation_bar: ^1.0.1
   
+  # Mapa de google
+  google_maps_flutter: ^2.1.0
 
+  permission_handler: ^8.2.6
+
+  geolocator: ^7.7.1
+
+  flutter_bloc: 
+
+  dio: ^4.0.1
+
+  animate_do: ^2.0.0
+  
   # Para poder guardar el token en el celular
   # flutter_secure_storage: 3.3.3
 
