@@ -1,11 +1,14 @@
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:custom_navigator/custom_navigator.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:pa_donde_app/ui/pages/cargando_gps_pag.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
+import 'package:pa_donde_app/bloc/mi_ubicacion/mi_ubicacion_bloc.dart';
 import 'package:pa_donde_app/ui/pages/perfil_pag.dart';
 import 'package:pa_donde_app/ui/pages/principal_pag.dart';
-import 'package:pa_donde_app/ui/pages/ruta_pag.dart';
 import 'package:pa_donde_app/ui/pages/vehiculo_pag.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 //---------------------------------------------------------------------
@@ -25,13 +28,13 @@ class _InicioPagState extends State<InicioPag> {
 
   final List<Widget> _children = [
     const PrincipalPag(),
-    CargandoGPSPag(),
+    const CargandoGPSPag(),
     const VehiculoPag(),
     PerfilPag(),
   ];
   /*----------------------*/
 
-  Widget _page = CargandoGPSPag();
+  Widget _page = const CargandoGPSPag();
   int _currentIndex = 1;
 
   GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -46,11 +49,6 @@ class _InicioPagState extends State<InicioPag> {
           pageRoute: PageRoutes.materialPageRoute,
         ),
         bottomNavigationBar: footerCustom());
-  }
-
-  /// Método al hacer tap sobre algún icono del BottomNavigationBar
-  void onTabTapped(int index) {
-    setState(() => _currentIndex = index);
   }
 
   /// Widget encargado de la creación del BottomNavigationBar
@@ -71,11 +69,16 @@ class _InicioPagState extends State<InicioPag> {
         Icon(Icons.person_outlined, size: tammanioIconos, color: Colors.black),
       ],
       color: Theme.of(context).primaryColor,
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
       onTap: (index) {
         navigatorKey.currentState!.maybePop();
         setState(() => _page = _children[index]);
         _currentIndex = index;
+        // Cnacelar el seguimiento cuando no este en la pagina de la ruta
+        if (_currentIndex != 1) {
+          BlocProvider.of<MiUbicacionBloc>(context)!.cancelarSeguimiento();
+          setState(() {});
+        }
       },
       buttonBackgroundColor: Theme.of(context).primaryColor,
       animationCurve: Curves.easeInSine,

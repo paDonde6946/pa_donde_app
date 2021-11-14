@@ -21,7 +21,6 @@ class Labels extends StatelessWidget {
         const SizedBox(height: 10),
         GestureDetector(
           onTap: () {
-            print("hola");
             Navigator.pushReplacementNamed(context, ruta);
           },
           child: Text(

@@ -62,6 +62,8 @@ dependencies:
   dio: ^4.0.1
 
   animate_do: ^2.0.0
+
+  sliding_up_panel: ^2.0.0+1
   
   # Para poder guardar el token en el celular
   # flutter_secure_storage: 3.3.3
