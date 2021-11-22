@@ -51,7 +51,6 @@ dependencies:
 
   permission_handler:
 
-  geolocator: ^7.7.1
 
   flutter_bloc: 
 
@@ -64,6 +63,8 @@ dependencies:
   animate_do: ^2.0.0
 
   sliding_up_panel: ^2.0.0+1
+  geolocator: ^7.7.1
+  # geolocator: ^5.3.2+2
   
   # Para poder guardar el token en el celular
   # flutter_secure_storage: 3.3.3
