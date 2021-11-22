@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pa_donde_app/bloc/busqueda/busqueda_bloc.dart';
 import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
 import 'package:pa_donde_app/routes/routes.dart';
 import 'package:provider/provider.dart'
@@ -35,6 +36,9 @@ class _MyAppState extends State<MyApp> {
           ),
           BlocProvider(
             create: (context) => MapaBloc(),
+          ),
+          BlocProvider(
+            create: (context) => BusquedaBloc(),
           )
         ],
         child: MaterialApp(

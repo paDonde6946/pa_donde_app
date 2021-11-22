@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import 'package:pa_donde_app/bloc/mapa/mapa_bloc.dart';
+
 import 'package:pa_donde_app/bloc/mi_ubicacion/mi_ubicacion_bloc.dart';
+import 'package:pa_donde_app/data/services/trafico_servicio.dart';
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 import 'package:pa_donde_app/ui/global_widgets/button/boton_ubicacion.dart';
+import 'package:pa_donde_app/ui/global_widgets/widgets/barra_busqueda_destino_widget.dart';
+import 'package:pa_donde_app/ui/global_widgets/widgets/barra_busqueda_inicio_widget.dart';
+import 'package:pa_donde_app/ui/global_widgets/widgets/marcador_manual_widget.dart';
 import 'dart:async';
+
+import 'package:polyline_do/polyline_do.dart' as Poly;
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -36,8 +44,6 @@ class _RutaPagState extends State<RutaPag> {
 
   @override
   Widget build(BuildContext context) {
-    final mapaBloc = BlocProvider.of<MapaBloc>(context);
-
     return Scaffold(
       body: Stack(
         children: [
@@ -47,23 +53,17 @@ class _RutaPagState extends State<RutaPag> {
               child: Container(
                   padding: const EdgeInsets.all(10),
                   child: const BtnUbicacion())),
+          MarcardorManual(),
           SlidingUpPanel(
-            maxHeight: 300,
-            minHeight: 100,
-            parallaxEnabled: false,
+            maxHeight: 200,
+            minHeight: 150,
+            parallaxEnabled: true,
             parallaxOffset: .5,
-            panelBuilder: (sc) => Center(
-              child: SizedBox(
-                width: 200,
-                child: BtnAnaranja(
-                  titulo: "Marcar Recorrido",
-                  function: () {
-                    mapaBloc.add(OnMarcarRecorrido());
-                    mapaBloc.add(OnSeguirUbicacion());
-                  },
-                ),
-              ),
-            ),
+            panelBuilder: (sc) => Column(children: [
+              const BuscadorBarraInicio(),
+              const BuscadorBarraDestino(),
+              btnContinuar()
+            ]),
             borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(18.0),
                 topRight: Radius.circular(18.0)),
@@ -86,13 +86,60 @@ class _RutaPagState extends State<RutaPag> {
     // Emite cada vez que recibe una nueva ubicacion
     mapaBloc.add(OnNuevaUbicacion(state.ubicacion!));
 
-    return GoogleMap(
-      mapType: MapType.terrain,
-      initialCameraPosition: cameraPosition,
-      myLocationEnabled: true,
-      myLocationButtonEnabled: false,
-      onMapCreated: mapaBloc.iniMapa,
-      polylines: mapaBloc.state.polylines!.values.toSet(),
+    return BlocBuilder<MapaBloc, MapaState>(
+      builder: (context, _) {
+        return GoogleMap(
+          mapType: MapType.terrain,
+          initialCameraPosition: cameraPosition,
+          myLocationEnabled: true,
+          myLocationButtonEnabled: false,
+          onMapCreated: mapaBloc.iniMapa,
+          polylines: mapaBloc.state.polylines!.values.toSet(),
+          onCameraMove: (cameraPosition) {
+            mapaBloc.add(OnMovioMapa(cameraPosition.target));
+          },
+        );
+      },
+    );
+  }
+
+  Widget btnContinuar() {
+    final size = MediaQuery.of(context).size;
+
+    final mapaBloc = BlocProvider.of<MapaBloc>(context);
+
+    return Column(
+      children: [
+        SizedBox(height: size.height * 0.02),
+        SizedBox(
+          width: size.width * 0.9,
+          child: BtnAnaranja(
+              titulo: 'Continuar',
+              function: () async {
+                // final traficoServicio = TraficoServicio();
+                // final inicio =
+                //     BlocProvider.of<MiUbicacionBloc>(context).state.ubicacion;
+                // final destino = BlocProvider.of<MapaBloc>(context).state.ubicacionCentral;
+
+                // final ruta = await traficoServicio.getCoordsInicioYFin(
+                //     inicio!, destino!);
+
+                // final geometry = ruta.routes![0].geometry;
+                // final duracion = ruta.routes![0].duration;
+                // final distancia = ruta.routes![0].distance;
+
+                // final points =
+                //     Poly.Polyline.Decode(encodedString: geometry!, precision: 6)
+                //         .decodedCoords;
+
+                // final List<LatLng> rutaCoords =
+                //     points.map((point) => LatLng(point[0], point[1])).toList();
+
+                // mapaBloc.add(OnCrearRutaInicioDestino(
+                //     rutaCoords, distancia!, duracion!));
+              }),
+        ),
+      ],
     );
   }
 }

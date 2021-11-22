@@ -57,7 +57,7 @@ class ValidarInicioSesion extends StatelessWidget {
             context,
             PageRouteBuilder(
                 pageBuilder: (context, __, ___) => const InicioPag(),
-                transitionDuration: const Duration(milliseconds: 0)));
+                transitionDuration: const Duration(milliseconds: 10)));
       });
     } else {
       SchedulerBinding.instance!.addPostFrameCallback((_) {
@@ -65,7 +65,7 @@ class ValidarInicioSesion extends StatelessWidget {
             context,
             PageRouteBuilder(
                 pageBuilder: (context, __, ___) => InicioSesionPag(),
-                transitionDuration: const Duration(milliseconds: 0)));
+                transitionDuration: const Duration(milliseconds: 10)));
       });
     }
   }

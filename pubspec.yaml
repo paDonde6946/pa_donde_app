@@ -38,7 +38,7 @@ dependencies:
   http: ^0.13.3
 
   # Para poder guardar el token en el celular
-  flutter_secure_storage: 
+  flutter_secure_storage: 3.3.3
 
   # Tuberia
   provider: ^4.3.2+2
@@ -64,6 +64,9 @@ dependencies:
   animate_do: ^2.0.0
 
   sliding_up_panel: ^2.0.0+1
+
+  # Decodificacion de los polylines
+  polyline_do: ^0.1.0
   
   # Para poder guardar el token en el celular
   # flutter_secure_storage: 3.3.3

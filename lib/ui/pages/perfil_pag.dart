@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:pa_donde_app/data/models/usuario_modelo.dart';
 import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
+import 'package:pa_donde_app/ui/helpers/helpers.dart';
+import 'package:pa_donde_app/ui/pages/agregar_vehiculo_pag.dart';
+import 'package:pa_donde_app/ui/pages/editar_perfil_pag.dart';
 import 'package:pa_donde_app/ui/pages/inicio_pag.dart';
 import 'package:pa_donde_app/ui/pages/inicio_sesion_pag.dart';
 import 'package:provider/provider.dart';
@@ -65,7 +69,10 @@ class _PerfilPagState extends State<PerfilPag> {
         BtnAnaranja(
           titulo: "Editar Perfil",
           function: () {
-            Navigator.pushNamed(context, 'editarPerfil');
+            SchedulerBinding.instance!.addPostFrameCallback((_) {
+              Navigator.of(context)
+                  .push(navegarMapaFadeIn(context, EditarPerfilPag()));
+            });
           },
         ),
         const SizedBox(height: 30),

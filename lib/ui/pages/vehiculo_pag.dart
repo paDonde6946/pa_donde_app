@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/models/vehiculo_modelo.dart';
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 import 'package:pa_donde_app/ui/global_widgets/widgets/card_vehiculo_widget.dart';
+import 'package:pa_donde_app/ui/helpers/helpers.dart';
+import 'package:pa_donde_app/ui/pages/agregar_vehiculo_pag.dart';
+import 'package:pa_donde_app/ui/pages/cargando_gps_pag.dart';
 //---------------------------------------------------------------------
 
 class VehiculoPag extends StatefulWidget {
@@ -34,7 +38,12 @@ class _VehiculoPagState extends State<VehiculoPag> {
           Container(
             padding: EdgeInsets.symmetric(horizontal: size.width * 0.2),
             child: BtnAnaranja(
-              function: () => Navigator.pushNamed(context, "agregarVehiculo"),
+              function: () {
+                SchedulerBinding.instance!.addPostFrameCallback((_) {
+                  Navigator.of(context).push(
+                      navegarMapaFadeIn(context, const AgregarVehiculo()));
+                });
+              },
               titulo: "AGREGAR VEHICULO",
             ),
           )

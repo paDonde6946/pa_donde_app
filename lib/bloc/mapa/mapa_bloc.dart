@@ -22,6 +22,11 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
       color: Color.fromRGBO(94, 153, 45, 1),
       width: 4);
 
+  Polyline _miRutaDestino = Polyline(
+      polylineId: PolylineId("mi_ruta_destino"),
+      color: Color.fromRGBO(94, 153, 45, 1),
+      width: 4);
+
   void iniMapa(GoogleMapController controller) {
     if (!state.mapaListo!) {
       _mapController = controller;
@@ -46,7 +51,11 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
     } else if (event is OnMarcarRecorrido) {
       yield* _onMarcarRecorrido(event);
     } else if (event is OnSeguirUbicacion) {
-      yield state.copyWith(seguirUbicacion: !state.seguirUbicacion!);
+      yield* _onSeguirUbicacion(event);
+    } else if (event is OnMovioMapa) {
+      yield state.copyWith(ubicacionCentral: event.centroMapa);
+    } else if (event is OnCrearRutaInicioDestino) {
+      yield* _onCrearRutaInicioDestino(event);
     }
   }
 
@@ -90,5 +99,27 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
     yield state.copyWith(
         dibujarRecorrido: !state.dibujarRecorrido!,
         polylines: currentPolylines);
+  }
+
+  /// Metodo que monitora el seguimiento de la ubicacion del usuario actualizar la camara con la ubicacion
+  Stream<MapaState> _onSeguirUbicacion(OnSeguirUbicacion event) async* {
+    if (!state.seguirUbicacion!) {
+      moverCamara(_miRuta.points[_miRuta.points.length - 1]);
+    }
+
+    yield state.copyWith(seguirUbicacion: !state.seguirUbicacion!);
+  }
+
+  Stream<MapaState> _onCrearRutaInicioDestino(
+      OnCrearRutaInicioDestino event) async* {
+    _miRutaDestino = _miRutaDestino
+      ..copyWith(pointsParam: event.rutaCoordenadas);
+
+    final currentPolylines = state.polylines;
+    currentPolylines!["mi_ruta_destino"] = _miRutaDestino;
+
+    yield state.copyWith(polylines: currentPolylines
+        //TODO:
+        );
   }
 }

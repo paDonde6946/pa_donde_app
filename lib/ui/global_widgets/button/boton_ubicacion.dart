@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pa_donde_app/bloc/busqueda/busqueda_bloc.dart';
 import 'package:pa_donde_app/bloc/mapa/mapa_bloc.dart';
 import 'package:pa_donde_app/bloc/mi_ubicacion/mi_ubicacion_bloc.dart';
 
@@ -23,6 +24,8 @@ class BtnUbicacion extends StatelessWidget {
           child: IconButton(
               onPressed: () {
                 final destino = ubicacionBloc.state.ubicacion;
+                BlocProvider.of<BusquedaBloc>(context)
+                    .add(OnActivarMarcadorManual());
                 mapaBloc.moverCamara(destino!);
               },
               icon: const Icon(Icons.my_location, color: Colors.black87)),
