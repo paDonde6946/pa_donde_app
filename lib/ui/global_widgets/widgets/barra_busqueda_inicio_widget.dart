@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pa_donde_app/bloc/busqueda/busqueda_bloc.dart';
+import 'package:pa_donde_app/bloc/mapa/mapa_bloc.dart';
 import 'package:pa_donde_app/bloc/mi_ubicacion/mi_ubicacion_bloc.dart';
 import 'package:pa_donde_app/data/models/busqueda_resultados_modelo.dart';
+import 'package:pa_donde_app/data/services/trafico_servicio.dart';
 import 'package:pa_donde_app/ui/global_widgets/search/busqueda_origen.dart';
+
+import 'package:polyline_do/polyline_do.dart' as Poly;
 
 class BuscadorBarraInicio extends StatelessWidget {
   // final void Function()? function;
@@ -50,12 +55,36 @@ class BuscadorBarraInicio extends StatelessWidget {
     );
   }
 
-  void retornoBusqueda(BuildContext context, BusquedaResultado resultado) {
+  Future<void> retornoBusqueda(
+      BuildContext context, BusquedaResultado resultado) async {
     if (resultado.cancelo!) return;
 
     if (resultado.manual!) {
       BlocProvider.of<BusquedaBloc>(context).add(OnActivarMarcadorManual());
       return;
     }
+
+    // Calcular la ruta en base al valor: Result
+    final traficoServicio = TraficoServicio();
+    final mapaBloc = BlocProvider.of<MapaBloc>(context);
+
+    final inicio = BlocProvider.of<MiUbicacionBloc>(context).state.ubicacion;
+    final destino = resultado.posicion;
+
+    final rutaResponse =
+        await traficoServicio.getCoordsInicioYFin(inicio, destino!);
+
+    final geometry = rutaResponse.routes![0].geometry;
+    final duracion = rutaResponse.routes![0].duration;
+    final distancia = rutaResponse.routes![0].distance;
+
+    final points = Poly.Polyline.Decode(encodedString: geometry!, precision: 6);
+
+    final List<LatLng> rutaCoordenadas = points.decodedCoords
+        .map((point) => LatLng(point[0], point[1]))
+        .toList();
+
+    mapaBloc
+        .add(OnCrearRutaInicioDestino(rutaCoordenadas, distancia!, duracion!));
   }
 }

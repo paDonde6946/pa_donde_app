@@ -33,48 +33,71 @@ class BusquedaOrigen extends SearchDelegate<BusquedaResultado> {
 
   @override
   Widget buildResults(BuildContext context) {
-    final s = traficoServicio.getResultadosPorQuery(query.trim(), proximidad);
-    print(s);
     return _construirResultadosSugerencias();
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return ListView(
-      children: [
-        ListTile(
-          leading: const Icon(Icons.location_on),
-          title: const Text("Colocar ubicacion manulamente"),
-          onTap: () {
-            /// El usuario no cancelo pero si elijo la opcion manualmente
-            close(context, BusquedaResultado(cancelo: false, manual: true));
-          },
-        )
-      ],
-    );
+    if (query.isEmpty) {
+      return ListView(
+        children: [
+          ListTile(
+            leading: const Icon(Icons.location_on),
+            title: const Text("Colocar ubicacion manulamente"),
+            onTap: () {
+              /// El usuario no cancelo pero si elijo la opcion manualmente
+              close(context, BusquedaResultado(cancelo: false, manual: true));
+            },
+          )
+        ],
+      );
+    }
+
+    return _construirResultadosSugerencias();
   }
 
   Widget _construirResultadosSugerencias() {
+    if (query.isEmpty) {
+      return Container();
+    }
+
+    // traficoServicio.getResultadosPorQuery(query.trim(), proximidad);
+
     return FutureBuilder(
+      // stream: traficoServicio.sugerenciasStream,
       future: traficoServicio.getResultadosPorQuery(query.trim(), proximidad),
-      builder: (context, AsyncSnapshot snapshot) {
-        if (snapshot.hasData) {
+      builder: (context, AsyncSnapshot<BusquedaResponse> snapshot) {
+        if (!snapshot.hasData) {
           return const Center(child: CircularProgressIndicator());
         }
 
         final lugares = snapshot.data!.features;
 
+        if (lugares!.isEmpty) {
+          return ListTile(
+            leading: const Icon(Icons.search_off_outlined),
+            title: Text('No hay resultados con $query'),
+          );
+        }
+
         return ListView.separated(
-          itemCount: lugares == null ? 0 : lugares.length,
+          itemCount: lugares.isEmpty ? 0 : lugares.length,
           separatorBuilder: (_, i) => const Divider(),
           itemBuilder: (BuildContext context, int index) {
-            final lugar = lugares![index];
+            final lugar = lugares[index];
             return ListTile(
-              leading: Icon(Icons.place),
+              leading: const Icon(Icons.place),
               title: Text(lugar.textEs!),
               subtitle: Text(lugar.placeNameEs!),
               onTap: () {
-                print(lugar);
+                close(
+                    context,
+                    BusquedaResultado(
+                        cancelo: false,
+                        manual: false,
+                        posicion: LatLng(lugar.center![1], lugar.center![0]),
+                        nombreDestino: lugar.textEs,
+                        descripcion: lugar.placeNameEs));
               },
             );
           },
