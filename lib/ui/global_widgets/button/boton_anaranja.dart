@@ -10,7 +10,9 @@ class BtnAnaranja extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     /// Crear un boton de color anaranjado personalizado
-    return Container(
+    return 
+    
+    Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Theme.of(context).primaryColorLight,
