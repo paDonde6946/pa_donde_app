@@ -8,6 +8,7 @@ import 'package:pa_donde_app/ui/global_widgets/widgets/card_vehiculo_widget.dart
 import 'package:pa_donde_app/ui/helpers/helpers.dart';
 import 'package:pa_donde_app/ui/pages/agregar_vehiculo_pag.dart';
 import 'package:pa_donde_app/ui/pages/cargando_gps_pag.dart';
+import 'package:pa_donde_app/ui/pages/editar_vehiculo_pag.dart';
 //---------------------------------------------------------------------
 
 class VehiculoPag extends StatefulWidget {
@@ -44,7 +45,7 @@ class _VehiculoPagState extends State<VehiculoPag> {
                       navegarMapaFadeIn(context, const AgregarVehiculo()));
                 });
               },
-              titulo: "AGREGAR VEHICULO",
+              titulo: "Agregar Vehículo",
             ),
           )
         ]),
@@ -80,12 +81,21 @@ class _VehiculoPagState extends State<VehiculoPag> {
     List<Widget> arreglo2 = [];
 
     for (int i = 0; i < vehiculos.length; i++) {
-      arreglo2.add(CardVehiculo(
-          icon: Icons.motorcycle_rounded,
-          color: Colors.black,
-          placa: vehiculos[i].placa,
-          marca: vehiculos[i].marca,
-          validar: true));
+      arreglo2.add(GestureDetector(
+              onTap: () {
+        
+        Navigator.of(context)
+            .push(navegarMapaFadeIn(context, EditarVehiculo(vehiculo: vehiculos[i],)));
+
+        // Navigator.pushNamed(context, 'editarVehiculo', arguments: vehiculos[i]);
+      },
+        child: CardVehiculo(
+            icon: Icons.motorcycle_rounded,
+            color: Colors.black,
+            placa: vehiculos[i].placa,
+            marca: vehiculos[i].marca,
+            validar: true),
+      ));
       count++;
       if (count == 2) {
         arreglo.add(TableRow(children: arreglo2));

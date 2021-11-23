@@ -70,11 +70,33 @@ class _EditarPerfilPagState extends State<EditarPerfilPag> {
     return AppBar(
         centerTitle: true,
         foregroundColor: Colors.black,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).primaryColor,
         title: Text(
-          "EDITAR PERFIL",
+          "Editar Perfil",
           style: TextStyle(
               fontSize: size.width * 0.045, fontWeight: FontWeight.bold),
         ));
+  }
+
+  
+  /// Panel superior verde (Titulo de la pagina)
+  Widget panelSuperior() {
+    final size = MediaQuery.of(context).size;
+    return Container(
+      color: Theme.of(context).primaryColor,
+      height: 120,
+      child: Column(
+        children: [
+          Icon(
+            Icons.directions_car_filled_outlined,
+            size: size.height * 0.1,
+          ),
+          Text(
+            "Editar Perfil",
+            style: TextStyle(fontSize: size.width * 0.06),
+          ),
+        ],
+      ),
+    );
   }
 }

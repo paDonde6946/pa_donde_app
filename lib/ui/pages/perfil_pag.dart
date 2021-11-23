@@ -95,11 +95,11 @@ class _PerfilPagState extends State<PerfilPag> {
       children: [
         IconButton(
             onPressed: () {},
-            icon: Icon(Icons.arrow_back, size: size.width * 0.06)),
+            icon: Icon(null, size: null)),
         Text(
-          "PERFIL",
+          "Perfil",
           style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontSize: size.width * 0.08,
               fontWeight: FontWeight.w600),
         ),
