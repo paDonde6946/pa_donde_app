@@ -67,6 +67,8 @@ dependencies:
 
   # Decodificacion de los polylines
   polyline_do: ^0.1.0
+
+  intl: ^0.17.0
   
   # Para poder guardar el token en el celular
   # flutter_secure_storage: 3.3.3
