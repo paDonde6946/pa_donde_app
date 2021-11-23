@@ -4,8 +4,11 @@ part of 'busqueda_bloc.dart';
 class BusquedaState {
   //
   final bool seleccionManual;
+  final List<BusquedaResultado> historial;
 
-  const BusquedaState({this.seleccionManual = false});
+  BusquedaState(
+      {this.seleccionManual = false, List<BusquedaResultado>? historial})
+      : historial = (historial == null) ? [] : historial;
 
   BusquedaState copyWith({bool? seleccionManual}) =>
       BusquedaState(seleccionManual: seleccionManual ?? this.seleccionManual);

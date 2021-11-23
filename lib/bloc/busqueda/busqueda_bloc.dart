@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:pa_donde_app/data/models/busqueda_resultados_modelo.dart';
 
 part 'busqueda_event.dart';
 part 'busqueda_state.dart';

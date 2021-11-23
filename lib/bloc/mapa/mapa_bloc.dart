@@ -112,8 +112,8 @@ class MapaBloc extends Bloc<MapaEvent, MapaState> {
 
   Stream<MapaState> _onCrearRutaInicioDestino(
       OnCrearRutaInicioDestino event) async* {
-    _miRutaDestino = _miRutaDestino
-      ..copyWith(pointsParam: event.rutaCoordenadas);
+    _miRutaDestino =
+        _miRutaDestino.copyWith(pointsParam: event.rutaCoordenadas);
 
     final currentPolylines = state.polylines;
     currentPolylines!["mi_ruta_destino"] = _miRutaDestino;
