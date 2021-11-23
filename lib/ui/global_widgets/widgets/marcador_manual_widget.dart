@@ -1,6 +1,8 @@
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pa_donde_app/bloc/busqueda/busqueda_bloc.dart';
 
 class MarcardorManual extends StatelessWidget {
