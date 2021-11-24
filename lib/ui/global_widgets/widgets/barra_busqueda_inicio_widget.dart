@@ -11,9 +11,10 @@ import 'package:pa_donde_app/ui/global_widgets/search/busqueda_origen.dart';
 import 'package:polyline_do/polyline_do.dart' as Poly;
 
 class BuscadorBarraInicio extends StatelessWidget {
-  // final void Function()? function;
+  final String busquedaDireccion;
 
-  const BuscadorBarraInicio({Key? key}) : super(key: key);
+  BuscadorBarraInicio({Key? key, required this.busquedaDireccion})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +28,12 @@ class BuscadorBarraInicio extends StatelessWidget {
         onTap: () async {
           final proximidad =
               BlocProvider.of<MiUbicacionBloc>(context).state.ubicacion;
+          final historial =
+              BlocProvider.of<BusquedaBloc>(context).state.historial;
           final bussquedaResultado = await showSearch(
-              context: context, delegate: BusquedaOrigen(proximidad!));
+              context: context,
+              delegate:
+                  BusquedaOrigen(proximidad!, historial, busquedaDireccion));
           retornoBusqueda(context, bussquedaResultado!);
         },
         child: Material(
@@ -39,8 +44,12 @@ class BuscadorBarraInicio extends StatelessWidget {
                 horizontal: size.width * 0.03, vertical: size.width * 0.025),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text("Origen", style: TextStyle(color: Colors.black87)),
+              children: [
+                Text(
+                    busquedaDireccion == ""
+                        ? '¿ Donde es el servicio?'.toUpperCase()
+                        : busquedaDireccion,
+                    style: TextStyle(color: Colors.black87)),
                 Icon(Icons.location_searching)
               ],
             ),
@@ -86,5 +95,9 @@ class BuscadorBarraInicio extends StatelessWidget {
 
     mapaBloc
         .add(OnCrearRutaInicioDestino(rutaCoordenadas, distancia!, duracion!));
+
+    /// Agregar historial
+    final busquedaBloc = BlocProvider.of<BusquedaBloc>(context);
+    busquedaBloc.add(OnAgregarHistorial(resultado));
   }
 }

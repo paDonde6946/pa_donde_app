@@ -14,6 +14,15 @@ class BusquedaBloc extends Bloc<BusquedaEvent, BusquedaState> {
       yield state.copyWith(seleccionManual: true);
     } else if (event is OnDesactivarMarcadorManual) {
       yield state.copyWith(seleccionManual: false);
+    } else if (event is OnAgregarHistorial) {
+      final existe = state.historial
+          .where((resultado) =>
+              resultado.nombreDestino == event.resultado.nombreDestino)
+          .length;
+      if (existe == 0) {
+        final newHistorial = [...state.historial, event.resultado];
+        yield state.copyWith(historial: newHistorial);
+      }
     }
   }
 }

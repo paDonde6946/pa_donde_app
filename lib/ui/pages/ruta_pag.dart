@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:pa_donde_app/bloc/busqueda/busqueda_bloc.dart';
 
 import 'package:pa_donde_app/bloc/mapa/mapa_bloc.dart';
 
@@ -44,6 +45,8 @@ class _RutaPagState extends State<RutaPag> {
 
   @override
   Widget build(BuildContext context) {
+    final busquedaBloc = BlocProvider.of<BusquedaBloc>(context).state.historial;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -60,7 +63,10 @@ class _RutaPagState extends State<RutaPag> {
             parallaxEnabled: true,
             parallaxOffset: .5,
             panelBuilder: (sc) => Column(children: [
-              const BuscadorBarraInicio(),
+              BuscadorBarraInicio(
+                  busquedaDireccion: (busquedaBloc.isEmpty)
+                      ? 'Origen'
+                      : busquedaBloc[0].nombreDestino!),
               const BuscadorBarraDestino(),
               btnContinuar()
             ]),

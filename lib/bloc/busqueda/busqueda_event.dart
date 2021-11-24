@@ -6,3 +6,8 @@ abstract class BusquedaEvent {}
 class OnActivarMarcadorManual extends BusquedaEvent {}
 
 class OnDesactivarMarcadorManual extends BusquedaEvent {}
+
+class OnAgregarHistorial extends BusquedaEvent {
+  final BusquedaResultado resultado;
+  OnAgregarHistorial(this.resultado);
+}

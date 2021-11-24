@@ -10,8 +10,10 @@ class BusquedaOrigen extends SearchDelegate<BusquedaResultado> {
   String searchFieldLabel;
   final TraficoServicio traficoServicio;
   final LatLng proximidad;
+  final List<BusquedaResultado> historial;
+  final String busquedaDireccion;
 
-  BusquedaOrigen(this.proximidad)
+  BusquedaOrigen(this.proximidad, this.historial, this.busquedaDireccion)
       : searchFieldLabel = "Buscar",
         traficoServicio = TraficoServicio();
 
@@ -48,7 +50,17 @@ class BusquedaOrigen extends SearchDelegate<BusquedaResultado> {
               /// El usuario no cancelo pero si elijo la opcion manualmente
               close(context, BusquedaResultado(cancelo: false, manual: true));
             },
-          )
+          ),
+          ...historial
+              .map((result) => ListTile(
+                    leading: const Icon(Icons.history),
+                    title: Text(result.nombreDestino!),
+                    subtitle: Text(result.descripcion!),
+                    onTap: () {
+                      close(context, result);
+                    },
+                  ))
+              .toList()
         ],
       );
     }
