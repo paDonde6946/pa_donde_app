@@ -101,6 +101,7 @@ class _RutaPagState extends State<RutaPag> {
           myLocationButtonEnabled: false,
           onMapCreated: mapaBloc.iniMapa,
           polylines: mapaBloc.state.polylines!.values.toSet(),
+          markers: mapaBloc.state.markers.values.toSet(),
           onCameraMove: (cameraPosition) {
             mapaBloc.add(OnMovioMapa(cameraPosition.target));
           },
