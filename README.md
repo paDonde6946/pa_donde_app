@@ -40,23 +40,23 @@ Teniendo presente que ya tiene el entorno listo. Ya solamente queda la ejecució
  
  ![](/resources/img/estructuraProyecto.png)
 
-## How to clone
-If you have special requirements, you have to list it step by step.
-* This is the first step
-* Then you have to do this
-* Finally do this
+  
+  5. Es posible que la primera vez que intente ejecutar el programa le salga errores. Esto se debe a que debe de actualizar las dependencias que tiene el artefacto. Para ello debe de abrir la consola o terminal de Visual Studio y ejecutar el siguiente comando.
 
-Markdown has enumation and nested lists.
-
-## Installation
-To install and run this proyect just type and execute
 ```bash
-npm install
+flutter pub get
 ```
-## Preview
-Insert here an image of the preview if your project has one. The image can be into the project, you have to indicate the route and look like this.
 
+  Este debe de solucionar los posibles errores. Una vez validado esto puede proceder a ejecutar el proyecto. Para ello debe dar clic en `Run>Start Without Debugging` en la ventana principal del IDE. o presionar Cttl+5.
 
+## NOTA
 
-### Notes
-If you want to learn all about markdown i recommend you visit the site [markdown.es](https://markdown.es/sintaxis-markdown/)
+  Debe de asegurarse de estar corriendo el emulador de Android y haberlo seleccionado en el IDE. En el siguiente link puede encontrar más información. [Link documentación de la ejecución de proyecto en flutter (click aqui)](https://esflutter.dev/docs/development/tools/vs-code) 
+
+  Para que el proyecto funcione correctamente debe asegurarse que antes de ejecutar el proyecto de flutter, el backend debe de estar corriendo dado que el aplicativo tiene manejo de sesiones y apenas inicia valida con el backend si el usuario ya estaba logueado en el dispositivo o no y si no recibe respuesta del backend el aplicativo no pasara de la pantalla inicial.
+
+## FUNCIONAMIENTO
+
+ A continuación se da una imagen preliminar de como deberia de comenzar el programa.
+
+  <img src="resources/img/inicio.png" width="300" height="500">
