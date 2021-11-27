@@ -16,7 +16,7 @@ Dependiendo el sistema operativo en su mayoria le descargara un archivo comprimi
 Recuerde que debe de establecer en variables del entorno. Para que pueda reconocer los comandos propios del framework en la maquina.
 
 ## ANDROID
-Para poder ejecutar un simulador de un dispositivo android debe de installar
+Para poder ejecutar un simulador de un dispositivo android debe de instalar
 `Android Studio` en el siguiente link encontrará toda la información necesaria para instalar el software.
 
 [Link documentación de descarga e instalación de Android Studio (click aqui)](https://developer.android.com/studio?hl=es-419&gclsrc=ds&gclsrc=ds&gclid=COmpopeutfQCFYo_Hwod76gBrA)
