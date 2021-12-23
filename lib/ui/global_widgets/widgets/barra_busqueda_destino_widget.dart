@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pa_donde_app/bloc/busqueda/busqueda_bloc.dart';
+import 'package:pa_donde_app/blocs/busqueda/busqueda_bloc.dart';
 import 'package:pa_donde_app/data/models/busqueda_resultados_modelo.dart';
 import 'package:pa_donde_app/ui/global_widgets/search/busqueda_destino.dart';
-import 'package:pa_donde_app/ui/global_widgets/search/busqueda_origen.dart';
 
 class BuscadorBarraDestino extends StatelessWidget {
   const BuscadorBarraDestino({Key? key}) : super(key: key);

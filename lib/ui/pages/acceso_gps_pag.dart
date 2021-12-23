@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:permission_handler/permission_handler.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+//------------------IMPORTACIONES LOCALES------------------------------
+import 'package:pa_donde_app/blocs/blocs.dart';
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 import 'package:pa_donde_app/ui/helpers/helpers.dart';
 import 'package:pa_donde_app/ui/pages/cargando_gps_pag.dart';
 import 'package:pa_donde_app/ui/pages/ruta_pag.dart';
-import 'package:permission_handler/permission_handler.dart';
+//---------------------------------------------------------------------
 
 class AccesoGPSPag extends StatefulWidget {
   @override
@@ -29,7 +35,7 @@ class _AccesoGPSPagState extends State<AccesoGPSPag>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
-    //Detectar cunado cambia el estado y
+    //Detectar cunado cambia el estado
     if (state == AppLifecycleState.resumed) {
       if (await Permission.location.isGranted) {
         SchedulerBinding.instance!.addPostFrameCallback((_) {
@@ -43,25 +49,38 @@ class _AccesoGPSPagState extends State<AccesoGPSPag>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: contenedorBody()),
+      body: Center(child: BlocBuilder<GpsBloc, GpsState>(
+        builder: (context, state) {
+          return !state.estaGpsHabilitado
+              ? _habilitarGpsMensage()
+              : _contenedorBody();
+        },
+      )
+          // _contenedorBody(),
+          // child: _habilitarGpsMensage(),
+          ),
     );
   }
 
-  Widget contenedorBody() {
+  /// Contiene el boton para poder solicitar acceso al GPS
+  Widget _contenedorBody() {
     final size = MediaQuery.of(context).size;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text("Es necesario el GPS para usar esta app !"),
+        Text(
+          "Es necesario el GPS para usar esta app!",
+          style: TextStyle(fontSize: size.width * 0.04),
+        ),
         SizedBox(height: size.height * 0.04),
         SizedBox(
           width: size.width * 0.5,
           child: BtnAnaranja(
             titulo: "Solicitar Acceso",
             function: () async {
-              final status = await Permission.location.request();
-              accesoGPS(status);
+              final gpsBloc = BlocProvider.of<GpsBloc>(context);
+              gpsBloc.preguntarGpsAcceso();
             },
           ),
         )
@@ -69,21 +88,21 @@ class _AccesoGPSPagState extends State<AccesoGPSPag>
     );
   }
 
-  // Valida que el APK tenga permisos de localizacion para poder usar el GPS
-  void accesoGPS(PermissionStatus status) {
-    switch (status) {
-      //  Si tiene los permisos permitidos
-      case PermissionStatus.granted:
-        SchedulerBinding.instance!.addPostFrameCallback((_) {
-          Navigator.of(context).push(navegarMapaFadeIn(context, RutaPag()));
-        });
-        break;
-      //Si no cumple con los permisos
-      case PermissionStatus.denied:
-      case PermissionStatus.restricted:
-      case PermissionStatus.limited:
-      case PermissionStatus.permanentlyDenied:
-        openAppSettings();
-    }
+  Widget _habilitarGpsMensage() {
+    final size = MediaQuery.of(context).size;
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image(
+            image: const AssetImage("img/logo/logo_PaDonde.png"),
+            width: size.width * 0.5),
+        SizedBox(height: size.height * 0.05),
+        Text(
+          "Debe de habilitar el GPS...",
+          style: TextStyle(fontSize: size.width * 0.045),
+        ),
+      ],
+    );
   }
 }

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:pa_donde_app/ui/pages/cargando_gps_pag.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
-import 'package:pa_donde_app/bloc/mi_ubicacion/mi_ubicacion_bloc.dart';
+import 'package:pa_donde_app/blocs/mi_ubicacion/mi_ubicacion_bloc.dart';
 import 'package:pa_donde_app/ui/pages/perfil_pag.dart';
 import 'package:pa_donde_app/ui/pages/principal_pag.dart';
 import 'package:pa_donde_app/ui/pages/vehiculo_pag.dart';

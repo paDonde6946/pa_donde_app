@@ -1,15 +1,29 @@
 import 'package:flutter/material.dart';
+
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pa_donde_app/bloc/busqueda/busqueda_bloc.dart';
-import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
-import 'package:pa_donde_app/routes/routes.dart';
+import 'package:pa_donde_app/blocs/blocs.dart';
+
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:provider/provider.dart'
     show ChangeNotifierProvider, MultiProvider;
 
-import 'package:pa_donde_app/bloc/mi_ubicacion/mi_ubicacion_bloc.dart';
-import 'package:pa_donde_app/bloc/mapa/mapa_bloc.dart';
+//------------------IMPORTACIONES LOCALES------------------------------
+import 'package:pa_donde_app/blocs/busqueda/busqueda_bloc.dart';
+import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
+import 'package:pa_donde_app/routes/routes.dart';
+import 'package:pa_donde_app/blocs/mi_ubicacion/mi_ubicacion_bloc.dart';
+import 'package:pa_donde_app/blocs/mapa/mapa_bloc.dart';
+//---------------------------------------------------------------------
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(MultiBlocProvider(
+    providers: [
+      BlocProvider(create: (context) => GpsBloc()),
+    ],
+    child: const MyApp(),
+  ));
+}
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -27,29 +41,14 @@ class _MyAppState extends State<MyApp> {
           create: (context) => AutenticacionServicio(),
         ),
       ],
-
-      /// Bloc Provider
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (context) => MiUbicacionBloc(),
-          ),
-          BlocProvider(
-            create: (context) => MapaBloc(),
-          ),
-          BlocProvider(
-            create: (context) => BusquedaBloc(),
-          )
-        ],
-        child: MaterialApp(
-          title: 'Pa Donde',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-              primaryColor: const Color.fromRGBO(94, 153, 45, 1),
-              primaryColorLight: const Color.fromRGBO(232, 119, 29, 1)),
-          initialRoute: 'validarInicioSesion',
-          routes: generarRutas(),
-        ),
+      child: MaterialApp(
+        title: 'Pa Donde',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+            primaryColor: const Color.fromRGBO(94, 153, 45, 1),
+            primaryColorLight: const Color.fromRGBO(232, 119, 29, 1)),
+        initialRoute: 'validarInicioSesion',
+        routes: generarRutas(),
       ),
     );
   }

@@ -35,7 +35,8 @@ class _CargandoGPSPagState extends State<CargandoGPSPag>
     if (state == AppLifecycleState.resumed) {
       if (await Geolocator.isLocationServiceEnabled()) {
         SchedulerBinding.instance!.addPostFrameCallback((_) {
-          Navigator.of(context).push(navegarMapaFadeIn(context, RutaPag()));
+          Navigator.of(context)
+              .push(navegarMapaFadeIn(context, AccesoGPSPag()));
         });
       }
     }
@@ -78,7 +79,7 @@ class _CargandoGPSPagState extends State<CargandoGPSPag>
 
     if (permisoGPS && gpsActivo) {
       SchedulerBinding.instance!.addPostFrameCallback((_) {
-        Navigator.of(context).push(navegarMapaFadeIn(context, RutaPag()));
+        Navigator.of(context).push(navegarMapaFadeIn(context, AccesoGPSPag()));
       });
       return "";
     } else if (!permisoGPS) {

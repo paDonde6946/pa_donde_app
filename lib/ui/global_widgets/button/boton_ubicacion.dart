@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pa_donde_app/bloc/busqueda/busqueda_bloc.dart';
-import 'package:pa_donde_app/bloc/mapa/mapa_bloc.dart';
-import 'package:pa_donde_app/bloc/mi_ubicacion/mi_ubicacion_bloc.dart';
+import 'package:pa_donde_app/blocs/busqueda/busqueda_bloc.dart';
+import 'package:pa_donde_app/blocs/mapa/mapa_bloc.dart';
+import 'package:pa_donde_app/blocs/mi_ubicacion/mi_ubicacion_bloc.dart';
 
 class BtnUbicacion extends StatelessWidget {
   const BtnUbicacion({Key? key}) : super(key: key);

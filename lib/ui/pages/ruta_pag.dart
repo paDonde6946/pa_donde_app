@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:pa_donde_app/bloc/busqueda/busqueda_bloc.dart';
+import 'package:pa_donde_app/blocs/busqueda/busqueda_bloc.dart';
 
-import 'package:pa_donde_app/bloc/mapa/mapa_bloc.dart';
+import 'package:pa_donde_app/blocs/mapa/mapa_bloc.dart';
 
-import 'package:pa_donde_app/bloc/mi_ubicacion/mi_ubicacion_bloc.dart';
+import 'package:pa_donde_app/blocs/mi_ubicacion/mi_ubicacion_bloc.dart';
 import 'package:pa_donde_app/data/services/trafico_servicio.dart';
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 import 'package:pa_donde_app/ui/global_widgets/button/boton_ubicacion.dart';
