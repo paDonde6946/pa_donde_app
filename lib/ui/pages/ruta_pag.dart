@@ -1,42 +1,45 @@
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:pa_donde_app/blocs/busqueda/busqueda_bloc.dart';
 
-import 'package:pa_donde_app/blocs/mapa/mapa_bloc.dart';
-
-import 'package:pa_donde_app/blocs/mi_ubicacion/mi_ubicacion_bloc.dart';
-import 'package:pa_donde_app/data/services/trafico_servicio.dart';
+//------------------IMPORTACIONES LOCALES------------------------------
+import 'package:pa_donde_app/blocs/blocs.dart';
+import 'package:pa_donde_app/ui/global_widgets/button/boton_alternar_ruta_usuario.dart';
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
+import 'package:pa_donde_app/ui/global_widgets/button/boton_seguir_usuario.dart';
 import 'package:pa_donde_app/ui/global_widgets/button/boton_ubicacion.dart';
+import 'package:pa_donde_app/ui/global_widgets/views/mapa_view.dart';
 import 'package:pa_donde_app/ui/global_widgets/widgets/barra_busqueda_destino_widget.dart';
 import 'package:pa_donde_app/ui/global_widgets/widgets/barra_busqueda_inicio_widget.dart';
 import 'package:pa_donde_app/ui/global_widgets/widgets/marcador_manual_widget.dart';
-import 'dart:async';
-
-import 'package:polyline_do/polyline_do.dart' as Poly;
-
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:flutter_bloc/flutter_bloc.dart';
+//---------------------------------------------------------------------
 
 class RutaPag extends StatefulWidget {
-  RutaPag({Key? key}) : super(key: key);
+  const RutaPag({Key? key}) : super(key: key);
 
   @override
   _RutaPagState createState() => _RutaPagState();
 }
 
 class _RutaPagState extends State<RutaPag> {
+  /// LATE sirve para esperar a que se cree.
+  late LocalizacionBloc localizacionBloc;
+
   @override
   void initState() {
-    // Acceso al bloc
-    BlocProvider.of<MiUbicacionBloc>(context).iniciarSeguimiento();
     super.initState();
+
+    localizacionBloc = BlocProvider.of<LocalizacionBloc>(context);
+    localizacionBloc.getPosicioActual();
+    // localizacionBloc.comenzarSeguirUsuario();
   }
 
   @override
   void dispose() {
+    // localizacionBloc.pararSeguirUsuario();
+
     super.dispose();
   }
 
@@ -45,75 +48,79 @@ class _RutaPagState extends State<RutaPag> {
 
   @override
   Widget build(BuildContext context) {
-    final busquedaBloc = BlocProvider.of<BusquedaBloc>(context).state.historial;
-
     return Scaffold(
-      body: Stack(
-        children: [
-          BlocBuilder<MiUbicacionBloc, MiUbicacionState>(
-              builder: (_, state) => crearMapa(state)),
-          SafeArea(
-              child: Container(
-                  padding: const EdgeInsets.all(10),
-                  child: const BtnUbicacion())),
-          MarcardorManual(),
-          SlidingUpPanel(
-            maxHeight: 200,
-            minHeight: 150,
-            parallaxEnabled: true,
-            parallaxOffset: .5,
-            panelBuilder: (sc) => Column(children: [
-              BuscadorBarraInicio(
-                  busquedaDireccion: (busquedaBloc.isEmpty)
-                      ? 'Origen'
-                      : busquedaBloc[0].nombreDestino!),
-              const BuscadorBarraDestino(),
-              btnContinuar()
-            ]),
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(18.0),
-                topRight: Radius.circular(18.0)),
-            onPanelSlide: (double pos) => setState(() {
-              _fabHeight = pos * (300 - 100) + _initFabHeight;
-            }),
-          ),
-        ],
+      body: BlocBuilder<LocalizacionBloc, LocalizacionState>(
+        builder: (context, localizacionState) {
+          if (localizacionState.ultimaLocalizacion == null) {
+            return const Center(child: Text('Espere por favor....'));
+          }
+
+          return BlocBuilder<MapsBloc, MapsState>(
+            builder: (context, mapaState) {
+              Map<String, Polyline> polylines = Map.from(mapaState.polylines);
+
+              if (!mapaState.mostrarMiRuta) {
+                polylines.removeWhere((key, value) => key == 'miRuta');
+              }
+
+              return Stack(
+                children: [
+                  MapaView(
+                    initialLocalizacion: localizacionState.ultimaLocalizacion!,
+                    polylines: polylines.values.toSet(),
+                  ),
+                  SafeArea(
+                      child: Container(
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            children: const [
+                              BtnAlternarRutaUsuario(),
+                              BtnSeguirUsuario(),
+                              BtnUbicacion(),
+                            ],
+                          ))),
+                  const MarcardorManual(),
+                  SlidingUpPanel(
+                    maxHeight: 210,
+                    minHeight: 160,
+                    parallaxEnabled: true,
+                    parallaxOffset: .5,
+                    panelBuilder: (sc) => Column(children: [
+                      // BuscadorBarraInicio(
+                      //     busquedaDireccion: (busquedaBloc.isEmpty)
+                      //         ? 'Origen'
+                      //         : busquedaBloc[0].nombreDestino!),
+                      const SizedBox(height: 20),
+
+                      const BuscadorBarraInicio(busquedaDireccion: ''),
+                      const SizedBox(height: 20),
+                      const BuscadorBarraDestino(
+                        busquedaDireccion: '',
+                      ),
+
+                      btnContinuar()
+                    ]),
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(18.0),
+                        topRight: Radius.circular(18.0)),
+                    onPanelSlide: (double pos) => setState(() {
+                      _fabHeight = pos * (300 - 100) + _initFabHeight;
+                    }),
+                  ),
+                ],
+              );
+            },
+          );
+        },
       ),
-    );
-  }
-
-  Widget crearMapa(MiUbicacionState state) {
-    if (!state.existeUbicacion!) return const Text("Ubicando...");
-
-    final cameraPosition = CameraPosition(target: state.ubicacion!, zoom: 15);
-
-    var mapaBloc = BlocProvider.of<MapaBloc>(context);
-
-    // Emite cada vez que recibe una nueva ubicacion
-    mapaBloc.add(OnNuevaUbicacion(state.ubicacion!));
-
-    return BlocBuilder<MapaBloc, MapaState>(
-      builder: (context, _) {
-        return GoogleMap(
-          mapType: MapType.terrain,
-          initialCameraPosition: cameraPosition,
-          myLocationEnabled: true,
-          myLocationButtonEnabled: false,
-          onMapCreated: mapaBloc.iniMapa,
-          polylines: mapaBloc.state.polylines!.values.toSet(),
-          markers: mapaBloc.state.markers.values.toSet(),
-          onCameraMove: (cameraPosition) {
-            mapaBloc.add(OnMovioMapa(cameraPosition.target));
-          },
-        );
-      },
     );
   }
 
   Widget btnContinuar() {
     final size = MediaQuery.of(context).size;
-
-    final mapaBloc = BlocProvider.of<MapaBloc>(context);
+    final busquedaBloc = BlocProvider.of<BusquedaBloc>(context);
+    final localizacionBloc = BlocProvider.of<LocalizacionBloc>(context);
+    final mapaBloc = BlocProvider.of<MapsBloc>(context);
 
     return Column(
       children: [
@@ -123,6 +130,21 @@ class _RutaPagState extends State<RutaPag> {
           child: BtnAnaranja(
               titulo: 'Continuar',
               function: () async {
+                final coordenadaInicio =
+                    localizacionBloc.state.ultimaLocalizacion;
+
+                if (coordenadaInicio == null) return;
+
+                final coordenadaFin = mapaBloc.centroMapa;
+                if (coordenadaFin == null) return;
+
+                final reesponseRuta = await busquedaBloc.getCoordInicioYFin(
+                    coordenadaInicio, coordenadaFin);
+
+                await mapaBloc.dibujarRutaPolyline(context, reesponseRuta);
+
+                busquedaBloc.add(OnDesactivarMarcadorManual());
+
                 // final traficoServicio = TraficoServicio();
                 // final inicio =
                 //     BlocProvider.of<MiUbicacionBloc>(context).state.ubicacion;

@@ -1,13 +1,14 @@
 import 'dart:async';
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import 'package:http/http.dart' as http;
+//------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/response/busqueda_response.dart';
 import 'package:pa_donde_app/data/response/rutas_response.dart';
+import 'package:pa_donde_app/data/services/lugares_interceptor_servicio.dart';
+import 'package:pa_donde_app/data/services/trafico_interceptor_servicio.dart';
 import 'package:pa_donde_app/ui/helpers/debouncer.dart';
+//---------------------------------------------------------------------
 
 class TraficoServicio {
   // Singleton
@@ -20,9 +21,11 @@ class TraficoServicio {
     return _intance;
   }
 
-  final _dio = Dio();
-  final _baseUrlDir = 'https://api.mapbox.com/directions/v5';
-  final _baseUrlGeo = 'https://api.mapbox.com/geocoding/v5';
+  final _dio = Dio()..interceptors.add(TraficoInterceptor());
+  final _dioLugares = Dio()..interceptors.add(LugararesInterceptor());
+
+  final _baseUrlDir = 'https://api.mapbox.com/directions/v5/mapbox';
+  final _baseUrlGeo = 'https://api.mapbox.com/geocoding/v5/mapbox.places';
 
   /// INSTANCIA PARA PODER CONTROLAR LAS PETICIONES AL SERVICIO
   final debouncer = Debouncer<String>(duration: Duration(milliseconds: 400));
@@ -35,46 +38,36 @@ class TraficoServicio {
   Stream<BusquedaResponse> get sugerenciasStream =>
       _sugerenciasStreamController.stream;
 
-  final _apyKey =
-      'pk.eyJ1IjoicGFkb25kZSIsImEiOiJja3cwMnhhaGo5cDNrMm9xcHZ1aHp3MG5sIn0.xK7J4icnMawVN-_Qx0t_9g';
-
+  /// Metodo que se conectar para obtener las rutas entre dos puntos
   Future<RutasResponse> getCoordsInicioYFin(
       LatLng? inicio, LatLng? destino) async {
     final coordString =
         '${inicio!.longitude},${inicio.latitude};${destino!.longitude},${destino.latitude}';
-    final path = '$_baseUrlDir/mapbox/driving/$coordString';
+    final path = '$_baseUrlDir/driving/$coordString';
 
-    final response = await _dio.get(path, queryParameters: {
-      'alternatives': 'true',
-      'geometries': 'polyline6',
-      'overview': 'simplified',
-      'steps': 'false',
-      'access_token': _apyKey,
-      'language': 'es',
-    });
+    final response = await _dio.get(path);
 
     final data = RutasResponse.fromJson(response.data);
 
     return data;
   }
 
-  Future<BusquedaResponse> getResultadosPorQuery(
+  /// Metodo que para haceer la query de un lugar
+  Future<List<Feature>> getResultadosPorQuery(
       String busqueda, LatLng proximidad) async {
-    final url = '$_baseUrlGeo/mapbox.places/$busqueda.json';
+    // if (busqueda.isEmpty) return [];
+
+    final url = '$_baseUrlGeo/$busqueda.json';
     try {
-      final response = await _dio.get(url, queryParameters: {
-        'access_token': _apyKey,
-        'autocomplete': 'true',
-        'proximity': '${proximidad.longitude},${proximidad.latitude}',
-        'language': "es",
-        'country': 'co',
+      final response = await _dioLugares.get(url, queryParameters: {
+        'proximity': '${proximidad.longitude}, ${proximidad.latitude}'
       });
 
       final busquedaResponse = busquedaResponseFromJson(response.data);
 
-      return busquedaResponse;
+      return busquedaResponse.features!;
     } catch (e) {
-      return BusquedaResponse(features: []);
+      return [];
     }
   }
 
@@ -85,7 +78,7 @@ class TraficoServicio {
     debouncer.value = '';
     debouncer.onValue = (value) async {
       final resultados = await getResultadosPorQuery(value, proximidad);
-      _sugerenciasStreamController.add(resultados);
+      // _sugerenciasStreamController.add(resultados);
     };
 
     final timer = Timer.periodic(const Duration(milliseconds: 200), (_) {

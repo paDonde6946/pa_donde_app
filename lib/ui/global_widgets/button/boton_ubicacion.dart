@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pa_donde_app/blocs/busqueda/busqueda_bloc.dart';
-import 'package:pa_donde_app/blocs/mapa/mapa_bloc.dart';
-import 'package:pa_donde_app/blocs/mi_ubicacion/mi_ubicacion_bloc.dart';
+
+//------------------IMPORTACIONES LOCALES------------------------------
+import 'package:pa_donde_app/blocs/blocs.dart';
+import 'package:pa_donde_app/ui/utils/snack_bars.dart';
+//---------------------------------------------------------------------
 
 class BtnUbicacion extends StatelessWidget {
   const BtnUbicacion({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final mapaBloc = BlocProvider.of<MapaBloc>(context);
-    final ubicacionBloc = BlocProvider.of<MiUbicacionBloc>(context);
+    final mapaBloc = BlocProvider.of<MapsBloc>(context);
+    final localizacionBloc = BlocProvider.of<LocalizacionBloc>(context);
 
     return Material(
       elevation: 10,
@@ -23,10 +25,16 @@ class BtnUbicacion extends StatelessWidget {
           maxRadius: 25,
           child: IconButton(
               onPressed: () {
-                final destino = ubicacionBloc.state.ubicacion;
-                BlocProvider.of<BusquedaBloc>(context)
-                    .add(OnActivarMarcadorManual());
-                mapaBloc.moverCamara(destino!);
+                final usuarioLocalizacion =
+                    localizacionBloc.state.ultimaLocalizacion;
+
+                /// Si no encuentra la ultima ubicacion del usuario
+                if (usuarioLocalizacion == null) {
+                  customShapeSnackBar(
+                      context: context, titulo: 'No se encuentra la ubicación');
+                  return;
+                }
+                mapaBloc.moverCamara(usuarioLocalizacion);
               },
               icon: const Icon(Icons.my_location, color: Colors.black87)),
         ),

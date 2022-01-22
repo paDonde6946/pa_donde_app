@@ -3,10 +3,10 @@ import 'package:custom_navigator/custom_navigator.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:pa_donde_app/ui/pages/cargando_gps_pag.dart';
+import 'package:pa_donde_app/blocs/blocs.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
-import 'package:pa_donde_app/blocs/mi_ubicacion/mi_ubicacion_bloc.dart';
+import 'package:pa_donde_app/ui/pages/loading_gps_pag.dart';
 import 'package:pa_donde_app/ui/pages/perfil_pag.dart';
 import 'package:pa_donde_app/ui/pages/principal_pag.dart';
 import 'package:pa_donde_app/ui/pages/vehiculo_pag.dart';
@@ -28,13 +28,13 @@ class _InicioPagState extends State<InicioPag> {
 
   final List<Widget> _children = [
     const PrincipalPag(),
-    const CargandoGPSPag(),
+    const LoadingGPSPag(),
     const VehiculoPag(),
     PerfilPag(),
   ];
   /*----------------------*/
 
-  Widget _page = const CargandoGPSPag();
+  Widget _page = const LoadingGPSPag();
   int _currentIndex = 1;
 
   GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -76,7 +76,7 @@ class _InicioPagState extends State<InicioPag> {
         _currentIndex = index;
         // Cnacelar el seguimiento cuando no este en la pagina de la ruta
         if (_currentIndex != 1) {
-          BlocProvider.of<MiUbicacionBloc>(context)!.cancelarSeguimiento();
+          BlocProvider.of<LocalizacionBloc>(context).pararSeguirUsuario();
           setState(() {});
         }
       },

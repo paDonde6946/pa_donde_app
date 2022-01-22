@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
-import 'package:pa_donde_app/ui/global_widgets/show_dialogs/confirmacion_show.dart';
 import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
 import 'package:provider/provider.dart';
-
 //---------------------------------------------------------------------
 
 class PrincipalPag extends StatefulWidget {

@@ -7,7 +7,17 @@ class OnActivarMarcadorManual extends BusquedaEvent {}
 
 class OnDesactivarMarcadorManual extends BusquedaEvent {}
 
-class OnAgregarHistorial extends BusquedaEvent {
-  final BusquedaResultado resultado;
-  OnAgregarHistorial(this.resultado);
+class OnAgregarHistorialOrigenEvent extends BusquedaEvent {
+  final Feature lugarOrigen;
+  OnAgregarHistorialOrigenEvent(this.lugarOrigen);
+}
+
+class OnAgregarHistorialDestionoEvent extends BusquedaEvent {
+  final Feature lugarDestino;
+  OnAgregarHistorialDestionoEvent(this.lugarDestino);
+}
+
+class OnNuevosLugaresEncontradosEvent extends BusquedaEvent {
+  final List<Feature> lugares;
+  OnNuevosLugaresEncontradosEvent(this.lugares);
 }

@@ -4,6 +4,7 @@ mostrarShowDialogCargando({@required BuildContext? context, String? titulo}) {
   final size = MediaQuery.of(context!).size;
   showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
           shape: RoundedRectangleBorder(

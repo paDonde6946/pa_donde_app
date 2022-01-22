@@ -7,7 +7,6 @@ import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 import 'package:pa_donde_app/ui/global_widgets/widgets/card_vehiculo_widget.dart';
 import 'package:pa_donde_app/ui/helpers/helpers.dart';
 import 'package:pa_donde_app/ui/pages/agregar_vehiculo_pag.dart';
-import 'package:pa_donde_app/ui/pages/cargando_gps_pag.dart';
 import 'package:pa_donde_app/ui/pages/editar_vehiculo_pag.dart';
 //---------------------------------------------------------------------
 

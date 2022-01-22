@@ -1,28 +1,67 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
+
+//------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/models/busqueda_resultados_modelo.dart';
+import 'package:pa_donde_app/data/models/ruta_destino_modelo.dart';
+import 'package:pa_donde_app/data/response/busqueda_response.dart';
+import 'package:pa_donde_app/data/services/trafico_servicio.dart';
+//---------------------------------------------------------------------
 
 part 'busqueda_event.dart';
 part 'busqueda_state.dart';
 
 class BusquedaBloc extends Bloc<BusquedaEvent, BusquedaState> {
-  BusquedaBloc() : super(BusquedaState());
+  TraficoServicio traficoServicio;
 
-  @override
-  Stream<BusquedaState> mapEventToState(BusquedaEvent event) async* {
-    if (event is OnActivarMarcadorManual) {
-      yield state.copyWith(seleccionManual: true);
-    } else if (event is OnDesactivarMarcadorManual) {
-      yield state.copyWith(seleccionManual: false);
-    } else if (event is OnAgregarHistorial) {
-      final existe = state.historial
-          .where((resultado) =>
-              resultado.nombreDestino == event.resultado.nombreDestino)
-          .length;
-      if (existe == 0) {
-        final newHistorial = [...state.historial, event.resultado];
-        yield state.copyWith(historial: newHistorial);
-      }
-    }
+  BusquedaBloc({
+    required this.traficoServicio,
+  }) : super(const BusquedaState()) {
+    on<OnActivarMarcadorManual>(
+        (event, emit) => emit(state.copyWith(seleccionManual: true)));
+    on<OnDesactivarMarcadorManual>(
+        (event, emit) => emit(state.copyWith(seleccionManual: false)));
+
+    on<OnNuevosLugaresEncontradosEvent>(
+        (event, emit) => emit(state.copyWith(lugares: event.lugares)));
+
+    on<OnAgregarHistorialOrigenEvent>((event, emit) => emit(state.copyWith(
+        historialOrigen: [event.lugarOrigen, ...state.historialOrigen])));
+
+    on<OnAgregarHistorialDestionoEvent>((event, emit) => emit(state.copyWith(
+        historialOrigen: [event.lugarDestino, ...state.historialDestino])));
+  }
+
+  Future<RutaDestino> getCoordInicioYFin(LatLng inicio, LatLng destino) async {
+    final traficoResponse =
+        await traficoServicio.getCoordsInicioYFin(inicio, destino);
+
+    final distancia = traficoResponse.routes![0].distance;
+    final duracion = traficoResponse.routes![0].duration;
+    final geometria = traficoResponse.routes![0].geometry;
+
+    // Deecodificar
+    final puntos = decodePolyline(geometria!, accuracyExponent: 6);
+
+    final latLngLista = puntos
+        .map((coord) => LatLng(coord[0].toDouble(), coord[1].toDouble()))
+        .toList();
+
+    return RutaDestino(
+      puntos: latLngLista,
+      duracion: duracion!,
+      distancia: distancia!,
+    );
+  }
+
+  Future getLugaresPorQuery(LatLng proximidad, String busqueda) async {
+    final response =
+        await traficoServicio.getResultadosPorQuery(busqueda, proximidad);
+
+    // Disparar el evento para agregar los nuevos lugares buscados
+    add(OnNuevosLugaresEncontradosEvent(response));
   }
 }

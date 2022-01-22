@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' show LatLng;
+
+//------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/models/busqueda_resultados_modelo.dart';
-import 'package:pa_donde_app/data/response/busqueda_response.dart';
-import 'package:pa_donde_app/data/services/trafico_servicio.dart';
+import 'package:pa_donde_app/blocs/blocs.dart';
+//---------------------------------------------------------------------
 
 class BusquedaOrigen extends SearchDelegate<BusquedaResultado> {
   @override
   // ignore: overridden_fields
   String searchFieldLabel;
-  final TraficoServicio traficoServicio;
-  final LatLng proximidad;
-  final List<BusquedaResultado> historial;
-  final String busquedaDireccion;
 
-  BusquedaOrigen(this.proximidad, this.historial, this.busquedaDireccion)
-      : searchFieldLabel = "Buscar",
-        traficoServicio = TraficoServicio();
+  BusquedaOrigen() : searchFieldLabel = "Buscar Origen";
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -35,86 +32,82 @@ class BusquedaOrigen extends SearchDelegate<BusquedaResultado> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return _construirResultadosSugerencias();
+    final busquedaBloc = BlocProvider.of<BusquedaBloc>(context);
+    final localizacionBloc = BlocProvider.of<LocalizacionBloc>(context);
+    final mapaBloc = BlocProvider.of<MapsBloc>(context);
+
+    busquedaBloc.getLugaresPorQuery(
+        localizacionBloc.state.ultimaLocalizacion!, query);
+
+    return BlocBuilder<BusquedaBloc, BusquedaState>(
+      builder: (context, state) {
+        final lugares = state.lugares;
+        return ListView.separated(
+          itemCount: lugares.length,
+          itemBuilder: (context, i) {
+            final lugar = lugares[i];
+            return ListTile(
+              title: Text(lugar.text!),
+              subtitle: Text(lugar.placeName!),
+              leading: const Icon(Icons.place_outlined, color: Colors.black),
+              onTap: () {
+                /// El usuario no cancelo pero si elijo la opcion manualmente
+                final nuevaLocalizacion =
+                    LatLng(lugar.center![1], lugar.center![0]);
+                close(
+                    context,
+                    BusquedaResultado(
+                      cancelo: false,
+                      manual: true,
+                      posicion: nuevaLocalizacion,
+                      nombreDestino: lugar.text,
+                      descripcion: lugar.placeName,
+                    ));
+                localizacionBloc
+                    .add(OnNuevaLocalizacionUsuarioEvent(nuevaLocalizacion));
+                mapaBloc.moverCamara(nuevaLocalizacion);
+                busquedaBloc.add(OnAgregarHistorialOrigenEvent(lugar));
+              },
+            );
+          },
+          separatorBuilder: (context, i) => const Divider(),
+        );
+      },
+    );
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    if (query.isEmpty) {
-      return ListView(
-        children: [
-          ListTile(
-            leading: const Icon(Icons.location_on),
-            title: const Text("Colocar ubicacion manulamente"),
-            onTap: () {
-              /// El usuario no cancelo pero si elijo la opcion manualmente
-              close(context, BusquedaResultado(cancelo: false, manual: true));
-            },
-          ),
-          ...historial
-              .map((result) => ListTile(
-                    leading: const Icon(Icons.history),
-                    title: Text(result.nombreDestino!),
-                    subtitle: Text(result.descripcion!),
-                    onTap: () {
-                      close(context, result);
-                    },
-                  ))
-              .toList()
-        ],
-      );
-    }
+    final historial =
+        BlocProvider.of<BusquedaBloc>(context).state.historialOrigen;
 
-    return _construirResultadosSugerencias();
-  }
-
-  Widget _construirResultadosSugerencias() {
-    if (query.isEmpty) {
-      return Container();
-    }
-
-    // traficoServicio.getResultadosPorQuery(query.trim(), proximidad);
-
-    return FutureBuilder(
-      // stream: traficoServicio.sugerenciasStream,
-      future: traficoServicio.getResultadosPorQuery(query.trim(), proximidad),
-      builder: (context, AsyncSnapshot<BusquedaResponse> snapshot) {
-        if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        final lugares = snapshot.data!.features;
-
-        if (lugares!.isEmpty) {
-          return ListTile(
-            leading: const Icon(Icons.search_off_outlined),
-            title: Text('No hay resultados con $query'),
-          );
-        }
-
-        return ListView.separated(
-          itemCount: lugares.isEmpty ? 0 : lugares.length,
-          separatorBuilder: (_, i) => const Divider(),
-          itemBuilder: (BuildContext context, int index) {
-            final lugar = lugares[index];
-            return ListTile(
-              leading: const Icon(Icons.place),
-              title: Text(lugar.textEs!),
-              subtitle: Text(lugar.placeNameEs!),
+    return ListView(
+      children: [
+        ListTile(
+          leading: const Icon(Icons.location_on_outlined),
+          title: const Text("Colocar ubicacion manulamente"),
+          onTap: () {
+            /// El usuario no cancelo pero si elijo la opcion manualmente
+            close(context, BusquedaResultado(cancelo: false, manual: true));
+          },
+        ),
+        ...historial.map((lugar) => ListTile(
+              leading: const Icon(Icons.history),
+              title: Text(lugar.text!),
+              subtitle: Text(lugar.placeName!),
               onTap: () {
                 close(
                     context,
                     BusquedaResultado(
-                        cancelo: false,
-                        manual: false,
-                        posicion: LatLng(lugar.center![1], lugar.center![0]),
-                        nombreDestino: lugar.textEs,
-                        descripcion: lugar.placeNameEs));
+                      cancelo: false,
+                      manual: false,
+                      posicion: LatLng(lugar.center![1], lugar.center![0]),
+                      nombreDestino: lugar.text,
+                      descripcion: lugar.placeName,
+                    ));
               },
-            );
-          },
-        );
-      },
+            ))
+      ],
     );
   }
 }

@@ -1,5 +1,3 @@
-// To parse this JSON data, do
-//
 //     final busquedaResponse = busquedaResponseFromJson(jsonString);
 
 import 'dart:convert';
