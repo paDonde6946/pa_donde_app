@@ -22,7 +22,7 @@ class Usuario with ChangeNotifier {
     apellido = pApellido;
     celular = pCelular;
     contrasenia = pConstrasenia;
-    cambio_contrasenia = pCambioContrasenia;
+    cambioContrasenia = pCambioContrasenia;
     uid = pUid;
   }
 
@@ -33,7 +33,7 @@ class Usuario with ChangeNotifier {
   String? _correo;
   int? _tipoUsuario;
   String? _contrasenia;
-  int? _cambio_contrasenia;
+  int? _cambioContrasenia;
   String? _uid;
 
   /// Constructor para transformar de un Mapa dinamico a json
@@ -54,7 +54,7 @@ class Usuario with ChangeNotifier {
         "apellido": apellido,
         "celular": celular,
         "contrasenia": contrasenia,
-        "cambio_contrasenia": cambio_contrasenia
+        "cambio_contrasenia": cambioContrasenia
       };
 
   // MÉTODOS GET AND SET DE LOS ATRIBUTOS
@@ -114,11 +114,11 @@ class Usuario with ChangeNotifier {
   }
 
   /// Método que retorna el valor de cabmiar la contrasenia
-  get cambio_contrasenia => _cambio_contrasenia;
+  get cambioContrasenia => _cambioContrasenia;
 
   /// Método que cambia el valor de la contraseña del usuario
-  set cambio_contrasenia(value) {
-    _cambio_contrasenia = value;
+  set cambioContrasenia(value) {
+    _cambioContrasenia = value;
     notifyListeners();
   }
 

@@ -5,14 +5,14 @@ class BtnAnaranja extends StatelessWidget {
   final double? tamanioLetra;
   final void Function()? function;
 
-  const BtnAnaranja({this.titulo, this.tamanioLetra = 18.0, this.function});
+  const BtnAnaranja(
+      {Key? key, this.titulo, this.tamanioLetra = 18.0, this.function})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     /// Crear un boton de color anaranjado personalizado
-    return 
-    
-    Container(
+    return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Theme.of(context).primaryColorLight,

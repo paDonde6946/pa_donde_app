@@ -1,4 +1,4 @@
-part of 'maps_bloc.dart';
+part of 'mapas_bloc.dart';
 
 abstract class MapsEvent extends Equatable {
   const MapsEvent();

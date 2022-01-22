@@ -12,8 +12,8 @@ import 'package:pa_donde_app/ui/theme/estilo_mapa_theme..dart';
 import 'package:pa_donde_app/blocs/blocs.dart';
 //---------------------------------------------------------------------
 
-part 'maps_event.dart';
-part 'maps_state.dart';
+part 'mapas_event.dart';
+part 'mapas_state.dart';
 
 class MapsBloc extends Bloc<MapsEvent, MapsState> {
   final LocalizacionBloc localizacionBloc;

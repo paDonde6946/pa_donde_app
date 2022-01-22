@@ -43,9 +43,6 @@ class _RutaPagState extends State<RutaPag> {
     super.dispose();
   }
 
-  double _fabHeight = 0;
-  final double _initFabHeight = 120.0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,9 +100,7 @@ class _RutaPagState extends State<RutaPag> {
                     borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(18.0),
                         topRight: Radius.circular(18.0)),
-                    onPanelSlide: (double pos) => setState(() {
-                      _fabHeight = pos * (300 - 100) + _initFabHeight;
-                    }),
+                    onPanelSlide: (double pos) => setState(() {}),
                   ),
                 ],
               );

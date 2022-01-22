@@ -22,7 +22,7 @@ void main() {
     expect(usuario.nombre, "Juan");
     expect(usuario.apellido, "Perez");
     expect(usuario.celular, 3004503102);
-    expect(usuario.cambio_contrasenia, 1);
+    expect(usuario.cambioContrasenia, 1);
     expect(usuario.uid, "1cbe1bdb7392188991");
   });
 
@@ -34,7 +34,7 @@ void main() {
     usuarioTest.celular = 123455;
     usuarioTest.correo = "felipe@unbosque.edu.co";
     usuarioTest.contrasenia = "asdfwa43";
-    usuarioTest.cambio_contrasenia = 0;
+    usuarioTest.cambioContrasenia = 0;
 
     /// Función a probar (fromJson)
     final usuario = usuarioTest.toJson();

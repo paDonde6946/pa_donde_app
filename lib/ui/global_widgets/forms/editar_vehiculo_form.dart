@@ -17,12 +17,14 @@ import 'package:pa_donde_app/ui/utils/validaciones_generales.dart'
 //---------------------------------------------------------------------
 
 class FormEditarVehiulo extends StatefulWidget {
-
   Vehiculo? _vehiculo;
-  FormEditarVehiulo({Key? key,@required Vehiculo? vehiculo}) {_vehiculo = vehiculo;}
+  FormEditarVehiulo({Key? key, @required Vehiculo? vehiculo}) {
+    _vehiculo = vehiculo;
+  }
 
   @override
-  State<FormEditarVehiulo> createState() => _FormEditarVehiuloState(_vehiculo!); // 
+  State<FormEditarVehiulo> createState() =>
+      _FormEditarVehiuloState(_vehiculo!); //
 }
 
 class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
@@ -42,7 +44,7 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
   final styleInput = const TextStyle(height: 0.4);
   bool color = false;
 
-    _FormEditarVehiuloState(Vehiculo vehiculo){
+  _FormEditarVehiuloState(Vehiculo vehiculo) {
     _vehiculo = vehiculo;
   }
 
@@ -66,14 +68,17 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
             _nombreLabel(_generalMaterial(_crearDocumentoTitular(_vehiculo!)),
                 'Documento del titular'),
             const SizedBox(height: tamanioSeparador),
-            _nombreLabel(_generalMaterial(_crearMarca(_vehiculo!)), "Marca del vehiculo"),
+            _nombreLabel(_generalMaterial(_crearMarca(_vehiculo!)),
+                "Marca del vehiculo"),
+            const SizedBox(height: tamanioSeparador),
+            _nombreLabel(_generalMaterial(_crearModelo(_vehiculo!)),
+                "Modelo del  vehiculo"),
             const SizedBox(height: tamanioSeparador),
             _nombreLabel(
-                _generalMaterial(_crearModelo(_vehiculo!)), "Modelo del  vehiculo"),
+                _generalMaterial(_crearAnio(_vehiculo!)), "Año del vehiculo"),
             const SizedBox(height: tamanioSeparador),
-            _nombreLabel(_generalMaterial(_crearAnio(_vehiculo!)), "Año del vehiculo"),
-            const SizedBox(height: tamanioSeparador),
-            SizedBox(width: size.width * 1, child: _crearBotonEditar(_vehiculo!)),
+            SizedBox(
+                width: size.width * 1, child: _crearBotonEditar(_vehiculo!)),
             // const SizedBox(height: tamanioSeparador),
             SizedBox(
                 width: size.width * 1, child: _crearBotonEliminar(_vehiculo!)),
@@ -133,16 +138,16 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
     final size = MediaQuery.of(context).size;
     return Row(
       children: [
-        Container(
+        SizedBox(
             width: size.width * 0.45,
             child: _nombreLabel(_crearTipoVehiculo(), 'Tipo Vehículo')),
         Column(
           children: [
-            Container(
+            SizedBox(
                 width: size.width * 0.42,
                 child: _nombreLabel(
                     _generalMaterial(_crearPlaca(_vehiculo!)), 'Placa')),
-            Container(
+            SizedBox(
                 width: size.width * 0.42,
                 child: _nombreLabel(
                     _generalMaterial(_crearColor(_vehiculo!)), 'Color')),
@@ -245,7 +250,6 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
 
   ///  Input - Campo de la Placa del Vehiculo
   Widget _crearPlaca(Vehiculo vehiculo) {
-    print(vehiculo.tipoVehiculo);
     return TextFormField(
       initialValue: vehiculo.placa,
       style: styleInput,
@@ -339,11 +343,8 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
 
   // Se crea el boton registro que es el encargado de validar la información y redirigir a la siguiente página
   Widget _crearBotonEditar(Vehiculo vehiculo) {
-    final size = MediaQuery.of(context).size;
-    return Container(
-      child: BtnAnaranja(
-          function: () => _validarFormulario(vehiculo), titulo: 'Editar'),
-    );
+    return BtnAnaranja(
+        function: () => _validarFormulario(vehiculo), titulo: 'Editar');
   }
 
   Widget _crearBotonEliminar(Vehiculo vehiculo) {

@@ -5,7 +5,7 @@ import 'package:pa_donde_app/blocs/blocs.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/blocs/busqueda/busqueda_bloc.dart';
-import 'package:pa_donde_app/blocs/mapas/maps_bloc.dart';
+import 'package:pa_donde_app/blocs/mapas/mapas_bloc.dart';
 import 'package:pa_donde_app/data/models/busqueda_resultados_modelo.dart';
 import 'package:pa_donde_app/ui/global_widgets/search/busqueda_destino.dart';
 //---------------------------------------------------------------------

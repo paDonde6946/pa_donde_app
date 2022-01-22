@@ -9,10 +9,11 @@ import 'package:pa_donde_app/blocs/blocs.dart';
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 import 'package:pa_donde_app/ui/helpers/helpers.dart';
 import 'package:pa_donde_app/ui/pages/cargando_gps_pag.dart';
-import 'package:pa_donde_app/ui/pages/ruta_pag.dart';
 //---------------------------------------------------------------------
 
 class AccesoGPSPag extends StatefulWidget {
+  const AccesoGPSPag({Key? key}) : super(key: key);
+
   @override
   State<AccesoGPSPag> createState() => _AccesoGPSPagState();
 }
@@ -40,7 +41,7 @@ class _AccesoGPSPagState extends State<AccesoGPSPag>
       if (await Permission.location.isGranted) {
         SchedulerBinding.instance!.addPostFrameCallback((_) {
           Navigator.of(context)
-              .push(navegarMapaFadeIn(context, CargandoGPSPag()));
+              .push(navegarMapaFadeIn(context, const CargandoGPSPag()));
         });
       }
     }

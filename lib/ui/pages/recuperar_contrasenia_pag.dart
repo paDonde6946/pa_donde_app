@@ -44,7 +44,7 @@ class RecuperarContraseniaPag extends StatelessWidget {
 
     return Image(
         height: size.width * 0.4,
-        image: AssetImage('img/logo/logo_PaDonde.png'));
+        image: const AssetImage('img/logo/logo_PaDonde.png'));
   }
 
   /// Contenedor del mensaje informativo para el usuario

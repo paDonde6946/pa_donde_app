@@ -13,7 +13,7 @@ class UsuarioServicio {
     final url = Uri.http(EntornoVariable.host, '/app/login/usuario/registrar');
 
     final headers = {HttpHeaders.contentTypeHeader: 'application/json'};
-    usuario.cambio_contrasenia = 0;
+    usuario.cambioContrasenia = 0;
     final response =
         await http.put(url, headers: headers, body: usuarioToJson(usuario));
 

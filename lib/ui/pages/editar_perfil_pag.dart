@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pa_donde_app/ui/global_widgets/forms/editar_perfil_form.dart';
 
 class EditarPerfilPag extends StatefulWidget {
-  EditarPerfilPag({Key? key}) : super(key: key);
+  const EditarPerfilPag({Key? key}) : super(key: key);
 
   @override
   _EditarPerfilPagState createState() => _EditarPerfilPagState();
@@ -25,11 +25,11 @@ class _EditarPerfilPagState extends State<EditarPerfilPag> {
   }
 
   Widget imagen() {
-    return Center(
-      child: Container(
+    return const Center(
+      child: SizedBox(
         height: 150,
         width: 150,
-        child: const FadeInImage(
+        child: FadeInImage(
           image: NetworkImage(
               'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/User.svg/768px-User.svg.png'),
           placeholder: AssetImage('img/gif/cargando.gif'),
@@ -48,7 +48,7 @@ class _EditarPerfilPagState extends State<EditarPerfilPag> {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30.0),
             color: Colors.white,
-            boxShadow: <BoxShadow>[
+            boxShadow: const <BoxShadow>[
               BoxShadow(
                 blurRadius: 40.0,
                 color: Colors.black26,
@@ -78,7 +78,6 @@ class _EditarPerfilPagState extends State<EditarPerfilPag> {
         ));
   }
 
-  
   /// Panel superior verde (Titulo de la pagina)
   Widget panelSuperior() {
     final size = MediaQuery.of(context).size;

@@ -27,7 +27,7 @@ void main() {
     usuarioTest.apellido = "Martinez";
     usuarioTest.celular = 1234567;
     usuarioTest.correo = "felipe@unbosque.edu.co";
-    usuarioTest.cambio_contrasenia = 1;
+    usuarioTest.cambioContrasenia = 1;
 
     expect(inicioSesionResponse.ok, true);
     expect(inicioSesionResponse.usuario.correo, usuarioTest.correo);
@@ -35,7 +35,7 @@ void main() {
     expect(inicioSesionResponse.usuario.apellido, usuarioTest.apellido);
     expect(inicioSesionResponse.usuario.celular, usuarioTest.celular);
     expect(inicioSesionResponse.usuario.cambio_contrasenia,
-        usuarioTest.cambio_contrasenia);
+        usuarioTest.cambioContrasenia);
 
     expect(inicioSesionResponse.token,
         "2MTVkMWNiZTFiZGI3MzkyMTg4OTkxMDCpd5jb4i9LuXn6qQmx-k70x8");

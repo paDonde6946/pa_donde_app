@@ -30,7 +30,7 @@ class _InicioPagState extends State<InicioPag> {
     const PrincipalPag(),
     const LoadingGPSPag(),
     const VehiculoPag(),
-    PerfilPag(),
+    const PerfilPag(),
   ];
   /*----------------------*/
 

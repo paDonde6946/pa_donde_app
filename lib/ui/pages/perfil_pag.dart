@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:pa_donde_app/data/models/usuario_modelo.dart';
-import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
-import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
-import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
-import 'package:pa_donde_app/ui/helpers/helpers.dart';
-import 'package:pa_donde_app/ui/pages/agregar_vehiculo_pag.dart';
-import 'package:pa_donde_app/ui/pages/editar_perfil_pag.dart';
-import 'package:pa_donde_app/ui/pages/inicio_pag.dart';
-import 'package:pa_donde_app/ui/pages/inicio_sesion_pag.dart';
 import 'package:provider/provider.dart';
 
+//------------------IMPORTACIONES LOCALES------------------------------
+import 'package:pa_donde_app/data/models/usuario_modelo.dart';
+
+import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
+
+import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
+
+import 'package:pa_donde_app/ui/helpers/helpers.dart';
+
+import 'package:pa_donde_app/ui/pages/editar_perfil_pag.dart';
+import 'package:pa_donde_app/ui/pages/inicio_sesion_pag.dart';
+//---------------------------------------------------------------------
+
 class PerfilPag extends StatefulWidget {
-  PerfilPag({Key? key}) : super(key: key);
+  const PerfilPag({Key? key}) : super(key: key);
 
   @override
   _PerfilPagState createState() => _PerfilPagState();
@@ -71,7 +76,7 @@ class _PerfilPagState extends State<PerfilPag> {
           function: () {
             SchedulerBinding.instance!.addPostFrameCallback((_) {
               Navigator.of(context)
-                  .push(navegarMapaFadeIn(context, EditarPerfilPag()));
+                  .push(navegarMapaFadeIn(context, const EditarPerfilPag()));
             });
           },
         ),
@@ -93,9 +98,7 @@ class _PerfilPagState extends State<PerfilPag> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        IconButton(
-            onPressed: () {},
-            icon: Icon(null, size: null)),
+        IconButton(onPressed: () {}, icon: const Icon(null, size: null)),
         Text(
           "Perfil",
           style: TextStyle(
@@ -109,8 +112,10 @@ class _PerfilPagState extends State<PerfilPag> {
                   context: context, titulo: 'CERRANDO SESIÓN');
               await Future.delayed(const Duration(seconds: 1));
               Navigator.pop(context);
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => InicioSesionPag()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const InicioSesionPag()));
               AutenticacionServicio.eliminarToken();
             },
             icon: Icon(Icons.login, size: size.width * 0.075)),
@@ -119,8 +124,8 @@ class _PerfilPagState extends State<PerfilPag> {
   }
 
   Widget imagen() {
-    return Center(
-      child: Container(
+    return const Center(
+      child: SizedBox(
         height: 200,
         width: 200,
         child: FadeInImage(
@@ -137,12 +142,12 @@ class _PerfilPagState extends State<PerfilPag> {
 
   Widget contenedorImagen() {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 106),
+      margin: const EdgeInsets.symmetric(horizontal: 106),
       width: 195,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30.0),
           color: Colors.white,
-          boxShadow: <BoxShadow>[
+          boxShadow: const <BoxShadow>[
             BoxShadow(
               blurRadius: 40.0,
               color: Colors.black26,
@@ -161,13 +166,13 @@ class _PerfilPagState extends State<PerfilPag> {
     final size = MediaQuery.of(context).size;
     return Container(
       alignment: Alignment.centerLeft,
-      margin: EdgeInsets.symmetric(horizontal: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Icon(icono),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Text(
             titulo,
             style: TextStyle(
@@ -184,8 +189,8 @@ class _PerfilPagState extends State<PerfilPag> {
     final size = MediaQuery.of(context).size;
     return Container(
       alignment: Alignment.centerLeft,
-      margin: EdgeInsets.symmetric(horizontal: 20),
-      padding: EdgeInsets.only(left: 30),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.only(left: 30),
       child: Text(
         titulo,
         style: TextStyle(

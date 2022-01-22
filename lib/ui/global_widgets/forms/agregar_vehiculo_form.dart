@@ -128,12 +128,12 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
     final size = MediaQuery.of(context).size;
     return Row(
       children: [
-        Container(
+        SizedBox(
             width: size.width * 0.42,
             child:
                 _nombreLabel(_generalMaterial(_crearPlaca(vehiculo)), 'Placa')),
-        SizedBox(width: 15),
-        Container(
+        const SizedBox(width: 15),
+        SizedBox(
             width: size.width * 0.42,
             child:
                 _nombreLabel(_generalMaterial(_crearColor(vehiculo)), "Color")),
@@ -327,11 +327,8 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
 
   // Se crea el boton registro que es el encargado de validar la información y redirigir a la siguiente página
   Widget _crearBotonRegistro(Vehiculo vehiculo) {
-    final size = MediaQuery.of(context).size;
-    return Container(
-      child: BtnAnaranja(
-          function: () => _validarFormulario(vehiculo),
-          titulo: 'Guardar Vehiculo'),
-    );
+    return BtnAnaranja(
+        function: () => _validarFormulario(vehiculo),
+        titulo: 'Guardar Vehiculo');
   }
 }

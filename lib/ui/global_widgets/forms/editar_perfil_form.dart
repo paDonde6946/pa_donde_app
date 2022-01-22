@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pa_donde_app/data/models/usuario_modelo.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
-import 'package:pa_donde_app/ui/global_widgets/inputs/input_form.dart';
 import 'package:pa_donde_app/ui/global_widgets/inputs/input_form_elevado.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
 
@@ -13,14 +11,13 @@ import 'package:pa_donde_app/ui/global_widgets/text/formulario_texto.dart';
 import 'package:pa_donde_app/ui/utils/snack_bars.dart';
 import 'package:pa_donde_app/ui/utils/validaciones_generales.dart';
 import 'package:provider/provider.dart';
-import 'package:pa_donde_app/ui/global_widgets/inputs/input_form_redondo.dart'
-    as input_redondo;
 import 'package:pa_donde_app/ui/utils/validaciones_generales.dart'
     as validaciones_generales;
+
+import 'package:pa_donde_app/data/models/usuario_modelo.dart';
 //---------------------------------------------------------------------
 
 class FormEditarPerfil extends StatefulWidget {
-  
   const FormEditarPerfil({Key? key}) : super(key: key);
 
   @override
@@ -67,9 +64,11 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
             _nombreLabel(_generalMaterial(_crearNumCelular(usuarioServicios)),
                 'Número de teléfono'),
             SizedBox(height: size.height * 0.01),
-            _nombreLabel(_generalMaterial(_crearContrasenia(context)),'Contraseña'),
+            _nombreLabel(
+                _generalMaterial(_crearContrasenia(context)), 'Contraseña'),
             SizedBox(height: size.height * 0.01),
-            _nombreLabel(_generalMaterial(_crearConContrasenia()),'Repetir Contraseña'),
+            _nombreLabel(
+                _generalMaterial(_crearConContrasenia()), 'Repetir Contraseña'),
             SizedBox(height: size.height * 0.04),
             _crearBtnInicioSesion(),
           ],
@@ -88,7 +87,8 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
       return;
     }
 
-    mostrarShowDialogCargando(context: context, titulo: 'Guardando Información');
+    mostrarShowDialogCargando(
+        context: context, titulo: 'Guardando Información');
     await Future.delayed(const Duration(seconds: 1));
     Navigator.pop(context);
 
@@ -166,8 +166,8 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
       onSaved: (value) => usuarioServicios.celular = int.parse(value!),
       onChanged: (value) => usuarioServicios.celular = int.parse(value),
       keyboardType: TextInputType.number,
-      decoration: inputDecorationElevado('',
-          'Ingresa tu número celular', context, Colors.white),
+      decoration: inputDecorationElevado(
+          '', 'Ingresa tu número celular', context, Colors.white),
       validator: (value) => (validaciones_generales.isNumber(value!))
           ? null
           : 'Solo se perminten números',
@@ -209,8 +209,8 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
       scrollPadding: const EdgeInsets.all(1),
       obscureText: true,
       onChanged: (value) => inputControllerContrasenia.text = value,
-      decoration: inputDecorationElevado('',
-          'Ingresa tu contraseña', context, Colors.white),
+      decoration: inputDecorationElevado(
+          '', 'Ingresa tu contraseña', context, Colors.white),
       validator: (value) =>
           (value!.isEmpty) ? 'El correo ingresado no es valido' : null,
     );

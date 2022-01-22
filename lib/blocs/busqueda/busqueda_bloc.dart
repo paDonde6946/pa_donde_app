@@ -5,7 +5,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
-import 'package:pa_donde_app/data/models/busqueda_resultados_modelo.dart';
 import 'package:pa_donde_app/data/models/ruta_destino_modelo.dart';
 import 'package:pa_donde_app/data/response/busqueda_response.dart';
 import 'package:pa_donde_app/data/services/trafico_servicio.dart';

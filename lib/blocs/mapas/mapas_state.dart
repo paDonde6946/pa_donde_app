@@ -1,4 +1,4 @@
-part of 'maps_bloc.dart';
+part of 'mapas_bloc.dart';
 
 class MapsState extends Equatable {
   final bool estaMapaInicializado;

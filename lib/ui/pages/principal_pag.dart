@@ -108,7 +108,6 @@ class _PrincipalPagState extends State<PrincipalPag> {
   }
 
   PreferredSizeWidget appBar() {
-    final size = MediaQuery.of(context).size;
     return AppBar(
         centerTitle: true,
         foregroundColor: Colors.black,

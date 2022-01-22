@@ -28,7 +28,8 @@ class TraficoServicio {
   final _baseUrlGeo = 'https://api.mapbox.com/geocoding/v5/mapbox.places';
 
   /// INSTANCIA PARA PODER CONTROLAR LAS PETICIONES AL SERVICIO
-  final debouncer = Debouncer<String>(duration: Duration(milliseconds: 400));
+  final debouncer =
+      Debouncer<String>(duration: const Duration(milliseconds: 400));
 
   /// SE CREA UNA STREAM MULTI CAST PARA CONTROLAR LAS PETICIONES
   final StreamController<BusquedaResponse> _sugerenciasStreamController =
@@ -77,7 +78,7 @@ class TraficoServicio {
     /// y asi mismo controlar el uso del internet entre otros parametros.
     debouncer.value = '';
     debouncer.onValue = (value) async {
-      final resultados = await getResultadosPorQuery(value, proximidad);
+      await getResultadosPorQuery(value, proximidad);
       // _sugerenciasStreamController.add(resultados);
     };
 

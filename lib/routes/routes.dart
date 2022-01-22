@@ -15,16 +15,16 @@ import 'package:pa_donde_app/ui/pages/validar_inicio_sesion_pag.dart';
 
 Map<String, WidgetBuilder> generarRutas() {
   final _rutas = <String, WidgetBuilder>{
-    'login': (_) => InicioSesionPag(),
+    'login': (_) => const InicioSesionPag(),
     'inicio': (_) => const InicioPag(),
     'recuperarContrasenia': (_) => const RecuperarContraseniaPag(),
     'validarInicioSesion': (_) => const ValidarInicioSesion(),
-    'editarPerfil': (_) => EditarPerfilPag(),
+    'editarPerfil': (_) => const EditarPerfilPag(),
     'agregarVehiculo': (_) => const AgregarVehiculo(),
-    'ruta': (_) => RutaPag(),
-    'accesoGPS': (_) => AccesoGPSPag(),
-    'cargandpGPS': (_) => CargandoGPSPag(),
-    'editarVehiculo': (_) => EditarVehiculo(),
+    'ruta': (_) => const RutaPag(),
+    'accesoGPS': (_) => const AccesoGPSPag(),
+    'cargandpGPS': (_) => const CargandoGPSPag(),
+    'editarVehiculo': (_) => const EditarVehiculo(vehiculo: null),
   };
 
   return _rutas;

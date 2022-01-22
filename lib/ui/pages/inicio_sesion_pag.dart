@@ -7,7 +7,7 @@ import 'package:pa_donde_app/ui/global_widgets/forms/registro_usuario_form.dart'
 //---------------------------------------------------------------------
 
 class InicioSesionPag extends StatefulWidget {
-  InicioSesionPag({Key? key}) : super(key: key);
+  const InicioSesionPag({Key? key}) : super(key: key);
 
   @override
   _InicioSesionPagState createState() => _InicioSesionPagState();

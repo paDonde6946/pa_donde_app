@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+//------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/ui/helpers/helpers.dart';
 import 'package:pa_donde_app/ui/pages/acceso_gps_pag.dart';
-import 'package:pa_donde_app/ui/pages/ruta_pag.dart';
-import 'package:permission_handler/permission_handler.dart';
+//---------------------------------------------------------------------
 
 class CargandoGPSPag extends StatefulWidget {
   const CargandoGPSPag({Key? key}) : super(key: key);
@@ -36,7 +38,7 @@ class _CargandoGPSPagState extends State<CargandoGPSPag>
       if (await Geolocator.isLocationServiceEnabled()) {
         SchedulerBinding.instance!.addPostFrameCallback((_) {
           Navigator.of(context)
-              .push(navegarMapaFadeIn(context, AccesoGPSPag()));
+              .push(navegarMapaFadeIn(context, const AccesoGPSPag()));
         });
       }
     }
@@ -79,12 +81,14 @@ class _CargandoGPSPagState extends State<CargandoGPSPag>
 
     if (permisoGPS && gpsActivo) {
       SchedulerBinding.instance!.addPostFrameCallback((_) {
-        Navigator.of(context).push(navegarMapaFadeIn(context, AccesoGPSPag()));
+        Navigator.of(context)
+            .push(navegarMapaFadeIn(context, const AccesoGPSPag()));
       });
       return "";
     } else if (!permisoGPS) {
       SchedulerBinding.instance!.addPostFrameCallback((_) {
-        Navigator.of(context).push(navegarMapaFadeIn(context, AccesoGPSPag()));
+        Navigator.of(context)
+            .push(navegarMapaFadeIn(context, const AccesoGPSPag()));
       });
       return "Es necesario el permiso de la localización";
     } else {

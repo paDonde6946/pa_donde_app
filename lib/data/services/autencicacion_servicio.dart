@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 //------------------IMPORTACIONES LOCALES------------------------------
@@ -46,31 +47,28 @@ class AutenticacionServicio with ChangeNotifier {
   Future<bool> logeado() async {
     String? token = await _storage.read(key: 'token');
 
-    if (token != null) {
-      String path = "/app/login/renovarToken";
+    String path = "/app/login/renovarToken";
 
-      final uri = Uri.http(EntornoVariable.host, path);
-      final headers = {
-        "x-token": token,
-        HttpHeaders.contentTypeHeader: 'application/json'
-      };
-      final response = await http.get(uri, headers: headers);
+    final uri = Uri.http(EntornoVariable.host, path);
+    final headers = {
+      "x-token": token,
+      HttpHeaders.contentTypeHeader: 'application/json'
+    };
+    final response = await http.get(uri, headers: headers);
 
-      // Verificar si la informacion que viene del Backend es correcta y el status es 200
-      if (response.statusCode == 200) {
-        // Se transforma el JSON de respuesta a una modelo dentro de Flutter
-        final loginResponse = inicioSesionResponseFromJson(response.body);
-        usuarioServiciosActual = loginResponse.usuario;
+    // Verificar si la informacion que viene del Backend es correcta y el status es 200
+    if (response.statusCode == 200) {
+      // Se transforma el JSON de respuesta a una modelo dentro de Flutter
+      final loginResponse = inicioSesionResponseFromJson(response.body);
+      usuarioServiciosActual = loginResponse.usuario;
 
-        await _guardarToken(loginResponse.token);
+      await _guardarToken(loginResponse.token);
 
-        return true;
-      } else {
-        _logout();
-        return false;
-      }
+      return true;
+    } else {
+      _logout();
+      return false;
     }
-    return false;
   }
 
   /// Petición para poder recuperar la contraseña y validar la autenticacion del usuario
