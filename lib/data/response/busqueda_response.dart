@@ -11,20 +11,20 @@ String busquedaResponseToJson(BusquedaResponse data) =>
 class BusquedaResponse {
   BusquedaResponse({
     this.type,
-    this.query,
+    // this.query,
     this.features,
     this.attribution,
   });
 
   String? type;
-  List<String>? query;
+  // List<String>? query;
   List<Feature>? features;
   String? attribution;
 
   factory BusquedaResponse.fromJson(Map<String, dynamic> json) =>
       BusquedaResponse(
         type: json["type"],
-        query: List<String>.from(json["query"].map((x) => x)),
+        // query: List<String>.from(json["query"].map((x) => x)),
         features: List<Feature>.from(
             json["features"].map((x) => Feature.fromJson(x))),
         attribution: json["attribution"],
@@ -32,7 +32,7 @@ class BusquedaResponse {
 
   Map<String, dynamic> toJson() => {
         "type": type,
-        "query": List<dynamic>.from(query!.map((x) => x)),
+        // "query": List<dynamic>.from(query!.map((x) => x)),
         "features": List<dynamic>.from(features!.map((x) => x.toJson())),
         "attribution": attribution,
       };

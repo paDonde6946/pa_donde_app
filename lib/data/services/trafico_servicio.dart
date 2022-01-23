@@ -53,15 +53,16 @@ class TraficoServicio {
     return data;
   }
 
-  /// Metodo que para haceer la query de un lugar
+  /// Metodo que consulta a MapBox para realizar una peticion por medio del nombre de una consulta de un lugar.
   Future<List<Feature>> getResultadosPorQuery(
       String busqueda, LatLng proximidad) async {
-    // if (busqueda.isEmpty) return [];
+    if (busqueda.isEmpty) return [];
 
     final url = '$_baseUrlGeo/$busqueda.json';
     try {
       final response = await _dioLugares.get(url, queryParameters: {
-        'proximity': '${proximidad.longitude}, ${proximidad.latitude}'
+        'proximity': '${proximidad.longitude}, ${proximidad.latitude}',
+        'limit': 9,
       });
 
       final busquedaResponse = busquedaResponseFromJson(response.data);
@@ -69,6 +70,22 @@ class TraficoServicio {
       return busquedaResponse.features!;
     } catch (e) {
       return [];
+    }
+  }
+
+  /// Metodo que conuslta a MapBox para realizar una peticion por medio de las coordenas de un lugar.
+  Future<Feature> getInformacionPorCoordenas(LatLng coordenadas) async {
+    final url =
+        '$_baseUrlGeo/${coordenadas.longitude},${coordenadas.latitude}.json';
+    try {
+      final response =
+          await _dioLugares.get(url, queryParameters: {'limit': 1});
+
+      final busquedaResponse = busquedaResponseFromJson(response.data);
+
+      return busquedaResponse.features![0];
+    } catch (e) {
+      return Feature();
     }
   }
 

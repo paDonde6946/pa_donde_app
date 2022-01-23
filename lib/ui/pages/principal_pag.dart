@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
-import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
-import 'package:provider/provider.dart';
+// import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
+// import 'package:provider/provider.dart';
 //---------------------------------------------------------------------
 
 class PrincipalPag extends StatefulWidget {
@@ -21,9 +21,9 @@ class _PrincipalPagState extends State<PrincipalPag> {
   }
 
   Widget body() {
-    final usuario = Provider.of<AutenticacionServicio>(context, listen: false)
-        .usuarioServiciosActual;
-    //TODO: Cambiar cuando este listo
+    // final usuario = Provider.of<AutenticacionServicio>(context, listen: false)
+    //  .usuarioServiciosActual;
+    ///TODO: Cambiar cuando este listo
     // if (usuario.cambio_contrasenia == 0) {
     //   SchedulerBinding.instance!.addPostFrameCallback((_) {
     //     mostrarShowDialogConfirmar(

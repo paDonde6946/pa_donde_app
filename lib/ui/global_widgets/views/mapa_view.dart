@@ -9,11 +9,13 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class MapaView extends StatelessWidget {
   final LatLng initialLocalizacion;
   final Set<Polyline> polylines;
+  final Set<Marker> markers;
 
   const MapaView({
     Key? key,
     required this.initialLocalizacion,
     required this.polylines,
+    required this.markers,
   }) : super(key: key);
 
   @override
@@ -43,6 +45,7 @@ class MapaView extends StatelessWidget {
           onMapCreated: (controller) =>
               mapaBloc.add(OnMapaInicializadoEvent(controller)),
           onCameraMove: (position) => mapaBloc.centroMapa = position.target,
+          markers: markers,
         ),
       ),
     );

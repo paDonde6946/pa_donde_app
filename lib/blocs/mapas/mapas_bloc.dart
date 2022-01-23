@@ -8,6 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/models/ruta_destino_modelo.dart';
+import 'package:pa_donde_app/ui/helpers/helpers.dart';
 import 'package:pa_donde_app/ui/theme/estilo_mapa_theme..dart';
 import 'package:pa_donde_app/blocs/blocs.dart';
 //---------------------------------------------------------------------
@@ -34,8 +35,8 @@ class MapsBloc extends Bloc<MapsEvent, MapsState> {
     on<OnRutaAlternarUsuario>((event, emit) =>
         emit(state.copyWith(mostrarMiRuta: !state.mostrarMiRuta)));
 
-    on<OnMostrarPolylineEvent>(
-        (event, emit) => emit(state.copyWith(polylines: event.polylines)));
+    on<OnMostrarPolylineEvent>((event, emit) => emit(
+        state.copyWith(polylines: event.polylines, markers: event.markers)));
     //
     localizacionStateSubscricion =
         localizacionBloc.stream.listen((localizacionState) {
@@ -102,10 +103,43 @@ class MapsBloc extends Bloc<MapsEvent, MapsState> {
       endCap: Cap.roundCap,
     );
 
+    /// Transformacion de la informacion para mostrar la distancia y duracion
+    double distanciaKM = rutaDestino.distancia / 1000;
+    distanciaKM = (distanciaKM * 100).floorToDouble();
+    distanciaKM /= 100;
+
+    double duracionViaje = (rutaDestino.duracion / 60).floorToDouble();
+
+    /// Marcodor Personalizado
+    final marcadorPersonalizado = await getNetworkImagenMarker();
+    final marcadorPersonalizadoFinal = await getFinalMarkerPersonalizado(
+        rutaDestino.lugarFinal.text!,
+        distanciaKM.toInt(),
+        context,
+        duracionViaje.toInt());
+
+    /// Marcador Inicial de la ruta
+    final marcadorInicial = Marker(
+      markerId: const MarkerId('inicial'),
+      position: rutaDestino.puntos[0],
+      icon: marcadorPersonalizado,
+    );
+
+    /// Marcador Final de la ruta
+    final marcadorFinal = Marker(
+      markerId: const MarkerId('final'),
+      position: rutaDestino.puntos[rutaDestino.puntos.length - 1],
+      icon: marcadorPersonalizadoFinal,
+    );
+
     final polylineActual = Map<String, Polyline>.from(state.polylines);
     polylineActual['ruta'] = ruta;
 
-    add(OnMostrarPolylineEvent(polylineActual));
+    final marcadorActual = Map<String, Marker>.from(state.markers);
+    marcadorActual['inicial'] = marcadorInicial;
+    marcadorActual['final'] = marcadorFinal;
+
+    add(OnMostrarPolylineEvent(polylineActual, marcadorActual));
   }
 
   @override

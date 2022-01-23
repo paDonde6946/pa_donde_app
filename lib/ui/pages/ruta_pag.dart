@@ -2,18 +2,16 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/blocs/blocs.dart';
-import 'package:pa_donde_app/ui/global_widgets/button/boton_alternar_ruta_usuario.dart';
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
-import 'package:pa_donde_app/ui/global_widgets/button/boton_seguir_usuario.dart';
 import 'package:pa_donde_app/ui/global_widgets/button/boton_ubicacion.dart';
 import 'package:pa_donde_app/ui/global_widgets/views/mapa_view.dart';
 import 'package:pa_donde_app/ui/global_widgets/widgets/barra_busqueda_destino_widget.dart';
 import 'package:pa_donde_app/ui/global_widgets/widgets/barra_busqueda_inicio_widget.dart';
 import 'package:pa_donde_app/ui/global_widgets/widgets/marcador_manual_widget.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 //---------------------------------------------------------------------
 
 class RutaPag extends StatefulWidget {
@@ -65,17 +63,12 @@ class _RutaPagState extends State<RutaPag> {
                   MapaView(
                     initialLocalizacion: localizacionState.ultimaLocalizacion!,
                     polylines: polylines.values.toSet(),
+                    markers: mapaState.markers.values.toSet(),
                   ),
                   SafeArea(
                       child: Container(
                           padding: const EdgeInsets.all(10),
-                          child: Column(
-                            children: const [
-                              BtnAlternarRutaUsuario(),
-                              BtnSeguirUsuario(),
-                              BtnUbicacion(),
-                            ],
-                          ))),
+                          child: const BtnUbicacion())),
                   const MarcardorManual(),
                   SlidingUpPanel(
                     maxHeight: 210,
@@ -89,11 +82,9 @@ class _RutaPagState extends State<RutaPag> {
                       //         : busquedaBloc[0].nombreDestino!),
                       const SizedBox(height: 20),
 
-                      const BuscadorBarraInicio(busquedaDireccion: ''),
+                      const BuscadorBarraInicio(),
                       const SizedBox(height: 20),
-                      const BuscadorBarraDestino(
-                        busquedaDireccion: '',
-                      ),
+                      const BuscadorBarraDestino(),
 
                       btnContinuar()
                     ]),
@@ -139,28 +130,6 @@ class _RutaPagState extends State<RutaPag> {
                 await mapaBloc.dibujarRutaPolyline(context, reesponseRuta);
 
                 busquedaBloc.add(OnDesactivarMarcadorManual());
-
-                // final traficoServicio = TraficoServicio();
-                // final inicio =
-                //     BlocProvider.of<MiUbicacionBloc>(context).state.ubicacion;
-                // final destino = BlocProvider.of<MapaBloc>(context).state.ubicacionCentral;
-
-                // final ruta = await traficoServicio.getCoordsInicioYFin(
-                //     inicio!, destino!);
-
-                // final geometry = ruta.routes![0].geometry;
-                // final duracion = ruta.routes![0].duration;
-                // final distancia = ruta.routes![0].distance;
-
-                // final points =
-                //     Poly.Polyline.Decode(encodedString: geometry!, precision: 6)
-                //         .decodedCoords;
-
-                // final List<LatLng> rutaCoords =
-                //     points.map((point) => LatLng(point[0], point[1])).toList();
-
-                // mapaBloc.add(OnCrearRutaInicioDestino(
-                //     rutaCoords, distancia!, duracion!));
               }),
         ),
       ],

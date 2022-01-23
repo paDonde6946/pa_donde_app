@@ -81,6 +81,9 @@ class BusquedaOrigen extends SearchDelegate<BusquedaResultado> {
     final historial =
         BlocProvider.of<BusquedaBloc>(context).state.historialOrigen;
 
+    final localizacionBloc = BlocProvider.of<LocalizacionBloc>(context);
+    final mapaBloc = BlocProvider.of<MapsBloc>(context);
+
     return ListView(
       children: [
         ListTile(
@@ -96,6 +99,8 @@ class BusquedaOrigen extends SearchDelegate<BusquedaResultado> {
               title: Text(lugar.text!),
               subtitle: Text(lugar.placeName!),
               onTap: () {
+                final nuevaLocalizacion =
+                    LatLng(lugar.center![1], lugar.center![0]);
                 close(
                     context,
                     BusquedaResultado(
@@ -105,6 +110,9 @@ class BusquedaOrigen extends SearchDelegate<BusquedaResultado> {
                       nombreDestino: lugar.text,
                       descripcion: lugar.placeName,
                     ));
+                localizacionBloc
+                    .add(OnNuevaLocalizacionUsuarioEvent(nuevaLocalizacion));
+                mapaBloc.moverCamara(nuevaLocalizacion);
               },
             ))
       ],

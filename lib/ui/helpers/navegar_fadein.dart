@@ -1,4 +1,4 @@
-part of 'helpers.dart';
+import 'package:flutter/material.dart';
 
 /// Para poner una animacion en la navegacion de un widget
 navegarMapaFadeIn(BuildContext context, Widget page) {

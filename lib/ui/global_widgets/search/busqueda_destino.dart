@@ -35,6 +35,7 @@ class BusquedaDestino extends SearchDelegate<BusquedaResultado> {
     final busquedaBloc = BlocProvider.of<BusquedaBloc>(context);
     final localizacionBloc =
         BlocProvider.of<LocalizacionBloc>(context).state.ultimaLocalizacion;
+    final mapaBloc = BlocProvider.of<MapsBloc>(context);
 
     busquedaBloc.getLugaresPorQuery(localizacionBloc!, query);
 
@@ -50,6 +51,9 @@ class BusquedaDestino extends SearchDelegate<BusquedaResultado> {
               subtitle: Text(lugar.placeName!),
               leading: const Icon(Icons.place_outlined, color: Colors.black),
               onTap: () {
+                final nuevaLocalizacion =
+                    LatLng(lugar.center![1], lugar.center![0]);
+
                 /// El usuario no cancelo pero si elijo la opcion manualmente
                 close(
                     context,
@@ -63,6 +67,7 @@ class BusquedaDestino extends SearchDelegate<BusquedaResultado> {
 
                 busquedaBloc.add(OnAgregarHistorialDestionoEvent(lugar));
                 busquedaBloc.add(OnDesactivarMarcadorManual());
+                mapaBloc.moverCamara(nuevaLocalizacion);
               },
             );
           },

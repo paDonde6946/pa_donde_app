@@ -31,12 +31,16 @@ class BusquedaBloc extends Bloc<BusquedaEvent, BusquedaState> {
         historialOrigen: [event.lugarOrigen, ...state.historialOrigen])));
 
     on<OnAgregarHistorialDestionoEvent>((event, emit) => emit(state.copyWith(
-        historialOrigen: [event.lugarDestino, ...state.historialDestino])));
+        historialDestino: [event.lugarDestino, ...state.historialDestino])));
   }
 
   Future<RutaDestino> getCoordInicioYFin(LatLng inicio, LatLng destino) async {
     final traficoResponse =
         await traficoServicio.getCoordsInicioYFin(inicio, destino);
+
+    /// Informacion del destino
+    final lugarFinal =
+        await traficoServicio.getInformacionPorCoordenas(destino);
 
     final distancia = traficoResponse.routes![0].distance;
     final duracion = traficoResponse.routes![0].duration;
@@ -53,6 +57,7 @@ class BusquedaBloc extends Bloc<BusquedaEvent, BusquedaState> {
       puntos: latLngLista,
       duracion: duracion!,
       distancia: distancia!,
+      lugarFinal: lugarFinal,
     );
   }
 

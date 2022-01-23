@@ -9,7 +9,6 @@ class LugararesInterceptor extends Interceptor {
     options.queryParameters.addAll({
       'access_token': accessToken,
       'autocomplete': 'true',
-      'limit': 9,
       'language': "es",
       'country': 'co',
     });

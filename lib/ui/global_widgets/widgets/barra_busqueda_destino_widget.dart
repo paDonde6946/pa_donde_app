@@ -10,11 +10,15 @@ import 'package:pa_donde_app/data/models/busqueda_resultados_modelo.dart';
 import 'package:pa_donde_app/ui/global_widgets/search/busqueda_destino.dart';
 //---------------------------------------------------------------------
 
-class BuscadorBarraDestino extends StatelessWidget {
-  final String busquedaDireccion;
+class BuscadorBarraDestino extends StatefulWidget {
+  const BuscadorBarraDestino({Key? key}) : super(key: key);
 
-  const BuscadorBarraDestino({Key? key, required this.busquedaDireccion})
-      : super(key: key);
+  @override
+  State<BuscadorBarraDestino> createState() => _BuscadorBarraDestinoState();
+}
+
+class _BuscadorBarraDestinoState extends State<BuscadorBarraDestino> {
+  String busquedaDireccion = '';
 
   void onBusquedaResultados(
       BuildContext context, BusquedaResultado resultado) async {
@@ -25,6 +29,11 @@ class BuscadorBarraDestino extends StatelessWidget {
     if (resultado.manual) {
       busquedaBloc.add(OnActivarMarcadorManual());
       return;
+    }
+
+    if (resultado.nombreDestino != null) {
+      busquedaDireccion = resultado.nombreDestino!;
+      setState(() {});
     }
 
     if (resultado.posicion != null) {

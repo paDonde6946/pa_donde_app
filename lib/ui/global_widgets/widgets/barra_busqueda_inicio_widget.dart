@@ -2,18 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
-import 'package:pa_donde_app/blocs/busqueda/busqueda_bloc.dart';
-// import 'package:pa_donde_app/blocs/mapa/mapa_bloc.dart';
 import 'package:pa_donde_app/data/models/busqueda_resultados_modelo.dart';
 import 'package:pa_donde_app/ui/global_widgets/search/busqueda_origen.dart';
 import 'package:pa_donde_app/blocs/blocs.dart';
 //---------------------------------------------------------------------
 
-class BuscadorBarraInicio extends StatelessWidget {
-  final String busquedaDireccion;
+class BuscadorBarraInicio extends StatefulWidget {
+  const BuscadorBarraInicio({Key? key}) : super(key: key);
 
-  const BuscadorBarraInicio({Key? key, required this.busquedaDireccion})
-      : super(key: key);
+  @override
+  State<BuscadorBarraInicio> createState() => _BuscadorBarraInicioState();
+}
+
+class _BuscadorBarraInicioState extends State<BuscadorBarraInicio> {
+  String busquedaDireccion = '';
 
   @override
   Widget build(BuildContext context) {
@@ -22,20 +24,15 @@ class BuscadorBarraInicio extends StatelessWidget {
     void onBusquedaResultados(
         BuildContext context, BusquedaResultado resultado) async {
       final busquedaBloc = BlocProvider.of<BusquedaBloc>(context);
-      final mapaBloc = BlocProvider.of<MapsBloc>(context);
-      final localizacionBloc = BlocProvider.of<LocalizacionBloc>(context);
 
+      if (resultado.nombreDestino != null) {
+        busquedaDireccion = resultado.nombreDestino!;
+        setState(() {});
+      }
       if (resultado.manual) {
         busquedaBloc.add(OnActivarMarcadorManual());
         return;
       }
-
-      // if (resultado.posicion != null) {
-      //   final destino = await busquedaBloc.getCoordInicioYFin(
-      //       localizacionBloc.state.ultimaLocalizacion!, resultado.posicion!);
-
-      //   await mapaBloc.dibujarRutaPolyline(context, destino);
-      // }
     }
 
     return Container(
