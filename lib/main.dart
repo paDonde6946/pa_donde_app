@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pa_donde_app/data/services/trafico_servicio.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:provider/provider.dart'
@@ -10,6 +10,7 @@ import 'package:provider/provider.dart'
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
+import 'package:pa_donde_app/data/services/trafico_servicio.dart';
 import 'package:pa_donde_app/routes/routes.dart';
 import 'package:pa_donde_app/blocs/blocs.dart';
 //---------------------------------------------------------------------
@@ -54,6 +55,16 @@ class _MyAppState extends State<MyApp> {
             primaryColorLight: const Color.fromRGBO(232, 119, 29, 1)),
         initialRoute: 'validarInicioSesion',
         routes: generarRutas(),
+        localizationsDelegates: const [
+          // ... app-specific localization delegate[s] here
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('en', ''), // English, no country code
+          Locale('es', ''),
+        ],
       ),
     );
   }

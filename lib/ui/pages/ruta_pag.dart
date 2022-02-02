@@ -2,6 +2,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:pa_donde_app/ui/global_widgets/forms/agregar_servicio1_form.dart';
+import 'package:pa_donde_app/ui/global_widgets/forms/agregar_servicio2_form.dart';
+import 'package:pa_donde_app/ui/global_widgets/forms/agregar_servicio3_form.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
@@ -24,6 +27,9 @@ class RutaPag extends StatefulWidget {
 class _RutaPagState extends State<RutaPag> {
   /// LATE sirve para esperar a que se cree.
   late LocalizacionBloc localizacionBloc;
+
+  PageController controller = PageController(initialPage: 0);
+  int page = 0;
 
   @override
   void initState() {
@@ -75,19 +81,7 @@ class _RutaPagState extends State<RutaPag> {
                     minHeight: 160,
                     parallaxEnabled: true,
                     parallaxOffset: .5,
-                    panelBuilder: (sc) => Column(children: [
-                      // BuscadorBarraInicio(
-                      //     busquedaDireccion: (busquedaBloc.isEmpty)
-                      //         ? 'Origen'
-                      //         : busquedaBloc[0].nombreDestino!),
-                      const SizedBox(height: 20),
-
-                      const BuscadorBarraInicio(),
-                      const SizedBox(height: 20),
-                      const BuscadorBarraDestino(),
-
-                      btnContinuar()
-                    ]),
+                    panelBuilder: (sc) => pageView(),
                     borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(18.0),
                         topRight: Radius.circular(18.0)),
@@ -102,11 +96,37 @@ class _RutaPagState extends State<RutaPag> {
     );
   }
 
+  Widget panel1() {
+    return Column(children: [
+      const SizedBox(height: 20),
+      const BuscadorBarraInicio(),
+      const SizedBox(height: 20),
+      const BuscadorBarraDestino(),
+      btnContinuar()
+    ]);
+  }
+
+  Widget pageView() {
+    return PageView(
+      onPageChanged: (i) {
+        page = i;
+      },
+      controller: controller,
+      // physics: const NeverScrollableScrollPhysics(),
+      children: [
+        panel1(),
+        const AgregarServicioParte1(),
+        const AgregarServicioParte2(),
+        const AgregarServicioParte3(),
+      ],
+    );
+  }
+
   Widget btnContinuar() {
     final size = MediaQuery.of(context).size;
-    final busquedaBloc = BlocProvider.of<BusquedaBloc>(context);
-    final localizacionBloc = BlocProvider.of<LocalizacionBloc>(context);
-    final mapaBloc = BlocProvider.of<MapsBloc>(context);
+    // final busquedaBloc = BlocProvider.of<BusquedaBloc>(context);
+    // final localizacionBloc = BlocProvider.of<LocalizacionBloc>(context);
+    // final mapaBloc = BlocProvider.of<MapsBloc>(context);
 
     return Column(
       children: [
@@ -116,20 +136,22 @@ class _RutaPagState extends State<RutaPag> {
           child: BtnAnaranja(
               titulo: 'Continuar',
               function: () async {
-                final coordenadaInicio =
-                    localizacionBloc.state.ultimaLocalizacion;
+                controller.jumpToPage(1);
 
-                if (coordenadaInicio == null) return;
+                // final coordenadaInicio =
+                //     localizacionBloc.state.ultimaLocalizacion;
 
-                final coordenadaFin = mapaBloc.centroMapa;
-                if (coordenadaFin == null) return;
+                // if (coordenadaInicio == null) return;
 
-                final reesponseRuta = await busquedaBloc.getCoordInicioYFin(
-                    coordenadaInicio, coordenadaFin);
+                // final coordenadaFin = mapaBloc.centroMapa;
+                // if (coordenadaFin == null) return;
 
-                await mapaBloc.dibujarRutaPolyline(context, reesponseRuta);
+                // final reesponseRuta = await busquedaBloc.getCoordInicioYFin(
+                //     coordenadaInicio, coordenadaFin);
 
-                busquedaBloc.add(OnDesactivarMarcadorManual());
+                // await mapaBloc.dibujarRutaPolyline(context, reesponseRuta);
+
+                // busquedaBloc.add(OnDesactivarMarcadorManual());
               }),
         ),
       ],
