@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'detalle_servicio_pag.dart';
-
 //------------------IMPORTACIONES LOCALES------------------------------
 // import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
 // import 'package:provider/provider.dart';
 //---------------------------------------------------------------------
 
-class PrincipalPag extends StatefulWidget {
-  const PrincipalPag({Key? key}) : super(key: key);
+class DetalleServicioPag extends StatefulWidget {
+  const DetalleServicioPag({Key? key}) : super(key: key);
 
   @override
-  _PrincipalPagState createState() => _PrincipalPagState();
+  _DetalleServicioPagState createState() => _DetalleServicioPagState();
 }
 
-class _PrincipalPagState extends State<PrincipalPag> {
+class _DetalleServicioPagState extends State<DetalleServicioPag> {
   @override
   Widget build(BuildContext context) {
     setState(() {});
@@ -42,25 +40,29 @@ class _PrincipalPagState extends State<PrincipalPag> {
       children: [
         GestureDetector(
           child: cardDeServicio(
-              titulo: "Pa Donde",
+              titulo: "Detalles del Servicio",
               destino: "Calle 74 A - No. 113 A - 47",
               origen: "Calle 74 A - No. 113 A - 47",
               fecha: DateTime.parse("1969-07-20 20:18:04Z"),
-              cuposDisponibles: "4"),
-              
+              nombreConductor: "Steven Estrada",
+              placa: "AAAXXX",
+              cuposDisponibles: "4",
+              valorServicio: "30000"),
         ),
-        cardDeServicio(
-            titulo: "Pa Donde",
-            destino: "Calle 74 A - No. 113 A - 47",
-            origen: "Calle 74 A - No. 113 A - 47",
-            fecha: DateTime.parse("1969-07-20 20:18:04Z"),
-            cuposDisponibles: "3")
       ],
     );
   }
 
   Widget cardDeServicio(
-      {String? titulo, String? origen, String? destino, DateTime? fecha, String? cuposDisponibles}) {
+      {String? titulo,
+      String? origen,
+      String? destino,
+      DateTime? fecha,
+      String? placa,
+      String? nombreConductor,
+      String? cuposDisponibles,
+      String? valorServicio}) {
+    final size = MediaQuery.of(context).size;
     return Card(
       // color: Theme.of(context).primaryColor.withOpacity(0.35),
       color: const Color.fromRGBO(238, 246, 232, 1),
@@ -71,7 +73,7 @@ class _PrincipalPagState extends State<PrincipalPag> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: const EdgeInsets.only(right: 30, left: 30, top: 15),
+            padding: const EdgeInsets.only(right: 30, left: 30, top: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -79,41 +81,63 @@ class _PrincipalPagState extends State<PrincipalPag> {
                 Row(children: [
                   const Icon(Icons.access_time_outlined, size: 20),
                   textoDelServicio(
-                      texto: DateFormat(' EEE, MMM d, ''yy').format(DateTime.now())),
+                      texto: DateFormat(' EEE, MMM d, ''yy').format(DateTime.now()))
                 ]),
               ],
             ),
           ),
-          Container(
-            padding: const EdgeInsets.only(left: 40, top: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      subTitulosDelServicio(subtitulo: "Origen"),
-                      textoDelServicio(texto: origen),
-                      const SizedBox(
-                        height: 6,
-                      ),
-                      subTitulosDelServicio(subtitulo: "Destino"),
-                      textoDelServicio(texto: destino)
-                    ],
-                  ),
-                ),
-                Column(
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.only(left: 40, top: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                     Container(child: subTitulosDelServicio(subtitulo: "Cupos"),padding: const EdgeInsets.only(right: 50)),
-                      Container(child: textoDelServicio(texto: cuposDisponibles), padding: const EdgeInsets.only(bottom: 18, right: 80),),
-                    botonDelServicio(nombreBoton: "Ver mas"),
+                    Container(
+                      padding: const EdgeInsets.only(bottom: 18),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          subTitulosDelServicio(subtitulo: "Origen"),
+                          textoDelServicio(texto: origen),
+                          const SizedBox(
+                            height: 6,
+                          ),
+                          subTitulosDelServicio(subtitulo: "Destino"),
+                          textoDelServicio(texto: destino),
+                          const SizedBox(
+                            height: 6,
+                          ),
+                          subTitulosDelServicio(subtitulo: "Conductor"),
+                          textoDelServicio(texto: nombreConductor),                          
+                        ],
+                      ),
+                    ),
                   ],
-                )
-              ],
-            ),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(left: size.width * 0.10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    subTitulosDelServicio(subtitulo: "Cupos Disponibles"),
+                    textoDelServicio(texto: cuposDisponibles),
+                    const SizedBox(
+                      height: 6,
+                    ),
+                    subTitulosDelServicio(subtitulo: "Valor Servicio"),
+                    textoDelServicio(texto: valorServicio),
+                    const SizedBox(
+                      height: 6,
+                    ),
+                    subTitulosDelServicio(subtitulo: "Placa"),
+                    textoDelServicio(texto: placa),
+                  ],
+                ),
+              ),
+            ],
           )
         ],
       ),
@@ -149,30 +173,5 @@ class _PrincipalPagState extends State<PrincipalPag> {
 
   Widget textoDelServicio({texto}) {
     return Text(texto);
-  }
-
-  Widget botonDelServicio({String nombreBoton = ''}) {
-    return Container(
-      height: 40,
-      width: 100,
-      // padding: EdgeInsets.only(bottom: ),
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.only(
-            bottomRight: Radius.circular(10), topLeft: Radius.circular(10)),
-        color: Theme.of(context).primaryColorLight,
-      ),
-      child: IconButton(
-        icon: Text(
-          nombreBoton,
-          style: const TextStyle(fontSize: 20, color: Colors.white),
-        ),
-        onPressed: () => {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const DetalleServicioPag()),
-          ),
-        },
-      ),
-    );
   }
 }
