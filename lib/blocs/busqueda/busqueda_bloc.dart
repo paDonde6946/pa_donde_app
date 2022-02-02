@@ -46,8 +46,15 @@ class BusquedaBloc extends Bloc<BusquedaEvent, BusquedaState> {
     final duracion = traficoResponse.routes![0].duration;
     final geometria = traficoResponse.routes![0].geometry;
 
+    print("COMO LLEGAN: $geometria");
     // Deecodificar
     final puntos = decodePolyline(geometria!, accuracyExponent: 6);
+
+    print("DECODIFICADOS: $puntos");
+
+    String puntosCodificados = encodePolyline(puntos);
+
+    print("===================CODIFICADOS: $puntosCodificados");
 
     final latLngLista = puntos
         .map((coord) => LatLng(coord[0].toDouble(), coord[1].toDouble()))

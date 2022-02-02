@@ -81,13 +81,15 @@ class _VehiculoPagState extends State<VehiculoPag> {
 
     for (int i = 0; i < vehiculos.length; i++) {
       arreglo2.add(GestureDetector(
-              onTap: () {
-        
-        Navigator.of(context)
-            .push(navegarMapaFadeIn(context, EditarVehiculo(vehiculo: vehiculos[i],)));
+        onTap: () {
+          Navigator.of(context).push(navegarMapaFadeIn(
+              context,
+              EditarVehiculo(
+                vehiculo: vehiculos[i],
+              )));
 
-        // Navigator.pushNamed(context, 'editarVehiculo', arguments: vehiculos[i]);
-      },
+          // Navigator.pushNamed(context, 'editarVehiculo', arguments: vehiculos[i]);
+        },
         child: CardVehiculo(
             icon: Icons.motorcycle_rounded,
             color: Colors.black,
