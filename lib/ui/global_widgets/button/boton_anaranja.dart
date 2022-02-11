@@ -17,7 +17,7 @@ class BtnAnaranja extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         color: Theme.of(context).primaryColorLight,
       ),
-      width: 150,
+      width: 160,
       margin: const EdgeInsets.only(bottom: 10),
       child: IconButton(
         icon: Text(
