@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 //------------------IMPORTACIONES LOCALES------------------------------
 
 import 'package:pa_donde_app/data/models/vehiculo_modelo.dart';
+import 'package:pa_donde_app/data/services/vehiculo_servicio.dart';
 
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 import 'package:pa_donde_app/ui/global_widgets/inputs/input_form_redondo.dart'
@@ -10,6 +11,7 @@ import 'package:pa_donde_app/ui/global_widgets/inputs/input_form_redondo.dart'
 
 import 'package:pa_donde_app/ui/global_widgets/inputs/input_form_elevado.dart'
     as input_elevado;
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
 import 'package:pa_donde_app/ui/global_widgets/text/formulario_texto.dart';
 
 import 'package:pa_donde_app/ui/utils/validaciones_generales.dart'
@@ -362,7 +364,12 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
           style: TextStyle(fontSize: size.width * 0.045, color: Colors.red),
         ),
         color: Colors.black87,
-        onPressed: () {},
+        onPressed: () {
+          mostrarShowDialogCargando(
+              context: context, titulo: "Estammos eliminando tu vehiculo");
+          var vehiculoServicio = VehiculoServicio();
+          vehiculoServicio.eliminarVehiculo(placa: vehiculo.placa);
+        },
       ),
     );
   }

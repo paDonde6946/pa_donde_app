@@ -7,24 +7,38 @@ mostrarShowDialogCargando({@required BuildContext? context, String? titulo}) {
       barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          title: Center(
-            child: Text(
-              titulo!,
-              style: const TextStyle(fontSize: 20.0),
-            ),
-          ),
-          elevation: 2,
-          content: Padding(
-            padding: EdgeInsets.symmetric(horizontal: size.width * 0.22),
-            child: CircularProgressIndicator(
-              color: Colors.white,
-              backgroundColor: Theme.of(context).primaryColor,
-              strokeWidth: 8,
-            ),
-          ),
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8.0))),
+          content: Container(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                        child: SizedBox(
+                            child: CircularProgressIndicator(
+                              strokeWidth: 8,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            width: size.height * 0.08,
+                            height: size.height * 0.08),
+                        padding: const EdgeInsets.only(bottom: 16)),
+                    Padding(
+                        child: Text(
+                          'Porfavor espere ...',
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Theme.of(context).primaryColorLight),
+                          textAlign: TextAlign.center,
+                        ),
+                        padding: const EdgeInsets.only(bottom: 4)),
+                    Text(
+                      titulo!,
+                      style: const TextStyle(fontSize: 14),
+                      textAlign: TextAlign.center,
+                    )
+                  ])),
         );
       });
 }
