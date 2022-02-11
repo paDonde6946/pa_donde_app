@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:pa_donde_app/ui/global_widgets/widgets/cargando_widget.dart';
 import 'package:provider/provider.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
@@ -19,24 +20,7 @@ class ValidarInicioSesion extends StatelessWidget {
       body: FutureBuilder(
         future: checkLoginState(context),
         builder: (context, snapshot) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image(
-                    height: size.height * 0.23,
-                    image: const AssetImage('img/logo/logo_PaDonde.png')),
-                const SizedBox(
-                  height: 40,
-                ),
-                CircularProgressIndicator(
-                  color: Colors.white,
-                  backgroundColor: Theme.of(context).primaryColor,
-                  strokeWidth: 5,
-                )
-              ],
-            ),
-          );
+          return Cargando(size: size);
         },
       ),
     );
