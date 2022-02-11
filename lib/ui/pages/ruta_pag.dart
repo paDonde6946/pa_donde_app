@@ -2,9 +2,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:pa_donde_app/ui/global_widgets/forms/agregar_servicio1_form.dart';
-import 'package:pa_donde_app/ui/global_widgets/forms/agregar_servicio2_form.dart';
-import 'package:pa_donde_app/ui/global_widgets/forms/agregar_servicio3_form.dart';
+import 'package:pa_donde_app/data/services/servicios_servicio.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
@@ -15,6 +13,9 @@ import 'package:pa_donde_app/ui/global_widgets/views/mapa_view.dart';
 import 'package:pa_donde_app/ui/global_widgets/widgets/barra_busqueda_destino_widget.dart';
 import 'package:pa_donde_app/ui/global_widgets/widgets/barra_busqueda_inicio_widget.dart';
 import 'package:pa_donde_app/ui/global_widgets/widgets/marcador_manual_widget.dart';
+import 'package:pa_donde_app/ui/global_widgets/forms/agregar_servicio1_form.dart';
+import 'package:pa_donde_app/ui/global_widgets/forms/agregar_servicio2_form.dart';
+import 'package:pa_donde_app/ui/global_widgets/forms/agregar_servicio3_form.dart';
 //---------------------------------------------------------------------
 
 class RutaPag extends StatefulWidget {
@@ -27,14 +28,15 @@ class RutaPag extends StatefulWidget {
 class _RutaPagState extends State<RutaPag> {
   /// LATE sirve para esperar a que se cree.
   late LocalizacionBloc localizacionBloc;
+  late PreserviciosBloc preserviciosBloc;
 
-  PageController controller = PageController(initialPage: 0);
+  PageController controller = PageController();
   int page = 0;
 
   @override
   void initState() {
     super.initState();
-
+    preserviciosBloc = BlocProvider.of<PreserviciosBloc>(context);
     localizacionBloc = BlocProvider.of<LocalizacionBloc>(context);
     localizacionBloc.getPosicioActual();
     // localizacionBloc.comenzarSeguirUsuario();
@@ -77,8 +79,8 @@ class _RutaPagState extends State<RutaPag> {
                           child: const BtnUbicacion())),
                   const MarcardorManual(),
                   SlidingUpPanel(
-                    maxHeight: 210,
-                    minHeight: 160,
+                    maxHeight: 230,
+                    minHeight: 230,
                     parallaxEnabled: true,
                     parallaxOffset: .5,
                     panelBuilder: (sc) => pageView(),
@@ -112,7 +114,7 @@ class _RutaPagState extends State<RutaPag> {
         page = i;
       },
       controller: controller,
-      // physics: const NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       children: [
         panel1(),
         const AgregarServicioParte1(),
@@ -137,6 +139,8 @@ class _RutaPagState extends State<RutaPag> {
               titulo: 'Continuar',
               function: () async {
                 controller.jumpToPage(1);
+                BlocProvider.of<PreserviciosBloc>(context)
+                    .add(OnCambiarPagina(controller));
 
                 // final coordenadaInicio =
                 //     localizacionBloc.state.ultimaLocalizacion;

@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/models/servicio_modelo.dart';
 import 'package:pa_donde_app/data/models/vehiculo_modelo.dart';
+import 'package:pa_donde_app/blocs/blocs.dart';
+import 'package:pa_donde_app/data/response/pre_agregar_servicio_response.dart';
+import 'package:pa_donde_app/data/services/servicios_servicio.dart';
 //---------------------------------------------------------------------
 
 class AgregarServicioParte2 extends StatefulWidget {
@@ -21,6 +25,8 @@ class _AgregarServicioParte2State extends State<AgregarServicioParte2> {
     // Vehiculo(pPlaca: "UYV469", pMarca: "MERCEDEZ"),
   ];
 
+  PreAgregarServicioResponse pre = PreAgregarServicioResponse();
+
   Servicio servicio = Servicio();
 
   int seleccion = 0;
@@ -33,21 +39,33 @@ class _AgregarServicioParte2State extends State<AgregarServicioParte2> {
         padding: EdgeInsets.symmetric(horizontal: size.width * 0.06),
         child: Stack(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.arrow_back_ios_sharp)),
-                const Text("Seleccion su automovil"),
-                IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.arrow_forward_ios_rounded)),
-              ],
-            ),
-            listadoCarros()
+            listadoCarros(),
+            titulo(),
           ],
         ));
+  }
+
+  /// Metodo para crear el titulo del form y los botones superiores
+  Widget titulo() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        IconButton(
+            onPressed: () {
+              BlocProvider.of<PreserviciosBloc>(context)
+                  .controller!
+                  .jumpToPage(1);
+            },
+            icon: const Icon(Icons.arrow_back_ios_sharp)),
+        const Text("Seleccion su automovil"),
+        IconButton(
+            onPressed: () {
+              final blocPaginar = BlocProvider.of<PreserviciosBloc>(context);
+              blocPaginar.controller!.jumpToPage(3);
+            },
+            icon: const Icon(Icons.arrow_forward_ios_rounded)),
+      ],
+    );
   }
 
   Widget _cardCarro(String nombre, int posicion) {
@@ -98,11 +116,15 @@ class _AgregarServicioParte2State extends State<AgregarServicioParte2> {
   }
 
   Widget listadoCarros() {
-    return ListView.builder(
-        itemCount: vehiculos.length,
-        itemBuilder: (context, i) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: _cardCarro(vehiculos[i].placa, i),
-            ));
+    return BlocBuilder<PreserviciosBloc, PreserviciosState>(
+      builder: (context, snapshot) {
+        return ListView.builder(
+            itemCount: snapshot.vehiculos.length,
+            itemBuilder: (context, i) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: _cardCarro(vehiculos[i].placa, i),
+                ));
+      },
+    );
   }
 }

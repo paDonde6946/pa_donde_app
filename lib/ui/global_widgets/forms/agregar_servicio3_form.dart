@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/models/servicio_modelo.dart';
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
+import 'package:pa_donde_app/blocs/blocs.dart';
 //---------------------------------------------------------------------
 
 class AgregarServicioParte3 extends StatefulWidget {
@@ -36,18 +38,9 @@ class _AgregarServicioParte3State extends State<AgregarServicioParte3> {
       padding: EdgeInsets.symmetric(horizontal: size.width * 0.06),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.arrow_back_ios_sharp)),
-              const Text("Seleccion un precio para el servicio"),
-              Container(width: 30)
-            ],
-          ),
+          titulo(),
           listadoPrecios(),
-          const SizedBox(height: 5),
+          const SizedBox(height: 10),
           const BtnAnaranja(
             titulo: 'Finalizar',
           )
@@ -56,19 +49,47 @@ class _AgregarServicioParte3State extends State<AgregarServicioParte3> {
     );
   }
 
-  Widget listadoPrecios() {
-    return Column(
+  /// Metodo para crear el titulo del form y los botones superiores
+  Widget titulo() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [cardPrecio(precios[0], 0), cardPrecio(precios[1], 1)],
-        ),
-        const SizedBox(height: 15),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [cardPrecio(precios[2], 2), cardPrecio(precios[3], 3)],
-        )
+        IconButton(
+            onPressed: () {
+              BlocProvider.of<PreserviciosBloc>(context)
+                  .controller!
+                  .jumpToPage(2);
+            },
+            icon: const Icon(Icons.arrow_back_ios_sharp)),
+        const Text("Seleccione un precio para el servicio"),
+        Container(width: 40)
       ],
+    );
+  }
+
+  Widget listadoPrecios() {
+    return BlocBuilder<PreserviciosBloc, PreserviciosState>(
+      builder: (context, snapshot) {
+        return Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                cardPrecio(snapshot.precios[0].valor.toString(), 0),
+                cardPrecio(snapshot.precios[1].valor.toString(), 1)
+              ],
+            ),
+            const SizedBox(height: 15),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                cardPrecio(snapshot.precios[2].valor.toString(), 2),
+                cardPrecio(snapshot.precios[3].valor.toString(), 3)
+              ],
+            )
+          ],
+        );
+      },
     );
   }
 

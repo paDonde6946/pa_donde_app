@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pa_donde_app/blocs/blocs.dart';
+import 'package:pa_donde_app/data/services/servicios_servicio.dart';
 import 'package:provider/provider.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
@@ -52,6 +55,16 @@ class ValidarInicioSesion extends StatelessWidget {
     await Future.delayed(const Duration(seconds: 4));
     if (autenticado) {
       // sockettServicce.connect();
+
+      /// Consulta los vehiculos del usuario
+      final preServicios = await ServicioRServicio().getPreServicio();
+
+      BlocProvider.of<PreserviciosBloc>(context)
+          .add(OnAgregarVehiculo(preServicios.vehiculos!));
+
+      BlocProvider.of<PreserviciosBloc>(context)
+          .add(OnAgregarPrecios(preServicios.auxilioEconomico!));
+
       SchedulerBinding.instance!.addPostFrameCallback((_) {
         Navigator.pushReplacement(
             context,

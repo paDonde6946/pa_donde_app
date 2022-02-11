@@ -20,6 +20,7 @@ void main() {
     providers: [
       BlocProvider(create: (context) => GpsBloc()),
       BlocProvider(create: (context) => LocalizacionBloc()),
+      BlocProvider(create: (context) => PreserviciosBloc()),
       BlocProvider(
           create: (context) => MapsBloc(
               localizacionBloc: BlocProvider.of<LocalizacionBloc>(context))),

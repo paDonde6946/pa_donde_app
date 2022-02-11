@@ -68,11 +68,13 @@ class _BuscadorBarraDestinoState extends State<BuscadorBarraDestino> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                    busquedaDireccion == ""
-                        ? 'Destino'.toUpperCase()
-                        : busquedaDireccion,
-                    style: const TextStyle(color: Colors.black87)),
-                const Icon(Icons.add_location)
+                  busquedaDireccion == "" ? 'Destino' : busquedaDireccion,
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: size.width * 0.04,
+                  ),
+                ),
+                const Icon(Icons.location_on)
               ],
             ),
             width: double.infinity,

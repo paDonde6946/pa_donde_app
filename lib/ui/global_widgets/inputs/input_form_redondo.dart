@@ -12,7 +12,7 @@ InputDecoration inputDecorationRedondo(
       borderSide: BorderSide(color: color),
     ),
     hintStyle: TextStyle(
-        color: Theme.of(context).primaryColor, fontSize: size.width * 0.035),
+        color: Theme.of(context).primaryColor, fontSize: size.width * 0.04),
     hintText: hint,
   );
 }

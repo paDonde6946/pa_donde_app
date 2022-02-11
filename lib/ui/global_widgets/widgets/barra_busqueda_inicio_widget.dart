@@ -21,6 +21,7 @@ class _BuscadorBarraInicioState extends State<BuscadorBarraInicio> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
+    /// Metodo que permite validar si ya se hizo una busqueda actualizar el nombre y activar el marcador mmanual
     void onBusquedaResultados(
         BuildContext context, BusquedaResultado resultado) async {
       final busquedaBloc = BlocProvider.of<BusquedaBloc>(context);
@@ -40,13 +41,14 @@ class _BuscadorBarraInicioState extends State<BuscadorBarraInicio> {
       width: size.width,
       child: GestureDetector(
         onTap: () async {
+          // Activa el buscador
           final resultado =
               await showSearch(context: context, delegate: BusquedaOrigen());
           if (resultado == null) return;
           onBusquedaResultados(context, resultado);
         },
         child: Material(
-          elevation: 10,
+          elevation: 5,
           color: Colors.transparent,
           child: Container(
             padding: EdgeInsets.symmetric(
@@ -55,11 +57,13 @@ class _BuscadorBarraInicioState extends State<BuscadorBarraInicio> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                    busquedaDireccion == ""
-                        ? 'Origen'.toUpperCase()
-                        : busquedaDireccion,
-                    style: const TextStyle(color: Colors.black87)),
-                const Icon(Icons.location_searching)
+                  busquedaDireccion == "" ? 'Origen' : busquedaDireccion,
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: size.width * 0.04,
+                  ),
+                ),
+                const Icon(Icons.push_pin_outlined)
               ],
             ),
             width: double.infinity,
