@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
+import 'package:pa_donde_app/data/models/ruta_destino_modelo.dart';
 
-class Servicio with ChangeNotifier {
+class Servicio {
   String? _estado;
   String? _nombreOrigen;
   String? _nombreDestino;
@@ -9,7 +9,8 @@ class Servicio with ChangeNotifier {
   String? _idVehiculo;
   DateTime? _fecha;
   int? _cantidadCupos;
-  int? _auxilioEconomico;
+  String? _auxilioEconomico;
+  RutaDestino? _rutaDestino;
 
   Servicio({
     String? pEstado,
@@ -20,7 +21,8 @@ class Servicio with ChangeNotifier {
     DateTime? pFecha,
     String? pIdVehiculo,
     int? pCantidadCupos,
-    int? pAuxilioEconomico,
+    String? pAuxilioEconomico,
+    RutaDestino? pRutaDestino,
   }) {
     estado = pEstado;
     nombreOrigen = pNombreOrigen;
@@ -31,6 +33,7 @@ class Servicio with ChangeNotifier {
     idVehiculo = pIdVehiculo;
     cantidadCupos = pCantidadCupos;
     auxilioEconomico = pAuxilioEconomico;
+    rutaDestino = pRutaDestino;
   }
 
   get estado => _estado;
@@ -85,5 +88,11 @@ class Servicio with ChangeNotifier {
 
   set auxilioEconomico(auxilioEconomico) {
     _auxilioEconomico = auxilioEconomico;
+  }
+
+  get rutaDestino => _rutaDestino;
+
+  set rutaDestino(pRutaDestino) {
+    _rutaDestino = pRutaDestino;
   }
 }

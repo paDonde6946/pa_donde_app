@@ -7,7 +7,10 @@ import 'package:pa_donde_app/blocs/blocs.dart';
 import 'package:pa_donde_app/blocs/busqueda/busqueda_bloc.dart';
 import 'package:pa_donde_app/blocs/mapas/mapas_bloc.dart';
 import 'package:pa_donde_app/data/models/busqueda_resultados_modelo.dart';
+import 'package:pa_donde_app/data/models/servicio_modelo.dart';
+import 'package:pa_donde_app/data/services/trafico_servicio.dart';
 import 'package:pa_donde_app/ui/global_widgets/search/busqueda_destino.dart';
+import 'package:pa_donde_app/ui/global_widgets/widgets/barra_busqueda_inicio_widget.dart';
 //---------------------------------------------------------------------
 
 class BuscadorBarraDestino extends StatefulWidget {
@@ -25,6 +28,8 @@ class _BuscadorBarraDestinoState extends State<BuscadorBarraDestino> {
     final busquedaBloc = BlocProvider.of<BusquedaBloc>(context);
     final mapaBloc = BlocProvider.of<MapsBloc>(context);
     final localizacionBloc = BlocProvider.of<LocalizacionBloc>(context);
+    final preServicioBloc = BlocProvider.of<PreserviciosBloc>(context);
+    Servicio servicio = Servicio();
 
     if (resultado.manual) {
       busquedaBloc.add(OnActivarMarcadorManual());
@@ -33,7 +38,17 @@ class _BuscadorBarraDestinoState extends State<BuscadorBarraDestino> {
 
     if (resultado.nombreDestino != null) {
       busquedaDireccion = resultado.nombreDestino!;
-      setState(() {});
+      servicio.nombreDestino = resultado.nombreDestino!;
+
+      servicio.nombreOrigen = preServicioBloc.servicio?.nombreOrigen;
+      if (preServicioBloc.servicio?.nombreOrigen == null) {
+        TraficoServicio traficoServicio = TraficoServicio();
+        final respuesta = await traficoServicio.getInformacionPorCoordenas(
+            localizacionBloc.state.ultimaLocalizacion!);
+        servicio.nombreOrigen = respuesta.textEs;
+        preServicioBloc.add(OnBusquedaInicioServicio(respuesta.textEs!));
+        setState(() {});
+      }
     }
 
     if (resultado.posicion != null) {
@@ -41,13 +56,19 @@ class _BuscadorBarraDestinoState extends State<BuscadorBarraDestino> {
           localizacionBloc.state.ultimaLocalizacion!, resultado.posicion!);
 
       await mapaBloc.dibujarRutaPolyline(context, destino);
+      servicio.rutaDestino = destino;
+      servicio.polylineRuta = preServicioBloc.state.servicio.polylineRuta;
+      preServicioBloc.add(OnCrearServicio(servicio));
+      setState(() {});
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final preServicioBloc = BlocProvider.of<PreserviciosBloc>(context);
 
+    setState(() {});
     return Container(
       padding: EdgeInsets.symmetric(horizontal: size.width * 0.03),
       width: size.width,
@@ -58,30 +79,31 @@ class _BuscadorBarraDestinoState extends State<BuscadorBarraDestino> {
           if (resultado == null) return;
           onBusquedaResultados(context, resultado);
         },
-        child: Material(
-          elevation: 10,
-          color: Colors.transparent,
-          child: Container(
-            padding: EdgeInsets.symmetric(
-                horizontal: size.width * 0.03, vertical: size.width * 0.025),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  busquedaDireccion == "" ? 'Destino' : busquedaDireccion,
-                  style: TextStyle(
-                    color: Theme.of(context).primaryColor,
-                    fontSize: size.width * 0.04,
-                  ),
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: size.width * 0.025),
+          padding: EdgeInsets.symmetric(
+              horizontal: size.width * 0.03, vertical: size.width * 0.025),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                preServicioBloc.servicio?.nombreDestino ?? 'Destino',
+                style: TextStyle(
+                  color: preServicioBloc.state.servicio.nombreDestino != null
+                      ? Colors.black
+                      : Theme.of(context).primaryColor,
+                  fontSize: size.width * 0.04,
                 ),
-                const Icon(Icons.location_on)
-              ],
-            ),
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(100),
-            ),
+              ),
+              const Icon(Icons.location_on)
+            ],
+          ),
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border(
+                bottom: BorderSide(
+                    color: Theme.of(context).primaryColor, width: 1)),
           ),
         ),
       ),

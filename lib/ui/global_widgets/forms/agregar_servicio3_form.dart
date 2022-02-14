@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
-import 'package:pa_donde_app/data/models/servicio_modelo.dart';
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 import 'package:pa_donde_app/blocs/blocs.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/informativo_show.dart';
 //---------------------------------------------------------------------
 
 class AgregarServicioParte3 extends StatefulWidget {
@@ -16,19 +16,7 @@ class AgregarServicioParte3 extends StatefulWidget {
 }
 
 class _AgregarServicioParte3State extends State<AgregarServicioParte3> {
-  final keyForm = GlobalKey<FormState>();
-  final keySnackbar = GlobalKey<ScaffoldState>();
-
-  List<String> precios = [
-    '\$ 0',
-    '\$ 2.000',
-    '\$ 3.000',
-    '\$ 4.000',
-  ];
-  Servicio servicio = Servicio();
-  bool color = false;
-  int seleccion = 0;
-  final styleInput = const TextStyle(height: 0.4);
+  int seleccion = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +29,21 @@ class _AgregarServicioParte3State extends State<AgregarServicioParte3> {
           titulo(),
           listadoPrecios(),
           const SizedBox(height: 10),
-          const BtnAnaranja(
+          BtnAnaranja(
             titulo: 'Finalizar',
+            function: () {
+              final servicioBloc = BlocProvider.of<PreserviciosBloc>(context);
+              if (seleccion >= 0) {
+                servicioBloc.servicio!.auxilioEconomico =
+                    servicioBloc.precios![seleccion].uid;
+                servicioBloc.add(OnCrearServicio(servicioBloc.servicio!));
+              } else {
+                mostrarShowDialogInformativo(
+                    context: context,
+                    titulo: 'Precio',
+                    contenido: 'Debe de seleccionar un precio');
+              }
+            },
           )
         ],
       ),
@@ -64,32 +65,6 @@ class _AgregarServicioParte3State extends State<AgregarServicioParte3> {
         const Text("Seleccione un precio para el servicio"),
         Container(width: 40)
       ],
-    );
-  }
-
-  Widget listadoPrecios() {
-    return BlocBuilder<PreserviciosBloc, PreserviciosState>(
-      builder: (context, snapshot) {
-        return Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                cardPrecio(snapshot.precios[0].valor.toString(), 0),
-                cardPrecio(snapshot.precios[1].valor.toString(), 1)
-              ],
-            ),
-            const SizedBox(height: 15),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                cardPrecio(snapshot.precios[2].valor.toString(), 2),
-                cardPrecio(snapshot.precios[3].valor.toString(), 3)
-              ],
-            )
-          ],
-        );
-      },
     );
   }
 
@@ -123,6 +98,32 @@ class _AgregarServicioParte3State extends State<AgregarServicioParte3> {
               borderRadius: const BorderRadius.all(Radius.circular(20))),
         ),
       ),
+    );
+  }
+
+  Widget listadoPrecios() {
+    return BlocBuilder<PreserviciosBloc, PreserviciosState>(
+      builder: (context, snapshot) {
+        return Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                cardPrecio(snapshot.precios[0].valor.toString(), 0),
+                cardPrecio(snapshot.precios[1].valor.toString(), 1)
+              ],
+            ),
+            const SizedBox(height: 15),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                cardPrecio(snapshot.precios[2].valor.toString(), 2),
+                cardPrecio(snapshot.precios[3].valor.toString(), 3)
+              ],
+            )
+          ],
+        );
+      },
     );
   }
 }
