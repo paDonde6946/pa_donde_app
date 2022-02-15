@@ -9,14 +9,21 @@ import 'package:pa_donde_app/blocs/blocs.dart';
 //---------------------------------------------------------------------
 
 class BuscadorBarraInicio extends StatefulWidget {
-  const BuscadorBarraInicio({Key? key}) : super(key: key);
+  const BuscadorBarraInicio({Key? key, required this.callbackFunction})
+      : super(key: key);
+  final Function? callbackFunction;
 
   @override
-  State<BuscadorBarraInicio> createState() => _BuscadorBarraInicioState();
+  State<BuscadorBarraInicio> createState() =>
+      // ignore: no_logic_in_create_state
+      _BuscadorBarraInicioState(callbackFunction);
 }
 
 class _BuscadorBarraInicioState extends State<BuscadorBarraInicio> {
   String busquedaDireccion = '';
+  final Function? callbackFunction;
+
+  _BuscadorBarraInicioState(this.callbackFunction);
 
   @override
   Widget build(BuildContext context) {

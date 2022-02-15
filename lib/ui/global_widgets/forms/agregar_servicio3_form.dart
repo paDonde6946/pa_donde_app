@@ -1,18 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pa_donde_app/data/services/servicios_servicio.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
+import 'package:pa_donde_app/data/models/servicio_modelo.dart';
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 import 'package:pa_donde_app/blocs/blocs.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/confirmacion_show.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/informativo_show.dart';
+import 'package:pa_donde_app/ui/pages/principal_pag.dart';
+import 'package:pa_donde_app/ui/utils/snack_bars.dart';
 //---------------------------------------------------------------------
 
 class AgregarServicioParte3 extends StatefulWidget {
   const AgregarServicioParte3({Key? key}) : super(key: key);
 
   @override
-  State<AgregarServicioParte3> createState() => _AgregarServicioParte3State();
+  State<AgregarServicioParte3> createState() =>
+      // ignore: no_logic_in_create_state
+      _AgregarServicioParte3State();
 }
 
 class _AgregarServicioParte3State extends State<AgregarServicioParte3> {
@@ -31,12 +38,30 @@ class _AgregarServicioParte3State extends State<AgregarServicioParte3> {
           const SizedBox(height: 10),
           BtnAnaranja(
             titulo: 'Finalizar',
-            function: () {
+            function: () async {
               final servicioBloc = BlocProvider.of<PreserviciosBloc>(context);
               if (seleccion >= 0) {
                 servicioBloc.servicio!.auxilioEconomico =
                     servicioBloc.precios![seleccion].uid;
                 servicioBloc.add(OnCrearServicio(servicioBloc.servicio!));
+
+                customShapeSnackBar(
+                    context: context, titulo: 'Su servicio se esta creando');
+
+                await ServicioRServicio().crearServicio(servicioBloc.servicio!);
+
+                mostrarShowDialogConfirmar(
+                    context: context,
+                    titulo: "Servicio",
+                    contenido: "Su servicio ha sido creeado",
+                    paginaRetorno: 'inicio');
+
+                servicioBloc.add(OnCrearServicio(Servicio()));
+
+                BlocProvider.of<PaginasBloc>(context)
+                    .add(const OnCambiarPaginaPrincipal(PrincipalPag(), 0));
+
+                setState(() {});
               } else {
                 mostrarShowDialogInformativo(
                     context: context,

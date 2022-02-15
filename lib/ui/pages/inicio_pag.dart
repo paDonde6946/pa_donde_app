@@ -11,7 +11,9 @@ import 'package:pa_donde_app/ui/pages/perfil_pag.dart';
 import 'package:pa_donde_app/ui/pages/principal_pag.dart';
 import 'package:pa_donde_app/ui/pages/vehiculo_pag.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+
 //---------------------------------------------------------------------
+typedef VoidCallback = void Function();
 
 class InicioPag extends StatefulWidget {
   const InicioPag({Key? key, this.titulo}) : super(key: key);
@@ -19,10 +21,15 @@ class InicioPag extends StatefulWidget {
   final String? titulo;
 
   @override
+  // ignore: no_logic_in_create_state
   _InicioPagState createState() => _InicioPagState();
 }
 
 class _InicioPagState extends State<InicioPag> {
+  callback() {
+    setState(() {});
+  }
+
   /* Variables Auxiliares */
   final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
 
@@ -34,13 +41,16 @@ class _InicioPagState extends State<InicioPag> {
   ];
   /*----------------------*/
 
-  Widget _page = const LoadingGPSPag();
-  int _currentIndex = 1;
+  Widget _page = const PrincipalPag();
+  int _currentIndex = 0;
 
   GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
+    _page = BlocProvider.of<PaginasBloc>(context).state.paginaMostrar;
+    _currentIndex =
+        BlocProvider.of<PaginasBloc>(context).state.controladorPagina;
     return Scaffold(
         body: CustomNavigator(
           navigatorKey: navigatorKey,
@@ -72,13 +82,19 @@ class _InicioPagState extends State<InicioPag> {
       backgroundColor: Colors.white,
       onTap: (index) {
         navigatorKey.currentState!.maybePop();
-        setState(() => _page = _children[index]);
         _currentIndex = index;
+        // BlocProvider.of<PreserviciosBloc>(context)
+        //     .add(OnCambiarPaginaPrincipalSS(_currentIndex));
         // Cnacelar el seguimiento cuando no este en la pagina de la ruta
         if (_currentIndex != 1) {
           BlocProvider.of<LocalizacionBloc>(context).pararSeguirUsuario();
           setState(() {});
         }
+        setState(() {
+          _page = _children[index];
+          BlocProvider.of<PaginasBloc>(context)
+              .add(OnCambiarPaginaPrincipal(_page, index));
+        });
       },
       buttonBackgroundColor: Theme.of(context).primaryColor,
       animationCurve: Curves.easeInSine,

@@ -26,8 +26,3 @@ class OnCrearServicio extends PreserviciosEvent {
   final Servicio servicio;
   const OnCrearServicio(this.servicio);
 }
-
-class OnBusquedaInicioServicio extends PreserviciosEvent {
-  final String busquedaInicio;
-  const OnBusquedaInicioServicio(this.busquedaInicio);
-}

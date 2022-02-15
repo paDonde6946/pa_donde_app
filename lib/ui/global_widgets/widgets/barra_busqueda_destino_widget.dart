@@ -10,18 +10,23 @@ import 'package:pa_donde_app/data/models/busqueda_resultados_modelo.dart';
 import 'package:pa_donde_app/data/models/servicio_modelo.dart';
 import 'package:pa_donde_app/data/services/trafico_servicio.dart';
 import 'package:pa_donde_app/ui/global_widgets/search/busqueda_destino.dart';
-import 'package:pa_donde_app/ui/global_widgets/widgets/barra_busqueda_inicio_widget.dart';
 //---------------------------------------------------------------------
 
 class BuscadorBarraDestino extends StatefulWidget {
-  const BuscadorBarraDestino({Key? key}) : super(key: key);
-
+  const BuscadorBarraDestino({Key? key, required this.callbackFunction})
+      : super(key: key);
+  final Function? callbackFunction;
   @override
-  State<BuscadorBarraDestino> createState() => _BuscadorBarraDestinoState();
+  State<BuscadorBarraDestino> createState() =>
+      // ignore: no_logic_in_create_state
+      _BuscadorBarraDestinoState(callbackFunction);
 }
 
 class _BuscadorBarraDestinoState extends State<BuscadorBarraDestino> {
   String busquedaDireccion = '';
+  final Function? callbackFunction;
+
+  _BuscadorBarraDestinoState(this.callbackFunction);
 
   void onBusquedaResultados(
       BuildContext context, BusquedaResultado resultado) async {
@@ -46,7 +51,7 @@ class _BuscadorBarraDestinoState extends State<BuscadorBarraDestino> {
         final respuesta = await traficoServicio.getInformacionPorCoordenas(
             localizacionBloc.state.ultimaLocalizacion!);
         servicio.nombreOrigen = respuesta.textEs;
-        preServicioBloc.add(OnBusquedaInicioServicio(respuesta.textEs!));
+        callbackFunction!();
         setState(() {});
       }
     }

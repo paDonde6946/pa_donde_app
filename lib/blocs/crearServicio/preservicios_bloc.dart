@@ -13,7 +13,6 @@ class PreserviciosBloc extends Bloc<PreserviciosEvent, PreserviciosState> {
   List<Vehiculo>? vehiculos;
   List<AuxilioEconomico>? precios;
   Servicio? servicio;
-  String? busquedaInicio;
 
   PreserviciosBloc()
       : super(
@@ -44,11 +43,6 @@ class PreserviciosBloc extends Bloc<PreserviciosEvent, PreserviciosState> {
     on<OnCrearServicio>((event, emit) {
       emit(state.copyWith(servicio: event.servicio));
       servicio = event.servicio;
-    });
-
-    on<OnBusquedaInicioServicio>((event, emit) {
-      emit(state.copyWith(busquedaInicio: event.busquedaInicio));
-      busquedaInicio = event.busquedaInicio;
     });
   }
 }

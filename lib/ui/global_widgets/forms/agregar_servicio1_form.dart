@@ -95,26 +95,32 @@ class _AgregarServicioParte1State extends State<AgregarServicioParte1> {
     final preServicioBloc = BlocProvider.of<PreserviciosBloc>(context);
     final servicioBloc = preServicioBloc.state.servicio;
 
-    // Separar hora 00:00
-    final horaPartida = hora2.split(':');
+    try {
+      // Separar hora 00:00
+      final horaPartida = hora2.split(':');
 
-    //Modifica la fecha de String a DateTime
-    DateTime fechaModificada = DateTime.parse(fecha2);
+      //Modifica la fecha de String a DateTime
+      DateTime fechaModificada = DateTime.parse(fecha2);
 
-    // Se agrega la hora a la fecha
-    fechaModificada = fechaModificada.add(Duration(
-        hours: int.parse(horaPartida[0]), minutes: int.parse(horaPartida[1])));
+      // Se agrega la hora a la fecha
+      fechaModificada = fechaModificada.add(Duration(
+          hours: int.parse(horaPartida[0]),
+          minutes: int.parse(horaPartida[1])));
 
-    // Se valida la diferencia de la fecha con la fecha actual
-    final diferenciaHoras = fechaModificada.difference(DateTime.now()).inHours;
+      // Se valida la diferencia de la fecha con la fecha actual
+      final diferenciaHoras =
+          fechaModificada.difference(DateTime.now()).inHours;
 
-    if (inputCupos.text.isNotEmpty) {
-      try {
+      if (inputCupos.text.isNotEmpty) {
         servicioBloc.cantidadCupos =
             int.parse(inputCupos.text.replaceAll(" ", ""));
         if (servicioBloc.cantidadCupos <= 0 ||
             servicioBloc.cantidadCupos >= 6) {
-          throw Exception();
+          mostrarShowDialogInformativo(
+              context: context,
+              titulo: 'Cupos',
+              contenido:
+                  "La cantidad de cupos no es valida. Debe de ingresar un valor entre 1 y 5");
         } else {
           if (diferenciaHoras < 24 && fecha2 != '' && hora2 != '') {
             mostrarShowDialogInformativo(
@@ -130,13 +136,13 @@ class _AgregarServicioParte1State extends State<AgregarServicioParte1> {
             preServicioBloc.add(OnCrearServicio(servicioBloc));
           }
         }
-      } catch (e) {
-        mostrarShowDialogInformativo(
-            context: context,
-            titulo: 'Cupos',
-            contenido:
-                "La cantidad de cupos no es valida. Debe de ingresar un valor entre 1 y 5");
       }
+      // throw Exception();
+    } catch (e) {
+      mostrarShowDialogInformativo(
+          context: context,
+          titulo: 'Campos Incompletos',
+          contenido: "Debe de completar todos los campos");
     }
   }
 
