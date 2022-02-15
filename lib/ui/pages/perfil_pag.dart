@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:pa_donde_app/ui/pages/editar_contrasenia_pag.dart';
 import 'package:provider/provider.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
@@ -60,7 +61,7 @@ class _PerfilPagState extends State<PerfilPag> {
       children: [
         const SizedBox(height: 30),
         encabezado(),
-        const SizedBox(height: 30),
+        const SizedBox(height: 20),
         contenedorImagen(),
         const SizedBox(height: 10),
         Text(
@@ -71,23 +72,65 @@ class _PerfilPagState extends State<PerfilPag> {
               fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 30),
-        BtnAnaranja(
-          titulo: "Editar Perfil",
-          function: () {
-            SchedulerBinding.instance!.addPostFrameCallback((_) {
-              Navigator.of(context)
-                  .push(navegarMapaFadeIn(context, const EditarPerfilPag()));
-            });
-          },
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            BtnAnaranja(
+              titulo: "Editar Perfil",
+              function: () {
+                SchedulerBinding.instance!.addPostFrameCallback((_) {
+                  Navigator.of(context).push(
+                      navegarMapaFadeIn(context, const EditarPerfilPag()));
+                });
+              },
+            ),
+            BtnAnaranja(
+              titulo: "Editar Contraseña",
+              function: () {
+                SchedulerBinding.instance!.addPostFrameCallback((_) {
+                  Navigator.of(context).push(
+                      navegarMapaFadeIn(context, const EditarContraseniaPag()));
+                });
+              },
+            ),
+          ],
         ),
-        const SizedBox(height: 30),
+        const SizedBox(height: 10),
         informacionTextoTitulo("CORREO", Icons.mail),
         const SizedBox(height: 10),
         informacionTextoSubTitulo(usuarioServicio.correo),
-        const SizedBox(height: 20),
+        const SizedBox(height: 10),
         informacionTextoTitulo("CELULAR", Icons.phone),
         const SizedBox(height: 10),
         informacionTextoSubTitulo(usuarioServicio.celular.toString()),
+        const SizedBox(height: 10),
+        informacionTextoTitulo("PUNTUACIÓN", Icons.star),
+        const SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Column(
+              children: [
+                informacionTextoPuntuacion('Usuario'),
+                const SizedBox(height: 5),
+                Container(
+                  padding: const EdgeInsets.only(left: 30),
+                  child: cuadroEstrella('4.8')
+                  )
+              ],
+            ),
+            Column(
+              children: [
+                informacionTextoPuntuacion('Conductor'),
+                const SizedBox(height: 5),
+                Container(
+                  padding: const EdgeInsets.only(left: 30),
+                  child: cuadroEstrella('5.0')
+                  )
+              ],
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -198,6 +241,44 @@ class _PerfilPagState extends State<PerfilPag> {
           fontSize: size.width * 0.05,
         ),
       ),
+    );
+  }
+
+  Widget informacionTextoPuntuacion(String titulo) {
+    final size = MediaQuery.of(context).size;
+    return Container(
+      alignment: Alignment.centerLeft,
+      padding: const EdgeInsets.only(left: 10),
+      child: Text(
+        titulo,
+        style: TextStyle(
+          color: Colors.black54,
+          fontSize: size.width * 0.05,
+        ),
+      ),
+    );
+  }
+
+  /// Puntuacion recibida y dada del servicio
+  Widget cuadroEstrella(String calificacion) {
+    final media = MediaQuery.of(context).size;
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            calificacion,
+            style: TextStyle(
+                // fontFamily: Tipografia.medium,
+                fontSize: media.height * 0.03,
+                color: Colors.grey),
+          ),
+          Icon(
+            Icons.star,
+            color: Colors.yellow,
+            size: media.width * 0.06,
+            // onPressed: () {},
+          ),
+        ],
     );
   }
 }

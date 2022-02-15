@@ -2,7 +2,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:pa_donde_app/data/services/servicios_servicio.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
@@ -16,19 +15,26 @@ import 'package:pa_donde_app/ui/global_widgets/widgets/marcador_manual_widget.da
 import 'package:pa_donde_app/ui/global_widgets/forms/agregar_servicio1_form.dart';
 import 'package:pa_donde_app/ui/global_widgets/forms/agregar_servicio2_form.dart';
 import 'package:pa_donde_app/ui/global_widgets/forms/agregar_servicio3_form.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/informativo_show.dart';
 //---------------------------------------------------------------------
 
 class RutaPag extends StatefulWidget {
-  const RutaPag({Key? key}) : super(key: key);
+  const RutaPag({
+    Key? key,
+  }) : super(key: key);
 
   @override
+  // ignore: no_logic_in_create_state
   _RutaPagState createState() => _RutaPagState();
 }
 
 class _RutaPagState extends State<RutaPag> {
   /// LATE sirve para esperar a que se cree.
   late LocalizacionBloc localizacionBloc;
-  late PreserviciosBloc preserviciosBloc;
+
+  callback() {
+    setState(() {});
+  }
 
   PageController controller = PageController();
   int page = 0;
@@ -36,7 +42,6 @@ class _RutaPagState extends State<RutaPag> {
   @override
   void initState() {
     super.initState();
-    preserviciosBloc = BlocProvider.of<PreserviciosBloc>(context);
     localizacionBloc = BlocProvider.of<LocalizacionBloc>(context);
     localizacionBloc.getPosicioActual();
     // localizacionBloc.comenzarSeguirUsuario();
@@ -83,7 +88,9 @@ class _RutaPagState extends State<RutaPag> {
                     minHeight: 230,
                     parallaxEnabled: true,
                     parallaxOffset: .5,
-                    panelBuilder: (sc) => pageView(),
+                    panelBuilder: (sc) {
+                      return pageView();
+                    },
                     borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(18.0),
                         topRight: Radius.circular(18.0)),
@@ -101,9 +108,9 @@ class _RutaPagState extends State<RutaPag> {
   Widget panel1() {
     return Column(children: [
       const SizedBox(height: 20),
-      const BuscadorBarraInicio(),
+      BuscadorBarraInicio(callbackFunction: callback),
       const SizedBox(height: 20),
-      const BuscadorBarraDestino(),
+      BuscadorBarraDestino(callbackFunction: callback),
       btnContinuar()
     ]);
   }
@@ -126,39 +133,30 @@ class _RutaPagState extends State<RutaPag> {
 
   Widget btnContinuar() {
     final size = MediaQuery.of(context).size;
-    // final busquedaBloc = BlocProvider.of<BusquedaBloc>(context);
-    // final localizacionBloc = BlocProvider.of<LocalizacionBloc>(context);
-    // final mapaBloc = BlocProvider.of<MapsBloc>(context);
 
     return Column(
       children: [
         SizedBox(height: size.height * 0.02),
         SizedBox(
           width: size.width * 0.9,
-          child: BtnAnaranja(
-              titulo: 'Continuar',
-              function: () async {
-                controller.jumpToPage(1);
-                BlocProvider.of<PreserviciosBloc>(context)
-                    .add(OnCambiarPagina(controller));
-
-                // final coordenadaInicio =
-                //     localizacionBloc.state.ultimaLocalizacion;
-
-                // if (coordenadaInicio == null) return;
-
-                // final coordenadaFin = mapaBloc.centroMapa;
-                // if (coordenadaFin == null) return;
-
-                // final reesponseRuta = await busquedaBloc.getCoordInicioYFin(
-                //     coordenadaInicio, coordenadaFin);
-
-                // await mapaBloc.dibujarRutaPolyline(context, reesponseRuta);
-
-                // busquedaBloc.add(OnDesactivarMarcadorManual());
-              }),
+          child: BtnAnaranja(titulo: 'Continuar', function: validarCampos),
         ),
       ],
     );
+  }
+
+  void validarCampos() {
+    final servicio = BlocProvider.of<PreserviciosBloc>(context).servicio;
+
+    if (servicio?.nombreOrigen != null && servicio?.nombreDestino != null) {
+      BlocProvider.of<PreserviciosBloc>(context)
+          .add(OnCambiarPagina(controller));
+      controller.jumpToPage(1);
+    } else {
+      mostrarShowDialogInformativo(
+          titulo: 'INFORMACIÓN',
+          contenido: "Debe de completar los campos de origen o destino",
+          context: context);
+    }
   }
 }

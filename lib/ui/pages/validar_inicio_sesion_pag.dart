@@ -53,7 +53,7 @@ class ValidarInicioSesion extends StatelessWidget {
         Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-                pageBuilder: (context, __, ___) => const InicioPag(),
+                pageBuilder: (context, __, ___) => InicioPag(),
                 transitionDuration: const Duration(milliseconds: 10)));
       });
     } else {

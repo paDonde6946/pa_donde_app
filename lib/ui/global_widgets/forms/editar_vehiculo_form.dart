@@ -22,14 +22,17 @@ import 'package:pa_donde_app/ui/utils/validaciones_generales.dart'
     as validaciones_generales;
 //---------------------------------------------------------------------
 
+// ignore: must_be_immutable
 class FormEditarVehiulo extends StatefulWidget {
   Vehiculo? _vehiculo;
+  // ignore: use_key_in_widget_constructors
   FormEditarVehiulo({Key? key, @required Vehiculo? vehiculo}) {
     _vehiculo = vehiculo;
   }
 
   @override
   State<FormEditarVehiulo> createState() =>
+      // ignore: no_logic_in_create_state
       _FormEditarVehiuloState(_vehiculo!); //
 }
 

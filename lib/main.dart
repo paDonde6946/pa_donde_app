@@ -21,12 +21,14 @@ void main() {
       BlocProvider(create: (context) => GpsBloc()),
       BlocProvider(create: (context) => LocalizacionBloc()),
       BlocProvider(create: (context) => PreserviciosBloc()),
+      BlocProvider(create: (context) => PaginasBloc()),
       BlocProvider(
           create: (context) => MapsBloc(
               localizacionBloc: BlocProvider.of<LocalizacionBloc>(context))),
       BlocProvider(
-          create: (context) =>
-              BusquedaBloc(traficoServicio: TraficoServicio())),
+          create: (context) => BusquedaBloc(
+              preserviciosBloc: BlocProvider.of<PreserviciosBloc>(context),
+              traficoServicio: TraficoServicio())),
     ],
     child: const MyApp(),
   ));

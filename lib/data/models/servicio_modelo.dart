@@ -1,6 +1,15 @@
-import 'package:flutter/cupertino.dart';
+// To parse this JSON data, do
+//
+//     final servicio = servicioFromJson(jsonString);
 
-class Servicio with ChangeNotifier {
+import 'dart:convert';
+import 'package:pa_donde_app/data/models/ruta_destino_modelo.dart';
+
+Servicio servicioFromJson(String str) => Servicio.fromJson(json.decode(str));
+
+String servicioToJson(Servicio data) => json.encode(data.toJson());
+
+class Servicio {
   String? _estado;
   String? _nombreOrigen;
   String? _nombreDestino;
@@ -9,7 +18,8 @@ class Servicio with ChangeNotifier {
   String? _idVehiculo;
   DateTime? _fecha;
   int? _cantidadCupos;
-  int? _auxilioEconomico;
+  String? _auxilioEconomico;
+  RutaDestino? _rutaDestino;
 
   Servicio({
     String? pEstado,
@@ -20,7 +30,8 @@ class Servicio with ChangeNotifier {
     DateTime? pFecha,
     String? pIdVehiculo,
     int? pCantidadCupos,
-    int? pAuxilioEconomico,
+    String? pAuxilioEconomico,
+    RutaDestino? pRutaDestino,
   }) {
     estado = pEstado;
     nombreOrigen = pNombreOrigen;
@@ -31,7 +42,30 @@ class Servicio with ChangeNotifier {
     idVehiculo = pIdVehiculo;
     cantidadCupos = pCantidadCupos;
     auxilioEconomico = pAuxilioEconomico;
+    rutaDestino = pRutaDestino;
   }
+
+  factory Servicio.fromJson(Map<String, dynamic> json) => Servicio(
+        pNombreOrigen: json["nombreOrigen"],
+        pNombreDestino: json["nombreDestino"],
+        pPolylineRuta: json["polylineRuta"],
+        pHoraInicio: json["horaDeInicio"],
+        pFecha: json["fecha"],
+        pIdVehiculo: json["idVehiculo"],
+        pCantidadCupos: json["cantidadCupos"],
+        pAuxilioEconomico: json["idAuxilioEconomico"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "nombreOrigen": nombreOrigen,
+        "nombreDestino": nombreDestino,
+        "polylineRuta": polylineRuta,
+        "horaDeInicio": horaInicio,
+        "fecha": fecha.toString(),
+        "idVehiculo": idVehiculo,
+        "cantidadCupos": cantidadCupos,
+        "idAuxilioEconomico": auxilioEconomico,
+      };
 
   get estado => _estado;
 
@@ -85,5 +119,11 @@ class Servicio with ChangeNotifier {
 
   set auxilioEconomico(auxilioEconomico) {
     _auxilioEconomico = auxilioEconomico;
+  }
+
+  get rutaDestino => _rutaDestino;
+
+  set rutaDestino(pRutaDestino) {
+    _rutaDestino = pRutaDestino;
   }
 }

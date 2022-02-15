@@ -18,7 +18,7 @@ import 'package:pa_donde_app/ui/pages/validar_inicio_sesion_pag.dart';
 Map<String, WidgetBuilder> generarRutas() {
   final _rutas = <String, WidgetBuilder>{
     'login': (_) => const InicioSesionPag(),
-    'inicio': (_) => const InicioPag(),
+    'inicio': (_) => InicioPag(),
     'recuperarContrasenia': (_) => const RecuperarContraseniaPag(),
     'validarInicioSesion': (_) => const ValidarInicioSesion(),
     'editarPerfil': (_) => const EditarPerfilPag(),

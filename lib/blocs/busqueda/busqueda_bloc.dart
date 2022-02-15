@@ -3,9 +3,11 @@ import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
+import 'package:pa_donde_app/blocs/blocs.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/models/ruta_destino_modelo.dart';
+import 'package:pa_donde_app/data/models/servicio_modelo.dart';
 import 'package:pa_donde_app/data/response/busqueda_response.dart';
 import 'package:pa_donde_app/data/services/trafico_servicio.dart';
 //---------------------------------------------------------------------
@@ -15,8 +17,10 @@ part 'busqueda_state.dart';
 
 class BusquedaBloc extends Bloc<BusquedaEvent, BusquedaState> {
   TraficoServicio traficoServicio;
+  PreserviciosBloc preserviciosBloc;
 
   BusquedaBloc({
+    required this.preserviciosBloc,
     required this.traficoServicio,
   }) : super(const BusquedaState()) {
     on<OnActivarMarcadorManual>(
@@ -38,6 +42,8 @@ class BusquedaBloc extends Bloc<BusquedaEvent, BusquedaState> {
     final traficoResponse =
         await traficoServicio.getCoordsInicioYFin(inicio, destino);
 
+    final Servicio servicio = Servicio();
+
     /// Informacion del destino
     final lugarFinal =
         await traficoServicio.getInformacionPorCoordenas(destino);
@@ -46,15 +52,13 @@ class BusquedaBloc extends Bloc<BusquedaEvent, BusquedaState> {
     final duracion = traficoResponse.routes![0].duration;
     final geometria = traficoResponse.routes![0].geometry;
 
-    print("COMO LLEGAN: $geometria");
     // Deecodificar
     final puntos = decodePolyline(geometria!, accuracyExponent: 6);
 
-    print("DECODIFICADOS: $puntos");
-
     String puntosCodificados = encodePolyline(puntos);
 
-    print("===================CODIFICADOS: $puntosCodificados");
+    servicio.polylineRuta = puntosCodificados;
+    preserviciosBloc.add(OnCrearServicio(servicio));
 
     final latLngLista = puntos
         .map((coord) => LatLng(coord[0].toDouble(), coord[1].toDouble()))

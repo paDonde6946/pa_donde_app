@@ -1,34 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pa_donde_app/data/services/servicios_servicio.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/models/servicio_modelo.dart';
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 import 'package:pa_donde_app/blocs/blocs.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/confirmacion_show.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/informativo_show.dart';
+import 'package:pa_donde_app/ui/pages/principal_pag.dart';
+import 'package:pa_donde_app/ui/utils/snack_bars.dart';
 //---------------------------------------------------------------------
 
 class AgregarServicioParte3 extends StatefulWidget {
   const AgregarServicioParte3({Key? key}) : super(key: key);
 
   @override
-  State<AgregarServicioParte3> createState() => _AgregarServicioParte3State();
+  State<AgregarServicioParte3> createState() =>
+      // ignore: no_logic_in_create_state
+      _AgregarServicioParte3State();
 }
 
 class _AgregarServicioParte3State extends State<AgregarServicioParte3> {
-  final keyForm = GlobalKey<FormState>();
-  final keySnackbar = GlobalKey<ScaffoldState>();
-
-  List<String> precios = [
-    '\$ 0',
-    '\$ 2.000',
-    '\$ 3.000',
-    '\$ 4.000',
-  ];
-  Servicio servicio = Servicio();
-  bool color = false;
-  int seleccion = 0;
-  final styleInput = const TextStyle(height: 0.4);
+  int seleccion = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +36,39 @@ class _AgregarServicioParte3State extends State<AgregarServicioParte3> {
           titulo(),
           listadoPrecios(),
           const SizedBox(height: 10),
-          const BtnAnaranja(
+          BtnAnaranja(
             titulo: 'Finalizar',
+            function: () async {
+              final servicioBloc = BlocProvider.of<PreserviciosBloc>(context);
+              if (seleccion >= 0) {
+                servicioBloc.servicio!.auxilioEconomico =
+                    servicioBloc.precios![seleccion].uid;
+                servicioBloc.add(OnCrearServicio(servicioBloc.servicio!));
+
+                customShapeSnackBar(
+                    context: context, titulo: 'Su servicio se esta creando');
+
+                await ServicioRServicio().crearServicio(servicioBloc.servicio!);
+
+                mostrarShowDialogConfirmar(
+                    context: context,
+                    titulo: "Servicio",
+                    contenido: "Su servicio ha sido creeado",
+                    paginaRetorno: 'inicio');
+
+                servicioBloc.add(OnCrearServicio(Servicio()));
+
+                BlocProvider.of<PaginasBloc>(context)
+                    .add(const OnCambiarPaginaPrincipal(PrincipalPag(), 0));
+
+                setState(() {});
+              } else {
+                mostrarShowDialogInformativo(
+                    context: context,
+                    titulo: 'Precio',
+                    contenido: 'Debe de seleccionar un precio');
+              }
+            },
           )
         ],
       ),
@@ -64,32 +90,6 @@ class _AgregarServicioParte3State extends State<AgregarServicioParte3> {
         const Text("Seleccione un precio para el servicio"),
         Container(width: 40)
       ],
-    );
-  }
-
-  Widget listadoPrecios() {
-    return BlocBuilder<PreserviciosBloc, PreserviciosState>(
-      builder: (context, snapshot) {
-        return Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                cardPrecio(snapshot.precios[0].valor.toString(), 0),
-                cardPrecio(snapshot.precios[1].valor.toString(), 1)
-              ],
-            ),
-            const SizedBox(height: 15),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                cardPrecio(snapshot.precios[2].valor.toString(), 2),
-                cardPrecio(snapshot.precios[3].valor.toString(), 3)
-              ],
-            )
-          ],
-        );
-      },
     );
   }
 
@@ -123,6 +123,32 @@ class _AgregarServicioParte3State extends State<AgregarServicioParte3> {
               borderRadius: const BorderRadius.all(Radius.circular(20))),
         ),
       ),
+    );
+  }
+
+  Widget listadoPrecios() {
+    return BlocBuilder<PreserviciosBloc, PreserviciosState>(
+      builder: (context, snapshot) {
+        return Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                cardPrecio(snapshot.precios[0].valor.toString(), 0),
+                cardPrecio(snapshot.precios[1].valor.toString(), 1)
+              ],
+            ),
+            const SizedBox(height: 15),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                cardPrecio(snapshot.precios[2].valor.toString(), 2),
+                cardPrecio(snapshot.precios[3].valor.toString(), 3)
+              ],
+            )
+          ],
+        );
+      },
     );
   }
 }

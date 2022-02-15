@@ -11,6 +11,7 @@ class LoadingGPSPag extends StatefulWidget {
   const LoadingGPSPag({Key? key}) : super(key: key);
 
   @override
+  // ignore: no_logic_in_create_state
   State<LoadingGPSPag> createState() => _LoadingGPSPagState();
 }
 

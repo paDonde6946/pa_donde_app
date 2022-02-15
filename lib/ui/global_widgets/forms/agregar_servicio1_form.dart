@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
-import 'package:pa_donde_app/data/models/servicio_modelo.dart';
 import 'package:pa_donde_app/blocs/blocs.dart';
-import 'package:pa_donde_app/ui/global_widgets/inputs/input_form_redondo.dart'
-    as input_redondo;
+import 'package:pa_donde_app/data/models/servicio_modelo.dart';
+import 'package:pa_donde_app/ui/global_widgets/inputs/input_form.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/informativo_show.dart';
 //---------------------------------------------------------------------
 
 class AgregarServicioParte1 extends StatefulWidget {
@@ -20,24 +20,22 @@ class AgregarServicioParte1 extends StatefulWidget {
 class _AgregarServicioParte1State extends State<AgregarServicioParte1> {
   final keyForm = GlobalKey<FormState>();
   final keySnackbar = GlobalKey<ScaffoldState>();
-
   Servicio servicio = Servicio();
 
-  String fecha2 = 'Fecha del servicio';
-  String hora2 = 'Hora de partida';
+  String fecha2 = '';
+  String hora2 = '';
+  int cupos = 0;
   double taminoLetra = 0;
 
   // CONTROLADORES DE CADA INPUT
-  TextEditingController inputFecha = TextEditingController();
-  TextEditingController inputHora = TextEditingController();
   TextEditingController inputCupos = TextEditingController();
-  final styleInput = const TextStyle(height: 0.4);
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     taminoLetra = size.width * 0.04;
 
+    validarExistenciaCampos();
     // Espacio entre cada input
     const tamanioSeparador = 7.0;
     return Form(
@@ -47,7 +45,7 @@ class _AgregarServicioParte1State extends State<AgregarServicioParte1> {
         child: Column(
           children: [
             titulo(),
-            _generalMaterial(_crearCupos()),
+            _crearCupos(),
             const SizedBox(height: tamanioSeparador),
             _crearFecha(),
             const SizedBox(height: tamanioSeparador),
@@ -64,124 +62,125 @@ class _AgregarServicioParte1State extends State<AgregarServicioParte1> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(
-            onPressed: () {
-              BlocProvider.of<PreserviciosBloc>(context)
-                  .controller!
-                  .jumpToPage(0);
-            },
+            onPressed: () => BlocProvider.of<PreserviciosBloc>(context)
+                .controller!
+                .jumpToPage(0),
             icon: const Icon(Icons.arrow_back_ios_sharp)),
         const Text("Regitro del servicio"),
         IconButton(
-            onPressed: () {
-              final blocPaginar = BlocProvider.of<PreserviciosBloc>(context);
-              blocPaginar.controller!.jumpToPage(2);
-              BlocProvider.of<PreserviciosBloc>(context)
-                  .add(OnCambiarPagina(blocPaginar.controller!));
-            },
+            onPressed: validarCampos,
             icon: const Icon(Icons.arrow_forward_ios_rounded)),
       ],
     );
   }
 
-  /// Metodo que permite darle una elevacion a los widgets
-  Widget _generalMaterial(Widget widget) {
-    return Material(
-      elevation: 7,
-      borderRadius: const BorderRadius.all(Radius.circular(20)),
-      child: widget,
-    );
+  void validarExistenciaCampos() {
+    final servicioBloc =
+        BlocProvider.of<PreserviciosBloc>(context).state.servicio;
+
+    /// Valida si tiene datos ya registrados anteriormente
+    if (servicioBloc.cantidadCupos != null &&
+        servicioBloc.fecha != null &&
+        servicioBloc.horaInicio != null) {
+      cupos = servicioBloc.cantidadCupos;
+      inputCupos.value =
+          TextEditingValue(text: servicioBloc.cantidadCupos.toString());
+      fecha2 = servicioBloc.fecha.toString().split(" ")[0];
+      hora2 = servicioBloc.horaInicio;
+    }
+  }
+
+  /// Valida los campos para continuar con el siguiente
+  void validarCampos() {
+    final preServicioBloc = BlocProvider.of<PreserviciosBloc>(context);
+    final servicioBloc = preServicioBloc.state.servicio;
+
+    try {
+      // Separar hora 00:00
+      final horaPartida = hora2.split(':');
+
+      //Modifica la fecha de String a DateTime
+      DateTime fechaModificada = DateTime.parse(fecha2);
+
+      // Se agrega la hora a la fecha
+      fechaModificada = fechaModificada.add(Duration(
+          hours: int.parse(horaPartida[0]),
+          minutes: int.parse(horaPartida[1])));
+
+      // Se valida la diferencia de la fecha con la fecha actual
+      final diferenciaHoras =
+          fechaModificada.difference(DateTime.now()).inHours;
+
+      if (inputCupos.text.isNotEmpty) {
+        servicioBloc.cantidadCupos =
+            int.parse(inputCupos.text.replaceAll(" ", ""));
+        if (servicioBloc.cantidadCupos <= 0 ||
+            servicioBloc.cantidadCupos >= 6) {
+          mostrarShowDialogInformativo(
+              context: context,
+              titulo: 'Cupos',
+              contenido:
+                  "La cantidad de cupos no es valida. Debe de ingresar un valor entre 1 y 5");
+        } else {
+          if (diferenciaHoras < 24 && fecha2 != '' && hora2 != '') {
+            mostrarShowDialogInformativo(
+                context: context,
+                titulo: 'Fecha del Servicio',
+                contenido:
+                    "Debe ingresar una fecha y hora mayor a 24 horas de la hora actual (${DateTime.now()})");
+          } else {
+            servicioBloc.fecha = fechaModificada;
+            servicioBloc.horaInicio = hora2;
+            preServicioBloc.controller!.jumpToPage(2);
+            preServicioBloc.add(OnCambiarPagina(preServicioBloc.controller!));
+            preServicioBloc.add(OnCrearServicio(servicioBloc));
+          }
+        }
+      }
+      // throw Exception();
+    } catch (e) {
+      mostrarShowDialogInformativo(
+          context: context,
+          titulo: 'Campos Incompletos',
+          contenido: "Debe de completar todos los campos");
+    }
   }
 
   /// Input - Cupos disponibles en el carro o moto
   Widget _crearCupos() {
     return TextFormField(
       keyboardType: TextInputType.number,
-      style: styleInput,
       controller: inputCupos,
       scrollPadding: const EdgeInsets.all(1),
       cursorColor: Theme.of(context).primaryColor,
-      obscureText: true,
-      onChanged: (value) => servicio.cantidadCupos = int.parse(value),
-      decoration: input_redondo.inputDecorationRedondo(
-          'Cupos', 'Cantidad de cupos', context, Colors.white),
+      onSaved: (value) => cupos = int.parse(value!),
+      decoration: inputDecoration(
+          'Cupos',
+          'Cantidad de cupos',
+          context,
+          Theme.of(context).primaryColor,
+          const Icon(
+            Icons.person_add_alt_1_outlined,
+            color: Colors.black,
+          )),
       validator: (value) => (value!.isEmpty) ? 'El digito no es valido' : null,
     );
   }
 
   /// Crea el contenedor de la fecha para seleccionar la fecha
   Widget _crearFecha() {
-    final size = MediaQuery.of(context).size;
-
-    return GestureDetector(
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: size.width * 0.01),
-        width: size.width,
-        child: Material(
-          elevation: 10,
-          color: Colors.transparent,
-          child: Container(
-            height: 50,
-            padding: EdgeInsets.symmetric(
-                horizontal: size.width * 0.03, vertical: size.width * 0.04),
-            child: Text(
-              fecha2 == "" ? 'Fecha del servicio' : fecha2,
-              style: TextStyle(
-                color: Theme.of(context).primaryColor,
-                fontSize: taminoLetra,
-              ),
-            ),
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-            ),
-          ),
-        ),
-      ),
-      onTap: () {
-        _seleccionarFechaServicio(servicio);
-      },
-    );
+    return _crearContenedor(fecha2, 'Fecha del servicio', Icons.calendar_today,
+        _seleccionarFechaServicio);
   }
 
   /// Crea el contenedor de la hora para seleccionar la hora a realizar del servicio
   Widget _crearHora() {
-    final size = MediaQuery.of(context).size;
-
-    return GestureDetector(
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: size.width * 0.01),
-        width: size.width,
-        child: Material(
-          elevation: 10,
-          color: Colors.transparent,
-          child: Container(
-            height: 50,
-            padding: EdgeInsets.symmetric(
-                horizontal: size.width * 0.03, vertical: size.width * 0.04),
-            child: Text(
-              hora2 == "" ? 'Hora de partida' : hora2,
-              style: TextStyle(
-                color: Theme.of(context).primaryColor,
-                fontSize: taminoLetra,
-              ),
-            ),
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-            ),
-          ),
-        ),
-      ),
-      onTap: () {
-        _seleccionarHoraServicio(servicio);
-      },
-    );
+    return _crearContenedor(
+        hora2, 'Hora de partida', Icons.schedule, _seleccionarHoraServicio);
   }
 
   /// Configuracion del pop up para mostrar el calendario
-  _seleccionarFechaServicio(Servicio servicio) async {
+  _seleccionarFechaServicio() async {
     DateTime selectedDate = DateTime.now();
 
     DateTime? _fechaDada = await showDatePicker(
@@ -207,15 +206,14 @@ class _AgregarServicioParte1State extends State<AgregarServicioParte1> {
 
     if (_fechaDada != null) {
       setState(() {
-        final a = DateTime.parse(_fechaDada.toString());
-        servicio.fecha = a;
-        fecha2 = servicio.fecha.toString().split(" ")[0];
+        final fechaModificada = DateTime.parse(_fechaDada.toString());
+        fecha2 = fechaModificada.toString().split(" ")[0];
       });
     }
   }
 
   /// Configuracion del pop up para mostrar el reloj
-  _seleccionarHoraServicio(Servicio servicio) async {
+  _seleccionarHoraServicio() async {
     TimeOfDay selectHora = TimeOfDay.now();
 
     TimeOfDay? _horaDada = await showTimePicker(
@@ -245,8 +243,48 @@ class _AgregarServicioParte1State extends State<AgregarServicioParte1> {
       setState(() {
         hora2 = _horaDada.toString().replaceAll("TimeOfDay(", "");
         hora2 = hora2.replaceAll(")", "");
-        servicio.horaInicio = hora2.toString();
       });
     }
+  }
+
+  /// Crear contenedor general para fecha y hora
+  Widget _crearContenedor(
+      String dato, String datoDefecto, IconData icono, Function() funcion) {
+    final size = MediaQuery.of(context).size;
+
+    return GestureDetector(
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: size.width * 0.006),
+        width: size.width,
+        child: Container(
+          height: 50,
+          padding: EdgeInsets.symmetric(
+              horizontal: size.width * 0.03, vertical: size.width * 0.04),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                dato == "" ? datoDefecto : dato,
+                style: TextStyle(
+                  color: dato == ""
+                      ? Theme.of(context).primaryColor
+                      : Colors.black,
+                  fontSize: taminoLetra,
+                ),
+              ),
+              Icon(icono)
+            ],
+          ),
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border(
+                bottom: BorderSide(
+                    color: Theme.of(context).primaryColor, width: 1)),
+          ),
+        ),
+      ),
+      onTap: funcion,
+    );
   }
 }

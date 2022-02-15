@@ -10,8 +10,12 @@ class PreserviciosState extends Equatable {
   // Precios que puede tener el servicio
   final List<AuxilioEconomico> precios;
 
+  /// Variable para guardar los datos del servicio.
+  final Servicio servicio;
+
   const PreserviciosState({
     required this.pageController,
+    required this.servicio,
     this.vehiculos = const [],
     this.precios = const [],
   });
@@ -20,13 +24,22 @@ class PreserviciosState extends Equatable {
     PageController? pageController,
     List<Vehiculo>? vehiculos,
     List<AuxilioEconomico>? precios,
+    Servicio? servicio,
+    String? busquedaInicio,
+    int? controlarIndex,
   }) =>
       PreserviciosState(
         pageController: pageController ?? this.pageController,
+        servicio: servicio ?? this.servicio,
         vehiculos: vehiculos ?? this.vehiculos,
         precios: precios ?? this.precios,
       );
 
   @override
-  List<Object> get props => [pageController, vehiculos, precios];
+  List<Object> get props => [
+        pageController,
+        servicio,
+        vehiculos,
+        precios,
+      ];
 }

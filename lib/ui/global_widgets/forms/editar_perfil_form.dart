@@ -63,12 +63,6 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
             SizedBox(height: size.height * 0.01),
             _nombreLabel(_generalMaterial(_crearNumCelular(usuarioServicios)),
                 'Número de teléfono'),
-            SizedBox(height: size.height * 0.01),
-            _nombreLabel(
-                _generalMaterial(_crearContrasenia(context)), 'Contraseña'),
-            SizedBox(height: size.height * 0.01),
-            _nombreLabel(
-                _generalMaterial(_crearConContrasenia()), 'Repetir Contraseña'),
             SizedBox(height: size.height * 0.04),
             _crearBtnInicioSesion(),
           ],
@@ -188,33 +182,6 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
     );
   }
 
-  /// Input - Campo de la contraseña
-  Widget _crearContrasenia(BuildContext context) {
-    return TextFormField(
-      style: styleInput,
-      scrollPadding: const EdgeInsets.all(1),
-      obscureText: true,
-      onChanged: (value) => inputControllerContrasenia.text = value,
-      decoration: inputDecorationElevado(
-          '', 'Ingresa tu contraseña', context, Colors.white),
-      validator: (value) =>
-          (value!.isEmpty) ? 'El correo ingresado no es valido' : null,
-    );
-  }
-
-  /// Input - Campo confirmarción de la contraseña
-  Widget _crearConContrasenia() {
-    return TextFormField(
-      style: styleInput,
-      scrollPadding: const EdgeInsets.all(1),
-      obscureText: true,
-      onChanged: (value) => inputControllerContrasenia.text = value,
-      decoration: inputDecorationElevado(
-          '', 'Ingresa tu contraseña', context, Colors.white),
-      validator: (value) =>
-          (value!.isEmpty) ? 'El correo ingresado no es valido' : null,
-    );
-  }
 
   /// Se crea el boton registro que es el encargado de validar la información y redirigir a la siguiente página
   Widget _crearBtnInicioSesion() {

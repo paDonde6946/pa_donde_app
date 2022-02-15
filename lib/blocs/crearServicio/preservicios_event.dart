@@ -21,3 +21,8 @@ class OnAgregarPrecios extends PreserviciosEvent {
   final List<AuxilioEconomico> precios;
   const OnAgregarPrecios(this.precios);
 }
+
+class OnCrearServicio extends PreserviciosEvent {
+  final Servicio servicio;
+  const OnCrearServicio(this.servicio);
+}
