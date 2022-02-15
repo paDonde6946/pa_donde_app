@@ -91,7 +91,7 @@ class _FormInicioSesionState extends State<FormInicioSesion> {
       controller: inputControllerCorreo,
       keyboardType: TextInputType.emailAddress,
       decoration: inputDecoration('Correo institucional', 'Ingresa tu correo',
-          context, Colors.black, null),
+          context, Colors.black, null, 0),
       validator: (value) =>
           (validarEmail(value)) ? 'El correo ingresado no es valido' : null,
     );
@@ -103,8 +103,8 @@ class _FormInicioSesionState extends State<FormInicioSesion> {
       scrollPadding: const EdgeInsets.all(1),
       obscureText: true,
       onChanged: (value) => inputControllerContrasenia.text = value,
-      decoration: inputDecoration(
-          'Contraseña', 'Ingresa tu contraseña', context, Colors.black, null),
+      decoration: inputDecoration('Contraseña', 'Ingresa tu contraseña',
+          context, Colors.black, null, 0),
       validator: (value) =>
           (value!.isEmpty) ? 'El correo ingresado no es valido' : null,
     );

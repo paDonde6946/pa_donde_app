@@ -84,7 +84,7 @@ class _RecuperarContraseniaFormState extends State<RecuperarContraseniaForm> {
       controller: inputControllerCorreo,
       keyboardType: TextInputType.emailAddress,
       decoration: inputDecoration('Correo institucional', 'Ingresa tu correo',
-          context, Colors.black, null),
+          context, Colors.black, null, 0),
       validator: (value) => (validaciones_generales.validarEmail(value) ||
               !validaciones_generales.validarEmailDominio(value))
           ? 'El correo ingresado no es valido'

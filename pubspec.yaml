@@ -77,6 +77,9 @@ dependencies:
   
   # 
   equatable: ^2.0.3
+
+  #Tratar imagenes svg
+  flutter_svg: ^1.0.3
   
   # Para poder guardar el token en el celular
   # flutter_secure_storage: 3.3.3
@@ -109,6 +112,7 @@ flutter:
   assets:
     - img/logo/
     - img/gif/
+    - img/icons/
     - test/resources/
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -162,7 +162,8 @@ class _AgregarServicioParte1State extends State<AgregarServicioParte1> {
           const Icon(
             Icons.person_add_alt_1_outlined,
             color: Colors.black,
-          )),
+          ),
+          0),
       validator: (value) => (value!.isEmpty) ? 'El digito no es valido' : null,
     );
   }

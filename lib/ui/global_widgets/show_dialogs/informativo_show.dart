@@ -20,7 +20,7 @@ mostrarShowDialogInformativo({
               children: [
                 Icon(
                   Icons.info_outline,
-                  color: Colors.yellow,
+                  color: Theme.of(context).primaryColorLight,
                   size: size.width * 0.3,
                 ),
                 const SizedBox(height: 20),
