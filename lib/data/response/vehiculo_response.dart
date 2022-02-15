@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/models/vehiculo_modelo.dart';
 //---------------------------------------------------------------------

@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -155,8 +153,8 @@ class _DetalleServicioPagState extends State<DetalleServicioPag> {
         ),
         SlidingUpPanel(
           margin: const EdgeInsets.all(15),
-          maxHeight: size.height*0.47,
-          minHeight: size.height*0.47,
+          maxHeight: size.height * 0.47,
+          minHeight: size.height * 0.47,
           parallaxEnabled: true,
           parallaxOffset: .5,
           panelBuilder: (sc) =>
@@ -165,7 +163,10 @@ class _DetalleServicioPagState extends State<DetalleServicioPag> {
             return BlocBuilder<MapsBloc, MapsState>(
                 builder: (context, mapState) {
               Map<String, Polyline> polylines = Map.from(mapState.polylines);
-              return MapaView(initialLocalizacion: localizacionState.ultimaLocalizacion!, markers: mapState.markers.values.toSet(), polylines: polylines.values.toSet());
+              return MapaView(
+                  initialLocalizacion: localizacionState.ultimaLocalizacion!,
+                  markers: mapState.markers.values.toSet(),
+                  polylines: polylines.values.toSet());
             });
           }),
           borderRadius: const BorderRadius.all(Radius.circular(18)),

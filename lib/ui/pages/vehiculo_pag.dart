@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pa_donde_app/blocs/blocs.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/models/vehiculo_modelo.dart';
+import 'package:pa_donde_app/global/enums/tipo_vehiculo_enum.dart';
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 import 'package:pa_donde_app/ui/global_widgets/widgets/card_vehiculo_widget.dart';
 import 'package:pa_donde_app/ui/global_widgets/widgets/cargando_widget.dart';
@@ -22,7 +25,7 @@ class VehiculoPag extends StatefulWidget {
 class _VehiculoPagState extends State<VehiculoPag> {
   List<Vehiculo> vehiculos = [];
   var vehiculoServicio = VehiculoServicio();
-  bool cargar = true;
+  bool cargar = false;
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +103,9 @@ class _VehiculoPagState extends State<VehiculoPag> {
           // Navigator.pushNamed(context, 'editarVehiculo', arguments: vehiculos[i]);
         },
         child: CardVehiculo(
-            icon: Icons.motorcycle_rounded,
+            icon: (vehiculos[i].tipoVehiculo == TipoVehiculo.carro)
+                ? Icons.car_rental
+                : Icons.motorcycle_rounded,
             color: Colors.black,
             placa: vehiculos[i].placa,
             marca: vehiculos[i].marca,
@@ -122,12 +127,6 @@ class _VehiculoPagState extends State<VehiculoPag> {
   }
 
   getVehiculos() async {
-    vehiculos = await vehiculoServicio.getVehiculos();
-    cargar = false;
-    if (this.mounted) {
-      setState(() {
-        // Your state change code goes here
-      });
-    }
+    vehiculos = BlocProvider.of<PreserviciosBloc>(context).vehiculos!;
   }
 }

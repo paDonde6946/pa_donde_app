@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pa_donde_app/blocs/blocs.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 
 import 'package:pa_donde_app/data/models/vehiculo_modelo.dart';
+import 'package:pa_donde_app/data/services/vehiculo_servicio.dart';
+import 'package:pa_donde_app/global/enums/tipo_vehiculo_enum.dart';
 
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 import 'package:pa_donde_app/ui/global_widgets/inputs/input_form_redondo.dart'
@@ -10,7 +14,10 @@ import 'package:pa_donde_app/ui/global_widgets/inputs/input_form_redondo.dart'
 
 import 'package:pa_donde_app/ui/global_widgets/inputs/input_form_elevado.dart'
     as input_elevado;
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/confirmacion_show.dart';
 import 'package:pa_donde_app/ui/global_widgets/text/formulario_texto.dart';
+import 'package:pa_donde_app/ui/utils/snack_bars.dart';
 
 import 'package:pa_donde_app/ui/utils/validaciones_generales.dart'
     as validaciones_generales;
@@ -38,10 +45,16 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
   TextEditingController inputControllerModelo = TextEditingController();
   TextEditingController inputControllerAnio = TextEditingController();
 
+  //Expresiones regulares
+  RegExp expresionPlacaCarro = RegExp('^[a-z][a-z][a-z][0-9][0-9][0-9]');
+  RegExp expresionPlacaMoto = RegExp(r"[a-z][a-z][a-z][0-9][0-9][a-z]");
+
   final styleInput = const TextStyle(height: 0.4);
-  bool color = false;
+  bool esMoto = false;
   @override
   Widget build(BuildContext context) {
+    vehiculo.tipoVehiculo = TipoVehiculo.carro;
+
     final size = MediaQuery.of(context).size;
 
     // Espacio entre cada input
@@ -60,9 +73,6 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
             const SizedBox(height: tamanioSeparador),
             _filaInputs(),
             const SizedBox(height: tamanioSeparador),
-            _nombreLabel(_generalMaterial(_crearDocumentoTitular(vehiculo)),
-                'Documento del titular'),
-            const SizedBox(height: tamanioSeparador),
             _nombreLabel(_generalMaterial(_crearMarca()), "Marca del vehiculo"),
             const SizedBox(height: tamanioSeparador),
             _nombreLabel(
@@ -80,6 +90,20 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
 
   /// Método auxiliar que  ayuda a validar todos los campos del registro
   void _validarFormulario(Vehiculo vehiculo) async {
+    mostrarShowDialogCargando(
+        context: context, titulo: "Estamos guardando tu vehiculo");
+    var vehiculoServicio = VehiculoServicio();
+    print(vehiculo);
+    var respuesta = await vehiculoServicio.agregarVehiculo(vehiculo: vehiculo);
+    var nuevosVehiculos = await vehiculoServicio.getVehiculos();
+    BlocProvider.of<PreserviciosBloc>(context)
+        .add(OnAgregarVehiculo(nuevosVehiculos));
+    Navigator.of(context).pop();
+    mostrarShowDialogConfirmar(
+        context: context,
+        titulo: "CONFIRMACION",
+        contenido: respuesta["msg"],
+        paginaRetorno: 'inicio');
     // Verfica que todos los campos del formulario esten completos
     // if (!keyForm.currentState!.validate()) {
     //   customShapeSnackBar(
@@ -87,37 +111,26 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
     //       titulo: "Recuerda que todos los campos son obligatorios");
     //   return;
     // }
-    // Verifica que las contraseñas coincidan
-    // if (inputControllerContrasenia.text != inputControllerConContrasenia.text) {
-    //   customShapeSnackBar(
-    //       context: context, titulo: 'Las contraseñas no coinciden');
-    //   return;
+
+    // Verificar la placa
+    // print(esMoto);
+    // if (!esMoto) {
+    //   print(inputControllerPlaca.text);
+    //   print(expresionPlacaCarro.hasMatch(inputControllerPlaca.text));
+    //   if (!expresionPlacaCarro.hasMatch(inputControllerPlaca.text)) {
+    //     customShapeSnackBar(
+    //         context: context,
+    //         titulo: 'Las placa no coincide con la de un carro.');
+    //     return;
+    //   }
+    // } else {
+    //   if (!expresionPlacaMoto.hasMatch(inputControllerPlaca.text)) {
+    //     customShapeSnackBar(
+    //         context: context,
+    //         titulo: 'Las placa no coincide con la de una moto.');
+    //     return;
+    //   }
     // }
-
-    // if (!validaciones_generales
-    //     .validarEmailDominio(inputControllerCorreo.text.trim())) {
-    //   customShapeSnackBar(
-    //       context: context,
-    //       titulo: "Solo se permiten correos de la universidad");
-    //   return;
-    // }
-
-    // mostrarShowDialogCargando(context: context, titulo: 'REGISTRANDOTE');
-    // await Future.delayed(const Duration(seconds: 1));
-    // Navigator.pop(context);
-
-    // UsuarioServicio usuarioServicio = UsuarioServicio();
-    // AutenticacionServicio autenticacionServicio = AutenticacionServicio();
-    // final Usuario? response =
-    //     await usuarioServicio.crearUsuarioServicio(usuario);
-    // // Si todo esta bien redirige a la siguiente página
-    // keyForm.currentState!.save();
-
-    // mostrarShowDialogCargando(context: context, titulo: 'REGISTRO EXITO');
-    // await Future.delayed(const Duration(seconds: 1));
-    // Navigator.pop(context);
-    // autenticacionServicio.usuarioServiciosActual = response!;
-    // Navigator.pushReplacementNamed(context, 'inicio');
   }
 
   /*____________________________________________________________*/
@@ -147,14 +160,16 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
       children: [
         GestureDetector(
             onTap: () {
-              color = false;
+              esMoto = false;
+              vehiculo.tipoVehiculo = TipoVehiculo.carro;
               setState(() {});
             },
             child: _cardCarro(redondo)),
         const SizedBox(width: 20),
         GestureDetector(
             onTap: () {
-              color = true;
+              esMoto = true;
+              vehiculo.tipoVehiculo = TipoVehiculo.moto;
               setState(() {});
             },
             child: _cardMoto(redondo)),
@@ -175,7 +190,7 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
         decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: !color
+                color: !esMoto
                     ? Theme.of(context).primaryColor
                     : Colors.transparent,
                 offset: const Offset(1.0, 1.0), //(x,y)
@@ -201,8 +216,9 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
         decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color:
-                    color ? Theme.of(context).primaryColor : Colors.transparent,
+                color: esMoto
+                    ? Theme.of(context).primaryColor
+                    : Colors.transparent,
                 offset: const Offset(1.0, 1.0), //(x,y)
                 blurRadius: 9.0,
               ),
@@ -299,9 +315,9 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
       style: styleInput,
       controller: inputControllerModelo,
       scrollPadding: const EdgeInsets.all(1),
-      obscureText: true,
       onSaved: (value) => vehiculo.modelo = value,
       onChanged: (value) => vehiculo.modelo = value,
+      keyboardType: TextInputType.text,
       decoration:
           input_redondo.inputDecorationRedondo('', '', context, Colors.white),
       validator: (value) =>
@@ -315,8 +331,9 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
       style: styleInput,
       controller: inputControllerAnio,
       scrollPadding: const EdgeInsets.all(1),
-      obscureText: true,
-      onChanged: (value) => conContrasenia = value,
+      onSaved: (value) => vehiculo.anio = value,
+      onChanged: (value) => vehiculo.anio = value,
+      keyboardType: TextInputType.number,
       decoration:
           input_redondo.inputDecorationRedondo('', '', context, Colors.white),
       validator: (value) => (value!.isEmpty) ? 'El digito no es valido' : null,

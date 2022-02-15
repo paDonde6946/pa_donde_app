@@ -19,14 +19,16 @@ mostrarShowDialogConfirmar({
           title: Center(
             child: Text(
               titulo,
-              style: TextStyle(fontSize: size.width * 0.05),
+              style: TextStyle(
+                  fontSize: size.width * 0.05,
+                  color: Theme.of(context).primaryColorLight),
             ),
           ),
           elevation: 2,
           content: Text(
             contenido,
             style: TextStyle(fontSize: size.width * 0.043),
-            textAlign: TextAlign.justify,
+            textAlign: TextAlign.center,
           ),
           actions: [
             TextButton(

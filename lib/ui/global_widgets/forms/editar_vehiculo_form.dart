@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pa_donde_app/blocs/blocs.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 
@@ -12,7 +14,9 @@ import 'package:pa_donde_app/ui/global_widgets/inputs/input_form_redondo.dart'
 import 'package:pa_donde_app/ui/global_widgets/inputs/input_form_elevado.dart'
     as input_elevado;
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/confirmacion_show.dart';
 import 'package:pa_donde_app/ui/global_widgets/text/formulario_texto.dart';
+import 'package:pa_donde_app/ui/utils/snack_bars.dart';
 
 import 'package:pa_donde_app/ui/utils/validaciones_generales.dart'
     as validaciones_generales;
@@ -67,9 +71,6 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
             const SizedBox(height: tamanioSeparador),
             _tipoPlacaColor(),
             const SizedBox(height: tamanioSeparador),
-            _nombreLabel(_generalMaterial(_crearDocumentoTitular(_vehiculo!)),
-                'Documento del titular'),
-            const SizedBox(height: tamanioSeparador),
             _nombreLabel(_generalMaterial(_crearMarca(_vehiculo!)),
                 "Marca del vehiculo"),
             const SizedBox(height: tamanioSeparador),
@@ -93,43 +94,23 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
   /// Método auxiliar que  ayuda a validar todos los campos del registro
   void _validarFormulario(Vehiculo vehiculo) async {
     // Verfica que todos los campos del formulario esten completos
-    // if (!keyForm.currentState!.validate()) {
-    //   customShapeSnackBar(
-    //       context: context,
-    //       titulo: "Recuerda que todos los campos son obligatorios");
-    //   return;
-    // }
-    // Verifica que las contraseñas coincidan
-    // if (inputControllerContrasenia.text != inputControllerConContrasenia.text) {
-    //   customShapeSnackBar(
-    //       context: context, titulo: 'Las contraseñas no coinciden');
-    //   return;
-    // }
+    if (!keyForm.currentState!.validate()) {
+      customShapeSnackBar(
+          context: context,
+          titulo: "Recuerda que todos los campos son obligatorios");
+      return;
+    }
+    mostrarShowDialogCargando(
+        context: context, titulo: "Estamos editando tu vehiculo");
 
-    // if (!validaciones_generales
-    //     .validarEmailDominio(inputControllerCorreo.text.trim())) {
-    //   customShapeSnackBar(
-    //       context: context,
-    //       titulo: "Solo se permiten correos de la universidad");
-    //   return;
-    // }
-
-    // mostrarShowDialogCargando(context: context, titulo: 'REGISTRANDOTE');
-    // await Future.delayed(const Duration(seconds: 1));
-    // Navigator.pop(context);
-
-    // UsuarioServicio usuarioServicio = UsuarioServicio();
-    // AutenticacionServicio autenticacionServicio = AutenticacionServicio();
-    // final Usuario? response =
-    //     await usuarioServicio.crearUsuarioServicio(usuario);
-    // // Si todo esta bien redirige a la siguiente página
-    // keyForm.currentState!.save();
-
-    // mostrarShowDialogCargando(context: context, titulo: 'REGISTRO EXITO');
-    // await Future.delayed(const Duration(seconds: 1));
-    // Navigator.pop(context);
-    // autenticacionServicio.usuarioServiciosActual = response!;
-    // Navigator.pushReplacementNamed(context, 'inicio');
+    var vehiculoServicio = VehiculoServicio();
+    var respuesta = await vehiculoServicio.editarServicio(vehiculo: vehiculo);
+    Navigator.of(context).pop();
+    mostrarShowDialogConfirmar(
+        context: context,
+        titulo: "CONFIRMACION",
+        contenido: respuesta["msg"],
+        paginaRetorno: 'inicio');
   }
 
   /*____________________________________________________________*/
@@ -140,9 +121,7 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
     final size = MediaQuery.of(context).size;
     return Row(
       children: [
-        SizedBox(
-            width: size.width * 0.45,
-            child: _nombreLabel(_crearTipoVehiculo(), 'Tipo Vehículo')),
+        SizedBox(child: _nombreLabel(_crearTipoVehiculo(), 'Tipo Vehículo')),
         Column(
           children: [
             SizedBox(
@@ -170,12 +149,6 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
             },
             child: _cardVehiculo(redondo)),
         const SizedBox(width: 20),
-        // GestureDetector(
-        //     onTap: () {
-        //       color = true;
-        //       setState(() {});
-        //     },
-        //     child: _cardMoto(redondo)),
       ],
     );
   }
@@ -304,10 +277,6 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
           input_redondo.inputDecorationRedondo('', '', context, Colors.white),
       onSaved: (value) => vehiculo.marca = value,
       onChanged: (value) => vehiculo.marca = value,
-      validator: (value) => (validaciones_generales.validarEmail(value) ||
-              !validaciones_generales.validarEmailDominio(value))
-          ? 'El correo ingresado no es valido'
-          : null,
     );
   }
 
@@ -317,7 +286,6 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
       initialValue: vehiculo.modelo,
       style: styleInput,
       scrollPadding: const EdgeInsets.all(1),
-      obscureText: true,
       onSaved: (value) => vehiculo.modelo = value,
       onChanged: (value) => vehiculo.modelo = value,
       decoration:
@@ -332,8 +300,8 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
     return TextFormField(
       initialValue: vehiculo.anio,
       style: styleInput,
+      keyboardType: TextInputType.number,
       scrollPadding: const EdgeInsets.all(1),
-      obscureText: true,
       onChanged: (value) => conContrasenia = value,
       decoration:
           input_redondo.inputDecorationRedondo('', '', context, Colors.white),
@@ -364,11 +332,21 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
           style: TextStyle(fontSize: size.width * 0.045, color: Colors.red),
         ),
         color: Colors.black87,
-        onPressed: () {
+        onPressed: () async {
           mostrarShowDialogCargando(
-              context: context, titulo: "Estammos eliminando tu vehiculo");
+              context: context, titulo: "Estamos eliminando tu vehiculo");
           var vehiculoServicio = VehiculoServicio();
-          vehiculoServicio.eliminarVehiculo(placa: vehiculo.placa);
+          var respuesta =
+              await vehiculoServicio.eliminarVehiculo(vehiculo: vehiculo);
+          var nuevosVehiculos = await vehiculoServicio.getVehiculos();
+          BlocProvider.of<PreserviciosBloc>(context)
+              .add(OnAgregarVehiculo(nuevosVehiculos));
+          Navigator.of(context).pop();
+          mostrarShowDialogConfirmar(
+              context: context,
+              titulo: "CONFIRMACION",
+              contenido: respuesta["msg"],
+              paginaRetorno: 'inicio');
         },
       ),
     );
