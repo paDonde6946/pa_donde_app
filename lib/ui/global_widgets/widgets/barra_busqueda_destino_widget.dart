@@ -61,7 +61,8 @@ class _BuscadorBarraDestinoState extends State<BuscadorBarraDestino> {
           localizacionBloc.state.ultimaLocalizacion!, resultado.posicion!);
 
       await mapaBloc.dibujarRutaPolyline(context, destino);
-      servicio.rutaDestino = destino;
+      servicio.distancia = destino.distancia.toString();
+      servicio.duracion = destino.duracion.toString();
       servicio.polylineRuta = preServicioBloc.state.servicio.polylineRuta;
       preServicioBloc.add(OnCrearServicio(servicio));
       setState(() {});

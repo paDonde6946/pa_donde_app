@@ -3,7 +3,6 @@
 //     final servicio = servicioFromJson(jsonString);
 
 import 'dart:convert';
-import 'package:pa_donde_app/data/models/ruta_destino_modelo.dart';
 
 Servicio servicioFromJson(String str) => Servicio.fromJson(json.decode(str));
 
@@ -18,7 +17,8 @@ class Servicio {
   DateTime? _fechayhora;
   int? _cantidadCupos;
   String? _auxilioEconomico;
-  RutaDestino? _rutaDestino;
+  String? _distancia;
+  String? _duracion;
 
   Servicio({
     String? pEstado,
@@ -29,7 +29,8 @@ class Servicio {
     String? pIdVehiculo,
     int? pCantidadCupos,
     String? pAuxilioEconomico,
-    RutaDestino? pRutaDestino,
+    String? pDistancia,
+    String? pDuracion,
   }) {
     estado = pEstado;
     nombreOrigen = pNombreOrigen;
@@ -39,7 +40,8 @@ class Servicio {
     idVehiculo = pIdVehiculo;
     cantidadCupos = pCantidadCupos;
     auxilioEconomico = pAuxilioEconomico;
-    rutaDestino = pRutaDestino;
+    distancia = pDistancia;
+    duracion = pDuracion;
   }
 
   factory Servicio.fromJson(Map<String, dynamic> json) => Servicio(
@@ -50,6 +52,8 @@ class Servicio {
         pIdVehiculo: json["idVehiculo"],
         pCantidadCupos: json["cantidadCupos"],
         pAuxilioEconomico: json["idAuxilioEconomico"],
+        pDistancia: json["distancia"],
+        pDuracion: json["duracion"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -60,6 +64,8 @@ class Servicio {
         "idVehiculo": idVehiculo,
         "cantidadCupos": cantidadCupos,
         "idAuxilioEconomico": auxilioEconomico,
+        "distancia": distancia,
+        "duracion": duracion,
       };
 
   get estado => _estado;
@@ -110,9 +116,15 @@ class Servicio {
     _auxilioEconomico = auxilioEconomico;
   }
 
-  get rutaDestino => _rutaDestino;
+  get distancia => _distancia;
 
-  set rutaDestino(pRutaDestino) {
-    _rutaDestino = pRutaDestino;
+  set distancia(pDistancia) {
+    _distancia = pDistancia;
+  }
+
+  get duracion => _duracion;
+
+  set duracion(pDuracion) {
+    _duracion = pDuracion;
   }
 }
