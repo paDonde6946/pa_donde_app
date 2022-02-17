@@ -79,14 +79,11 @@ class _AgregarServicioParte1State extends State<AgregarServicioParte1> {
         BlocProvider.of<PreserviciosBloc>(context).state.servicio;
 
     /// Valida si tiene datos ya registrados anteriormente
-    if (servicioBloc.cantidadCupos != null &&
-        servicioBloc.fecha != null &&
-        servicioBloc.horaInicio != null) {
+    if (servicioBloc.cantidadCupos != null && servicioBloc.fechayhora != null) {
       cupos = servicioBloc.cantidadCupos;
       inputCupos.value =
           TextEditingValue(text: servicioBloc.cantidadCupos.toString());
-      fecha2 = servicioBloc.fecha.toString().split(" ")[0];
-      hora2 = servicioBloc.horaInicio;
+      fecha2 = servicioBloc.fechayhora.toString().split(" ")[0];
     }
   }
 
@@ -129,8 +126,7 @@ class _AgregarServicioParte1State extends State<AgregarServicioParte1> {
                 contenido:
                     "Debe ingresar una fecha y hora mayor a 24 horas de la hora actual (${DateTime.now()})");
           } else {
-            servicioBloc.fecha = fechaModificada;
-            servicioBloc.horaInicio = hora2;
+            servicioBloc.fechayhora = fechaModificada;
             preServicioBloc.controller!.jumpToPage(2);
             preServicioBloc.add(OnCambiarPagina(preServicioBloc.controller!));
             preServicioBloc.add(OnCrearServicio(servicioBloc));

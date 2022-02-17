@@ -14,9 +14,8 @@ class Servicio {
   String? _nombreOrigen;
   String? _nombreDestino;
   String? _polylineRuta;
-  String? _horaInicio;
   String? _idVehiculo;
-  DateTime? _fecha;
+  DateTime? _fechayhora;
   int? _cantidadCupos;
   String? _auxilioEconomico;
   RutaDestino? _rutaDestino;
@@ -26,8 +25,7 @@ class Servicio {
     String? pNombreOrigen,
     String? pNombreDestino,
     String? pPolylineRuta,
-    String? pHoraInicio,
-    DateTime? pFecha,
+    DateTime? pFechayhora,
     String? pIdVehiculo,
     int? pCantidadCupos,
     String? pAuxilioEconomico,
@@ -37,8 +35,7 @@ class Servicio {
     nombreOrigen = pNombreOrigen;
     nombreDestino = pNombreDestino;
     polylineRuta = pPolylineRuta;
-    horaInicio = pHoraInicio;
-    fecha = pFecha;
+    fechayhora = pFechayhora;
     idVehiculo = pIdVehiculo;
     cantidadCupos = pCantidadCupos;
     auxilioEconomico = pAuxilioEconomico;
@@ -49,8 +46,7 @@ class Servicio {
         pNombreOrigen: json["nombreOrigen"],
         pNombreDestino: json["nombreDestino"],
         pPolylineRuta: json["polylineRuta"],
-        pHoraInicio: json["horaDeInicio"],
-        pFecha: json["fecha"],
+        pFechayhora: json["fechayhora"],
         pIdVehiculo: json["idVehiculo"],
         pCantidadCupos: json["cantidadCupos"],
         pAuxilioEconomico: json["idAuxilioEconomico"],
@@ -60,8 +56,7 @@ class Servicio {
         "nombreOrigen": nombreOrigen,
         "nombreDestino": nombreDestino,
         "polylineRuta": polylineRuta,
-        "horaDeInicio": horaInicio,
-        "fecha": fecha.toString(),
+        "fechayhora": fechayhora.toString(),
         "idVehiculo": idVehiculo,
         "cantidadCupos": cantidadCupos,
         "idAuxilioEconomico": auxilioEconomico,
@@ -91,16 +86,10 @@ class Servicio {
     _nombreDestino = nombreDestino;
   }
 
-  get horaInicio => _horaInicio;
+  get fechayhora => _fechayhora;
 
-  set horaInicio(horaInicio) {
-    _horaInicio = horaInicio;
-  }
-
-  get fecha => _fecha;
-
-  set fecha(fecha) {
-    _fecha = fecha;
+  set fechayhora(fechayHora) {
+    _fechayhora = fechayHora;
   }
 
   get idVehiculo => _idVehiculo;

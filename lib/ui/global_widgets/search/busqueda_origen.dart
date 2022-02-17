@@ -5,6 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart' show LatLng;
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/models/busqueda_resultados_modelo.dart';
 import 'package:pa_donde_app/blocs/blocs.dart';
+import 'package:pa_donde_app/data/response/busqueda_response.dart';
 //---------------------------------------------------------------------
 
 class BusquedaOrigen extends SearchDelegate<BusquedaResultado> {
@@ -101,6 +102,7 @@ class BusquedaOrigen extends SearchDelegate<BusquedaResultado> {
               onTap: () {
                 final nuevaLocalizacion =
                     LatLng(lugar.center![1], lugar.center![0]);
+
                 close(
                     context,
                     BusquedaResultado(

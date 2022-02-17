@@ -38,6 +38,8 @@ class BusquedaResponse {
       };
 }
 
+Feature featureFromJson(String str) => Feature.fromJson(json.decode(str));
+
 class Feature {
   Feature({
     this.id,
@@ -70,17 +72,23 @@ class Feature {
   factory Feature.fromJson(Map<String, dynamic> json) => Feature(
         id: json["id"],
         type: json["type"],
-        placeType: List<String>.from(json["place_type"].map((x) => x)),
-        relevance: json["relevance"].toDouble(),
-        properties: Properties.fromJson(json["properties"]),
+        placeType: json["place_type"] == null
+            ? []
+            : List<String>.from(json["place_type"].map((x) => x)),
+        relevance: json["relevance"]?.toDouble(),
+        properties: json["properties"] == null
+            ? Properties()
+            : Properties.fromJson(json["properties"]),
         textEs: json["text_es"],
         placeNameEs: json["place_name_es"],
         text: json["text"],
         placeName: json["place_name"],
         center: List<double>.from(json["center"].map((x) => x.toDouble())),
         geometry: Geometry.fromJson(json["geometry"]),
-        context:
-            List<Context>.from(json["context"].map((x) => Context.fromJson(x))),
+        context: json["context"] == null
+            ? []
+            : List<Context>.from(
+                json["context"]?.map((x) => Context.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -122,8 +130,8 @@ class Context {
         id: json["id"],
         textEs: json["text_es"],
         text: json["text"],
-        wikidata: json["wikidata"] == null ? null : json["wikidata"],
-        shortCode: json["short_code"] == null ? null : json["short_code"],
+        wikidata: json["wikidata"],
+        shortCode: json["short_code"],
         languageEs: json["language_es"] == null
             ? null
             : languageValues.map[json["language_es"]],
@@ -189,7 +197,7 @@ class Properties {
         landmark: json["landmark"],
         address: json["address"],
         category: json["category"],
-        maki: json["maki"] == null ? null : json["maki"],
+        maki: json["maki"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {

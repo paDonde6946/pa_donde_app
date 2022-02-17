@@ -10,7 +10,6 @@ import 'package:pa_donde_app/blocs/blocs.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/confirmacion_show.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/informativo_show.dart';
 import 'package:pa_donde_app/ui/pages/principal_pag.dart';
-import 'package:pa_donde_app/ui/utils/snack_bars.dart';
 //---------------------------------------------------------------------
 
 class AgregarServicioParte3 extends StatefulWidget {
@@ -44,9 +43,6 @@ class _AgregarServicioParte3State extends State<AgregarServicioParte3> {
                 servicioBloc.servicio!.auxilioEconomico =
                     servicioBloc.precios![seleccion].uid;
                 servicioBloc.add(OnCrearServicio(servicioBloc.servicio!));
-
-                customShapeSnackBar(
-                    context: context, titulo: 'Su servicio se esta creando');
 
                 await ServicioRServicio().crearServicio(servicioBloc.servicio!);
 
