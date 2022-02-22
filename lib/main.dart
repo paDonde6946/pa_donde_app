@@ -18,6 +18,7 @@ import 'package:pa_donde_app/blocs/blocs.dart';
 void main() {
   runApp(MultiBlocProvider(
     providers: [
+      BlocProvider(create: (context) => UsuarioBloc()),
       BlocProvider(create: (context) => GpsBloc()),
       BlocProvider(create: (context) => LocalizacionBloc()),
       BlocProvider(create: (context) => PreserviciosBloc()),

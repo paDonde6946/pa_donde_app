@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pa_donde_app/blocs/blocs.dart';
+import 'package:pa_donde_app/data/services/usuario_servicio.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
+import 'package:pa_donde_app/ui/global_widgets/inputs/input_form.dart';
 import 'package:pa_donde_app/ui/global_widgets/inputs/input_form_elevado.dart';
-import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
 
 import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
 import 'package:pa_donde_app/ui/global_widgets/text/formulario_texto.dart';
@@ -18,13 +22,21 @@ import 'package:pa_donde_app/data/models/usuario_modelo.dart';
 //---------------------------------------------------------------------
 
 class FormEditarPerfil extends StatefulWidget {
-  const FormEditarPerfil({Key? key}) : super(key: key);
+  final Function? callbackFunction;
+
+  const FormEditarPerfil({Key? key, required this.callbackFunction})
+      : super(key: key);
 
   @override
-  State<FormEditarPerfil> createState() => _FormEditarPerfilState();
+  // ignore: no_logic_in_create_state
+  State<FormEditarPerfil> createState() =>
+      _FormEditarPerfilState(callbackFunction);
 }
 
 class _FormEditarPerfilState extends State<FormEditarPerfil> {
+  final Function? callbackFunction;
+
+  Usuario usuario = Usuario();
   final keyForm = GlobalKey<FormState>();
   final keySnackbar = GlobalKey<ScaffoldState>();
 
@@ -33,17 +45,17 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
   TextEditingController inputControllerNombre = TextEditingController();
   TextEditingController inputControllerApellido = TextEditingController();
   TextEditingController inputControllerTelefono = TextEditingController();
-  TextEditingController inputControllerConContrasenia = TextEditingController();
-  TextEditingController inputControllerContrasenia = TextEditingController();
 
-  final styleInput = const TextStyle(height: 0.4);
+  final styleInput = const TextStyle(height: 0.05);
+
+  _FormEditarPerfilState(this.callbackFunction);
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
     /// Variable que nos permite guardar la información de cada uno de los registros
-    final usuarioServicios =
+    usuario =
         Provider.of<AutenticacionServicio>(context).usuarioServiciosActual;
     return Form(
       key: keyForm,
@@ -52,17 +64,13 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
         child: Column(
           children: [
             SizedBox(height: size.height * 0.02),
-            _nombreLabel(
-                _generalMaterial(_crearNombre(usuarioServicios)), 'Nombre'),
+            _nombreLabel(_crearNombre(), 'Nombre'),
             SizedBox(height: size.height * 0.01),
-            _nombreLabel(_generalMaterial(_crearApellido(usuarioServicios)),
-                'Apellidos'),
+            _nombreLabel(_crearApellido(), 'Apellidos'),
             SizedBox(height: size.height * 0.01),
-            _nombreLabel(_generalMaterial(_crearEmail(usuarioServicios)),
-                'Correo Institucional'),
+            _nombreLabel(_crearEmail(), 'Correo Institucional'),
             SizedBox(height: size.height * 0.01),
-            _nombreLabel(_generalMaterial(_crearNumCelular(usuarioServicios)),
-                'Número de teléfono'),
+            _nombreLabel(_crearNumCelular(), 'Número de teléfono'),
             SizedBox(height: size.height * 0.04),
             _crearBtnInicioSesion(),
           ],
@@ -80,24 +88,32 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
           titulo: "Recuerda que todos los campos son obligatorios");
       return;
     }
+    try {
+      usuario.celular = int.parse(inputControllerTelefono.value.text);
+    } catch (e) {
+      customShapeSnackBar(
+          context: context, titulo: 'Número de celular inválido');
 
-    mostrarShowDialogCargando(
-        context: context, titulo: 'Guardando Información');
+      return;
+    }
+
+    // mostrarShowDialogCargando(
+    //     context: context, titulo: 'Guardando Información');
     await Future.delayed(const Duration(seconds: 1));
-    Navigator.pop(context);
 
     // Validar informacion con el backend
-    AutenticacionServicio autenticacionServicio = AutenticacionServicio();
-    final response = await autenticacionServicio.login(
-        inputControllerCorreo.text.trim(),
-        inputControllerContrasenia.text.trim());
-
+    UsuarioServicio usuarioServicio = UsuarioServicio();
+    final response = await usuarioServicio.editarPerfil(usuario);
     if (response == null) {
       customShapeSnackBar(context: context, titulo: 'Información invalida');
     } else {
       // Si todo esta bien redirige a la siguiente página
-      keyForm.currentState!.save();
-      Navigator.pushNamed(context, 'inicio');
+      // keyForm.currentState!.save();
+      BlocProvider.of<UsuarioBloc>(context).add(OnActualizarUsuario(response));
+      setState(() {
+        callbackFunction!();
+      });
+      Navigator.pop(context);
     }
   }
 
@@ -110,84 +126,77 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         textoRegular(texto: texto, context: context),
-        const SizedBox(height: 2),
+        // const SizedBox(height: 2),
         widget
       ],
     );
   }
 
-  Widget _generalMaterial(Widget widget) {
-    return Material(
-      elevation: 7,
-      borderRadius: const BorderRadius.all(Radius.circular(20)),
-      child: widget,
-    );
-  }
-
   ///  Input - Campo del nombre
-  Widget _crearNombre(Usuario usuarioServicios) {
+  Widget _crearNombre() {
     return TextFormField(
       style: styleInput,
-      initialValue: usuarioServicios.nombre,
-      decoration: inputDecorationElevado(
-          'Nombre', 'Ingresa tu nombre', context, Colors.white),
-      onSaved: (value) => usuarioServicios.nombre = value,
-      onChanged: (value) => usuarioServicios.nombre = value,
+      initialValue: usuario.nombre,
+      decoration: inputDecoration(
+          '', 'Ingresa tu nombre', context, Theme.of(context).primaryColor, null),
+      onSaved: (value) => usuario.nombre = value,
+      onChanged: (value) => usuario.nombre = value,
       validator: (value) =>
           (value!.isEmpty) ? 'Es Obligatorio este campo' : null,
     );
   }
 
   ///  Input - Campo del apellido
-  Widget _crearApellido(Usuario usuarioServicios) {
+  Widget _crearApellido() {
     return TextFormField(
       style: styleInput,
-      initialValue: usuarioServicios.apellido,
-      decoration: inputDecorationElevado(
-          'Apellido', 'Ingresa tu apellido', context, Colors.white),
-      onSaved: (value) => usuarioServicios.apellido = value,
-      onChanged: (value) => usuarioServicios.apellido = value,
+      initialValue: usuario.apellido,
+      decoration: inputDecoration(
+          '', 'Ingresa tu apellido', context, Theme.of(context).primaryColor, null),
+      onSaved: (value) => usuario.apellido = value,
+      onChanged: (value) => usuario.apellido = value,
       validator: (value) =>
           (value!.isEmpty) ? 'Es Obligatorio este campo' : null,
     );
   }
 
   /// Input - Campo número de celular
-  Widget _crearNumCelular(Usuario usuarioServicios) {
+  Widget _crearNumCelular() {
     return TextFormField(
-      style: styleInput,
-      initialValue: usuarioServicios.celular.toString(),
-      onSaved: (value) => usuarioServicios.celular = int.parse(value!),
-      onChanged: (value) => usuarioServicios.celular = int.parse(value),
-      keyboardType: TextInputType.number,
-      decoration: inputDecorationElevado(
-          '', 'Ingresa tu número celular', context, Colors.white),
-      validator: (value) => (validaciones_generales.isNumber(value!))
-          ? null
-          : 'Solo se perminten números',
-    );
+        style: styleInput,
+        initialValue: usuario.celular.toString(),
+        onSaved: (value) => usuario.celular = int.parse(value!),
+        onChanged: (value) => inputControllerTelefono.text = value,
+        keyboardType: TextInputType.number,
+        decoration: inputDecoration('', 'Ingresa tu número celular', context,
+            Theme.of(context).primaryColor, null),
+        validator: (value) => (validaciones_generales.isNumber(value!))
+            ? null
+            : 'Solo se perminten números',
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(10),
+        ]);
   }
 
   /// Input - Campo correo eléctronico
-  Widget _crearEmail(Usuario usuarioServicios) {
-    inputControllerCorreo.text = usuarioServicios.correo;
+  Widget _crearEmail() {
+    inputControllerCorreo.text = usuario.correo;
     return TextFormField(
       style: styleInput,
-      initialValue: usuarioServicios.correo,
+      initialValue: usuario.correo,
       keyboardType: TextInputType.emailAddress,
-      decoration: inputDecorationElevado(
-          '', 'Ingresa tu correo', context, Colors.white),
+      decoration: inputDecoration(
+          '', 'Ingresa tu correo', context, Theme.of(context).primaryColor, null),
       validator: (value) =>
           (validarEmail(value)) ? 'El correo ingresado no es valido' : null,
     );
   }
 
-
   /// Se crea el boton registro que es el encargado de validar la información y redirigir a la siguiente página
   Widget _crearBtnInicioSesion() {
     return Center(
       child: BtnAnaranja(
-          function: () => _validarFormulario(), titulo: 'Editar Perfil'),
+          function: () => _validarFormulario(), titulo: 'Actualizar'),
     );
   }
 }

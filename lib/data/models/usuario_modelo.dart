@@ -15,7 +15,9 @@ class Usuario with ChangeNotifier {
       int? pCelular,
       String? pConstrasenia,
       int? pCambioContrasenia,
-      String? pUid}) {
+      String? pUid,
+      int? pCalificacionUsuario,int? pCalificacionConductor
+      }) {
     correo = pCorreo;
     tipoUsuario = pTipoUsuario;
     nombre = pNombre;
@@ -24,6 +26,8 @@ class Usuario with ChangeNotifier {
     contrasenia = pConstrasenia;
     cambioContrasenia = pCambioContrasenia;
     uid = pUid;
+    calificacionUsuario = pCalificacionUsuario;
+    calificacionConductor = pCalificacionConductor;
   }
 
   /// ATRIBUTOS DE LA CLASE
@@ -35,17 +39,21 @@ class Usuario with ChangeNotifier {
   String? _contrasenia;
   int? _cambioContrasenia;
   String? _uid;
+  int? _calificacionUsuario;
+  int? _calificacionConductor;
 
   /// Constructor para transformar de un Mapa dinamico a json
   factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
-        pCorreo: json["correo"],
-        pTipoUsuario: json["tipoUsuario"],
-        pNombre: json["nombre"],
-        pApellido: json["apellido"],
-        pCelular: json["celular"],
-        pConstrasenia: json["contrasenia"],
-        pCambioContrasenia: json["cambio_contrasenia"],
-        pUid: json["uid"],
+      pCorreo: json["correo"],
+      pTipoUsuario: json["tipoUsuario"],
+      pNombre: json["nombre"],
+      pApellido: json["apellido"],
+      pCelular: json["celular"],
+      pConstrasenia: json["contrasenia"],
+      pCambioContrasenia: json["cambio_contrasenia"],
+      pUid: json["uid"],
+      pCalificacionUsuario: json["calificacionUsuario"],
+      pCalificacionConductor: json["calificacionConductor"]
       );
 
   Map<String, dynamic> toJson() => {
@@ -54,7 +62,9 @@ class Usuario with ChangeNotifier {
         "apellido": apellido,
         "celular": celular,
         "contrasenia": contrasenia,
-        "cambio_contrasenia": cambioContrasenia
+        "cambio_contrasenia": cambioContrasenia,
+        "calificacionUsuario": calificacionUsuario,
+        "calificacionConductor": calificacionConductor
       };
 
   // MÉTODOS GET AND SET DE LOS ATRIBUTOS
@@ -128,6 +138,20 @@ class Usuario with ChangeNotifier {
   /// Método que cambia el valor de uid (Identificador para inicio de sesión)
   set uid(value) {
     _uid = value;
+    notifyListeners();
+  }
+
+  get calificacionUsuario => _calificacionUsuario;
+
+  set calificacionUsuario(value) {
+    _calificacionUsuario = value;
+    notifyListeners();
+  }
+
+  get calificacionConductor => _calificacionConductor;
+
+  set calificacionConductor(value) {
+    _calificacionConductor = value;
     notifyListeners();
   }
 }

@@ -21,7 +21,7 @@ Map<String, WidgetBuilder> generarRutas() {
     'inicio': (_) => const InicioPag(),
     'recuperarContrasenia': (_) => const RecuperarContraseniaPag(),
     'validarInicioSesion': (_) => const ValidarInicioSesion(),
-    'editarPerfil': (_) => const EditarPerfilPag(),
+    'editarPerfil': (_) => EditarPerfilPag(callbackFunction: (){},),
     'agregarVehiculo': (_) => const AgregarVehiculo(),
     'ruta': (_) => const RutaPag(),
     'accesoGPS': (_) => const AccesoGPSPag(),

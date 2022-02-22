@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pa_donde_app/blocs/blocs.dart';
 import 'package:pa_donde_app/ui/pages/editar_contrasenia_pag.dart';
-import 'package:provider/provider.dart';
+import 'package:pa_donde_app/ui/pages/historial_pag.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/models/usuario_modelo.dart';
@@ -25,10 +27,15 @@ class PerfilPag extends StatefulWidget {
 }
 
 class _PerfilPagState extends State<PerfilPag> {
+  callback() {
+    setState(() {});
+  }
+  
   @override
   Widget build(BuildContext context) {
     Usuario usuarioServicio =
-        Provider.of<AutenticacionServicio>(context).usuarioServiciosActual;
+      BlocProvider.of<UsuarioBloc>(context).state.usuario;
+
     return Scaffold(
       body: ListView(children: [
         Stack(
@@ -44,7 +51,7 @@ class _PerfilPagState extends State<PerfilPag> {
     return Column(
       children: [
         Container(
-          height: size.height * 0.3,
+          height: size.height * 0.25,
           color: Theme.of(context).primaryColor,
         ),
         Container(
@@ -59,7 +66,7 @@ class _PerfilPagState extends State<PerfilPag> {
 
     return Column(
       children: [
-        const SizedBox(height: 30),
+        const SizedBox(height: 10),
         encabezado(),
         const SizedBox(height: 20),
         contenedorImagen(),
@@ -80,7 +87,7 @@ class _PerfilPagState extends State<PerfilPag> {
               function: () {
                 SchedulerBinding.instance!.addPostFrameCallback((_) {
                   Navigator.of(context).push(
-                      navegarMapaFadeIn(context, const EditarPerfilPag()));
+                      navegarMapaFadeIn(context, EditarPerfilPag(callbackFunction: callback,)));
                 });
               },
             ),
@@ -114,9 +121,10 @@ class _PerfilPagState extends State<PerfilPag> {
                 informacionTextoPuntuacion('Usuario'),
                 const SizedBox(height: 5),
                 Container(
-                  padding: const EdgeInsets.only(left: 30),
-                  child: cuadroEstrella('4.8')
-                  )
+                    padding: const EdgeInsets.only(left: 30),
+                    child: cuadroEstrella(
+                        usuarioServicio.calificacionUsuario.toString())
+                    )
               ],
             ),
             Column(
@@ -124,9 +132,10 @@ class _PerfilPagState extends State<PerfilPag> {
                 informacionTextoPuntuacion('Conductor'),
                 const SizedBox(height: 5),
                 Container(
-                  padding: const EdgeInsets.only(left: 30),
-                  child: cuadroEstrella('5.0')
-                  )
+                    padding: const EdgeInsets.only(left: 30),
+                    child: cuadroEstrella(
+                        usuarioServicio.calificacionConductor.toString())
+                    )
               ],
             ),
           ],
@@ -141,14 +150,14 @@ class _PerfilPagState extends State<PerfilPag> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        IconButton(onPressed: () {}, icon: const Icon(null, size: null)),
-        Text(
-          "Perfil",
-          style: TextStyle(
-              color: Colors.black,
-              fontSize: size.width * 0.08,
-              fontWeight: FontWeight.w600),
-        ),
+        IconButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const HistorialPag()));
+            },
+            icon: Icon(Icons.watch_later_outlined, size: size.width * 0.075)),
         IconButton(
             onPressed: () async {
               mostrarShowDialogCargando(
@@ -263,22 +272,22 @@ class _PerfilPagState extends State<PerfilPag> {
   Widget cuadroEstrella(String calificacion) {
     final media = MediaQuery.of(context).size;
     return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            calificacion,
-            style: TextStyle(
-                // fontFamily: Tipografia.medium,
-                fontSize: media.height * 0.03,
-                color: Colors.grey),
-          ),
-          Icon(
-            Icons.star,
-            color: Colors.yellow,
-            size: media.width * 0.06,
-            // onPressed: () {},
-          ),
-        ],
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          calificacion,
+          style: TextStyle(
+              // fontFamily: Tipografia.medium,
+              fontSize: media.height * 0.03,
+              color: Colors.grey),
+        ),
+        Icon(
+          Icons.star,
+          color: Colors.yellow,
+          size: media.width * 0.06,
+          // onPressed: () {},
+        ),
+      ],
     );
   }
 }

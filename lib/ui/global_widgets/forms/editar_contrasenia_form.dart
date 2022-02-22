@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pa_donde_app/data/services/usuario_servicio.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
@@ -141,12 +142,28 @@ class _FormEditarContraseniaState extends State<FormEditarContrasenia> {
     );
   }
 
-  void validarContrasenia() {
+  void validarContrasenia() async {
     // Verifica que las contraseñas coincidan
     if (inputControllerContrasenia.text != inputControllerConContrasenia.text) {
       customShapeSnackBar(
           context: context, titulo: 'Las contraseñas no coinciden');
       return;
+    }
+    // mostrarShowDialogCargando(
+    //     context: context, titulo: 'Guardando Información');
+    await Future.delayed(const Duration(seconds: 1));
+    Navigator.pop(context);
+
+    // Validar informacion con el backend
+    UsuarioServicio usuarioServicio = UsuarioServicio();
+    final response = await usuarioServicio
+        .cambiarContrasenia(inputControllerContrasenia.text.trim());
+
+    if (response == null) {
+      customShapeSnackBar(context: context, titulo: 'Información invalida');
+    } else {
+      // Si todo esta bien redirige a la siguiente página
+      keyForm.currentState!.save();
     }
   }
 }

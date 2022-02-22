@@ -46,6 +46,10 @@ class ValidarInicioSesion extends StatelessWidget {
       BlocProvider.of<PreserviciosBloc>(context)
           .add(OnAgregarVehiculo(preServicios.vehiculos!));
 
+      // Bloc de usuario
+      BlocProvider.of<UsuarioBloc>(context)
+          .add(OnActualizarUsuario(authService.usuarioServiciosActual));
+
       BlocProvider.of<PreserviciosBloc>(context)
           .add(OnAgregarPrecios(preServicios.auxilioEconomico!));
 

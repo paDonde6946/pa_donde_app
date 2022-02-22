@@ -2,13 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:pa_donde_app/ui/global_widgets/forms/editar_perfil_form.dart';
 
 class EditarPerfilPag extends StatefulWidget {
-  const EditarPerfilPag({Key? key}) : super(key: key);
+  
+  final Function? callbackFunction;
+  
+  const EditarPerfilPag({Key? key, required this.callbackFunction}) : super(key: key);
 
   @override
-  _EditarPerfilPagState createState() => _EditarPerfilPagState();
+  // ignore: no_logic_in_create_state
+  _EditarPerfilPagState createState() => _EditarPerfilPagState(callbackFunction);
 }
 
 class _EditarPerfilPagState extends State<EditarPerfilPag> {
+  final Function? callbackFunction;
+
+  _EditarPerfilPagState(this.callbackFunction);
   @override
   Widget build(BuildContext context) {
     return Scaffold(appBar: appBar(), body: body());
@@ -19,7 +26,7 @@ class _EditarPerfilPagState extends State<EditarPerfilPag> {
       children: [
         const SizedBox(height: 40),
         contenedorImagen(),
-        const FormEditarPerfil()
+        FormEditarPerfil(callbackFunction: callbackFunction)
       ],
     );
   }
