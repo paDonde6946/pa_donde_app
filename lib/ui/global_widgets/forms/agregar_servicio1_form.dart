@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/intl.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/blocs/blocs.dart';
@@ -104,6 +105,11 @@ class _AgregarServicioParte1State extends State<AgregarServicioParte1> {
           hours: int.parse(horaPartida[0]),
           minutes: int.parse(horaPartida[1])));
 
+      String formateandoFecha =
+          // DateFormat('yyyy-MM-dd – kk:mm').format(fechaModificada);
+          DateFormat('yyyy-MM-ddTkk:mm:ss.sss').format(fechaModificada) +
+              '+00:00';
+
       // Se valida la diferencia de la fecha con la fecha actual
       final diferenciaHoras =
           fechaModificada.difference(DateTime.now()).inHours;
@@ -119,14 +125,14 @@ class _AgregarServicioParte1State extends State<AgregarServicioParte1> {
               contenido:
                   "La cantidad de cupos no es valida. Debe de ingresar un valor entre 1 y 5");
         } else {
-          if (diferenciaHoras < 24 && fecha2 != '' && hora2 != '') {
+          if (diferenciaHoras > 24 && fecha2 != '' && hora2 != '') {
             mostrarShowDialogInformativo(
                 context: context,
                 titulo: 'Fecha del Servicio',
                 contenido:
-                    "Debe ingresar una fecha y hora mayor a 24 horas de la hora actual (${DateTime.now()})");
+                    "Debe ingresar una fecha y hora menor a 24 horas de la hora actual (${DateTime.now()})");
           } else {
-            servicioBloc.fechayhora = fechaModificada;
+            servicioBloc.fechayhora = formateandoFecha;
             preServicioBloc.controller!.jumpToPage(2);
             preServicioBloc.add(OnCambiarPagina(preServicioBloc.controller!));
             preServicioBloc.add(OnCrearServicio(servicioBloc));

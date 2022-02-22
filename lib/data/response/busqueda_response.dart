@@ -144,14 +144,15 @@ class Context {
         "id": id,
         "text_es": textEs,
         "text": text,
-        "wikidata": wikidata == null ? null : wikidata,
-        "short_code": shortCode == null ? null : shortCode,
+        "wikidata": wikidata ?? '',
+        "short_code": shortCode ?? '',
         "language_es":
             languageEs == null ? null : languageValues.reverse![languageEs],
         "language": language == null ? null : languageValues.reverse![language],
       };
 }
 
+// ignore: constant_identifier_names
 enum Language { ES }
 
 final languageValues = EnumValues({"es": Language.ES});
@@ -205,7 +206,7 @@ class Properties {
         "landmark": landmark,
         "address": address,
         "category": category,
-        "maki": maki == null ? null : maki,
+        "maki": maki ?? '',
       };
 }
 
@@ -216,9 +217,7 @@ class EnumValues<T> {
   EnumValues(this.map);
 
   Map<T, String>? get reverse {
-    if (reverseMap == null) {
-      reverseMap = map.map((k, v) => new MapEntry(v, k));
-    }
+    reverseMap ??= map.map((k, v) => MapEntry(v, k));
     return reverseMap;
   }
 }

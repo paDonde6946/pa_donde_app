@@ -1,14 +1,14 @@
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:dio/dio.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:pa_donde_app/data/models/auxilio_economico_modelo.dart';
 import 'package:pa_donde_app/data/models/servicio_modelo.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/global/entorno_variable_global.dart';
-import 'package:pa_donde_app/data/response/pre_agregar_servicio_response.dart';
+import 'package:pa_donde_app/data/response/auxilio_economico_response.dart';
 //---------------------------------------------------------------------
 
 class ServicioRServicio {
@@ -25,20 +25,16 @@ class ServicioRServicio {
   /// Create storage que permite almacenar el token en el dispositivo fisico
   final _storage = const FlutterSecureStorage();
 
-  final _dio = Dio();
-
-  final _baseUrlDir = 'https://api.mapbox.com/directions/v5/mapbox';
-
-  Future<PreAgregarServicioResponse> getPreServicio() async {
+  Future<List<AuxilioEconomico>> getAuxiliosEconomicos() async {
     String? token = await _storage.read(key: 'token');
 
-    final uri = Uri.http(EntornoVariable.host, '/app/preAgregarServicio');
+    final uri = Uri.http(EntornoVariable.host, '/app/listarAuxilioEconomico');
 
     final response = await http.get(uri, headers: {"x-token": token});
 
-    final data = preAgregarServicioResponseFromJson(response.body);
+    final data = auxilioEconomicoResponseFromJson(response.body);
 
-    return data;
+    return data.auxilioEconomico!;
   }
 
   Future<bool> crearServicio(Servicio servicio) async {

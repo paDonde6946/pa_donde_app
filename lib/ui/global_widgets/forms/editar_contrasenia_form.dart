@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 import 'package:pa_donde_app/ui/global_widgets/inputs/input_form_elevado.dart';
-import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
-
-import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
 import 'package:pa_donde_app/ui/global_widgets/text/formulario_texto.dart';
 
 import 'package:pa_donde_app/ui/utils/snack_bars.dart';

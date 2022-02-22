@@ -9,7 +9,7 @@ import 'package:pa_donde_app/ui/pages/editar_vehiculo_pag.dart';
 import 'package:pa_donde_app/ui/pages/inicio_pag.dart';
 import 'package:pa_donde_app/ui/pages/inicio_sesion_pag.dart';
 import 'package:pa_donde_app/ui/pages/marker_pag.dart';
-import 'package:pa_donde_app/ui/pages/prueba.dart';
+import 'package:pa_donde_app/ui/pages/market.dart';
 import 'package:pa_donde_app/ui/pages/recuperar_contrasenia_pag.dart';
 import 'package:pa_donde_app/ui/pages/ruta_pag.dart';
 import 'package:pa_donde_app/ui/pages/validar_inicio_sesion_pag.dart';
@@ -18,7 +18,7 @@ import 'package:pa_donde_app/ui/pages/validar_inicio_sesion_pag.dart';
 Map<String, WidgetBuilder> generarRutas() {
   final _rutas = <String, WidgetBuilder>{
     'login': (_) => const InicioSesionPag(),
-    'inicio': (_) => InicioPag(),
+    'inicio': (_) => const InicioPag(),
     'recuperarContrasenia': (_) => const RecuperarContraseniaPag(),
     'validarInicioSesion': (_) => const ValidarInicioSesion(),
     'editarPerfil': (_) => const EditarPerfilPag(),

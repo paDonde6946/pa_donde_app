@@ -1,4 +1,5 @@
 import 'dart:io';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:http/http.dart' as http;
@@ -10,7 +11,6 @@ import 'package:pa_donde_app/global/entorno_variable_global.dart';
 class VehiculoServicio {
   /// Create storage que permite almacenar el token en el dispositivo fisico
   final _storage = const FlutterSecureStorage();
-  var vehiculoResponse;
 
   /// Obtiene todos los vehiculos
   Future<List<Vehiculo>> getVehiculos() async {
@@ -30,10 +30,10 @@ class VehiculoServicio {
     );
 
     final decodedData = json.decode(response.body);
-    vehiculoResponse = VehiculosResponse.fromJson(decodedData);
-    print(vehiculoResponse);
+    VehiculosResponse vehiculoResponse =
+        VehiculosResponse.fromJson(decodedData);
 
-    return vehiculoResponse.vehiculos;
+    return vehiculoResponse.vehiculos!;
   }
 
   Future eliminarVehiculo({required Vehiculo vehiculo}) async {

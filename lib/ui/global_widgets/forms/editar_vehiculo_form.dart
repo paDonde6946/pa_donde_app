@@ -12,19 +12,10 @@ import 'package:pa_donde_app/global/regexp/regexp_locales.dart';
 
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 import 'package:pa_donde_app/ui/global_widgets/inputs/input_form.dart';
-import 'package:pa_donde_app/ui/global_widgets/inputs/input_form_redondo.dart'
-    as input_redondo;
 
-import 'package:pa_donde_app/ui/global_widgets/inputs/input_form_elevado.dart'
-    as input_elevado;
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/confirmacion_show.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/informativo_show.dart';
-import 'package:pa_donde_app/ui/global_widgets/text/formulario_texto.dart';
-import 'package:pa_donde_app/ui/utils/snack_bars.dart';
-
-import 'package:pa_donde_app/ui/utils/validaciones_generales.dart'
-    as validaciones_generales;
 //---------------------------------------------------------------------
 
 // ignore: must_be_immutable
@@ -191,25 +182,6 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
             color: Colors.white,
             borderRadius: BorderRadius.all(Radius.circular(redondo))),
       ),
-    );
-  }
-
-  Widget _generalMaterial(Widget widget) {
-    return Material(
-      elevation: 7,
-      borderRadius: const BorderRadius.all(Radius.circular(20)),
-      child: widget,
-    );
-  }
-
-  Widget _nombreLabel(Widget widget, String texto) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        textoRegular(texto: texto, context: context),
-        const SizedBox(height: 2),
-        widget
-      ],
     );
   }
 

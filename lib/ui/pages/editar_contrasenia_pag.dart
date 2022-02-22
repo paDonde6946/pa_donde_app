@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pa_donde_app/ui/global_widgets/forms/editar_contrasenia_form.dart';
-import 'package:pa_donde_app/ui/global_widgets/forms/editar_perfil_form.dart';
 
 class EditarContraseniaPag extends StatefulWidget {
   const EditarContraseniaPag({Key? key}) : super(key: key);
@@ -17,10 +16,7 @@ class _EditarContraseniaPagState extends State<EditarContraseniaPag> {
 
   Widget body() {
     return ListView(
-      children: [
-        const SizedBox(height: 40),
-        const FormEditarContrasenia()
-      ],
+      children: const [SizedBox(height: 40), FormEditarContrasenia()],
     );
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/confirmacion_show.dart';
 import 'package:pa_donde_app/ui/pages/editar_contrasenia_pag.dart';
 import 'package:provider/provider.dart';
 
@@ -114,9 +115,8 @@ class _PerfilPagState extends State<PerfilPag> {
                 informacionTextoPuntuacion('Usuario'),
                 const SizedBox(height: 5),
                 Container(
-                  padding: const EdgeInsets.only(left: 30),
-                  child: cuadroEstrella('4.8')
-                  )
+                    padding: const EdgeInsets.only(left: 30),
+                    child: cuadroEstrella('4.8'))
               ],
             ),
             Column(
@@ -124,9 +124,8 @@ class _PerfilPagState extends State<PerfilPag> {
                 informacionTextoPuntuacion('Conductor'),
                 const SizedBox(height: 5),
                 Container(
-                  padding: const EdgeInsets.only(left: 30),
-                  child: cuadroEstrella('5.0')
-                  )
+                    padding: const EdgeInsets.only(left: 30),
+                    child: cuadroEstrella('5.0'))
               ],
             ),
           ],
@@ -154,11 +153,18 @@ class _PerfilPagState extends State<PerfilPag> {
               mostrarShowDialogCargando(
                   context: context, titulo: 'CERRANDO SESIÓN');
               await Future.delayed(const Duration(seconds: 1));
-              Navigator.pop(context);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const InicioSesionPag()));
+
+              // Navigator.of(context).pop();f
+
+              mostrarShowDialogConfirmar(
+                  context: context,
+                  titulo: "CONFIRMACION",
+                  contenido: 'Usted ha cerrado sesion correctamente',
+                  paginaRetorno: 'login');
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => const InicioSesionPag()));
               AutenticacionServicio.eliminarToken();
             },
             icon: Icon(Icons.login, size: size.width * 0.075)),
@@ -263,22 +269,22 @@ class _PerfilPagState extends State<PerfilPag> {
   Widget cuadroEstrella(String calificacion) {
     final media = MediaQuery.of(context).size;
     return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            calificacion,
-            style: TextStyle(
-                // fontFamily: Tipografia.medium,
-                fontSize: media.height * 0.03,
-                color: Colors.grey),
-          ),
-          Icon(
-            Icons.star,
-            color: Colors.yellow,
-            size: media.width * 0.06,
-            // onPressed: () {},
-          ),
-        ],
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          calificacion,
+          style: TextStyle(
+              // fontFamily: Tipografia.medium,
+              fontSize: media.height * 0.03,
+              color: Colors.grey),
+        ),
+        Icon(
+          Icons.star,
+          color: Colors.yellow,
+          size: media.width * 0.06,
+          // onPressed: () {},
+        ),
+      ],
     );
   }
 }

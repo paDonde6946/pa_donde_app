@@ -8,6 +8,7 @@ class MockClient extends Mock implements http.Client {}
 
 void main() {
   test("Autenticacion - Login Response HTTP", () {
+    // ignore: unused_element
     Future<http.Response> _mockRequest(http.Request request) async {
       if (request.url.toString().startsWith(
           'https://10.0.2.2:3001/app/login/usuario/felipe@unbosque.edu.co/1234')) {

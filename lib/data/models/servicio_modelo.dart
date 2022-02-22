@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:pa_donde_app/data/response/busqueda_response.dart';
+
 Servicio servicioFromJson(String str) => Servicio.fromJson(json.decode(str));
 
 String servicioToJson(Servicio data) => json.encode(data.toJson());
@@ -14,23 +16,27 @@ class Servicio {
   String? _nombreDestino;
   String? _polylineRuta;
   String? _idVehiculo;
-  DateTime? _fechayhora;
+  String? _fechayhora;
   int? _cantidadCupos;
   String? _auxilioEconomico;
   String? _distancia;
   String? _duracion;
+  List<Feature>? _historialOrigen;
+  List<Feature>? _historialDestino;
 
   Servicio({
     String? pEstado,
     String? pNombreOrigen,
     String? pNombreDestino,
     String? pPolylineRuta,
-    DateTime? pFechayhora,
+    String? pFechayhora,
     String? pIdVehiculo,
     int? pCantidadCupos,
     String? pAuxilioEconomico,
     String? pDistancia,
     String? pDuracion,
+    List<Feature>? pHistorialOrigen,
+    List<Feature>? pHistorialDestino,
   }) {
     estado = pEstado;
     nombreOrigen = pNombreOrigen;
@@ -42,6 +48,8 @@ class Servicio {
     auxilioEconomico = pAuxilioEconomico;
     distancia = pDistancia;
     duracion = pDuracion;
+    historialOrigen = pHistorialOrigen;
+    historialDestino = pHistorialDestino;
   }
 
   factory Servicio.fromJson(Map<String, dynamic> json) => Servicio(
@@ -54,6 +62,8 @@ class Servicio {
         pAuxilioEconomico: json["idAuxilioEconomico"],
         pDistancia: json["distancia"],
         pDuracion: json["duracion"],
+        pHistorialOrigen: json["historialOrigen"],
+        pHistorialDestino: json["historialDestino"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -66,6 +76,8 @@ class Servicio {
         "idAuxilioEconomico": auxilioEconomico,
         "distancia": distancia,
         "duracion": duracion,
+        "historialOrigen": historialOrigen,
+        "historialDestino": historialDestino,
       };
 
   get estado => _estado;
@@ -126,5 +138,17 @@ class Servicio {
 
   set duracion(pDuracion) {
     _duracion = pDuracion;
+  }
+
+  get historialOrigen => _historialOrigen;
+
+  set historialOrigen(pHistorialOrigen) {
+    _historialOrigen = pHistorialOrigen;
+  }
+
+  get historialDestino => _historialDestino;
+
+  set historialDestino(pHistorialDestino) {
+    _historialDestino = pHistorialDestino;
   }
 }
