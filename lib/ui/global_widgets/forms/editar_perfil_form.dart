@@ -138,7 +138,7 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
       style: styleInput,
       initialValue: usuario.nombre,
       decoration: inputDecoration(
-          '', 'Ingresa tu nombre', context, Theme.of(context).primaryColor, null),
+          '', 'Ingresa tu nombre', context, Theme.of(context).primaryColor, null, 0),
       onSaved: (value) => usuario.nombre = value,
       onChanged: (value) => usuario.nombre = value,
       validator: (value) =>
@@ -152,7 +152,7 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
       style: styleInput,
       initialValue: usuario.apellido,
       decoration: inputDecoration(
-          '', 'Ingresa tu apellido', context, Theme.of(context).primaryColor, null),
+          '', 'Ingresa tu apellido', context, Theme.of(context).primaryColor, null, 0),
       onSaved: (value) => usuario.apellido = value,
       onChanged: (value) => usuario.apellido = value,
       validator: (value) =>
@@ -169,7 +169,7 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
         onChanged: (value) => inputControllerTelefono.text = value,
         keyboardType: TextInputType.number,
         decoration: inputDecoration('', 'Ingresa tu número celular', context,
-            Theme.of(context).primaryColor, null),
+            Theme.of(context).primaryColor, null, 0),
         validator: (value) => (validaciones_generales.isNumber(value!))
             ? null
             : 'Solo se perminten números',
@@ -186,7 +186,7 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
       initialValue: usuario.correo,
       keyboardType: TextInputType.emailAddress,
       decoration: inputDecoration(
-          '', 'Ingresa tu correo', context, Theme.of(context).primaryColor, null),
+          '', 'Ingresa tu correo', context, Theme.of(context).primaryColor, null, 0),
       validator: (value) =>
           (validarEmail(value)) ? 'El correo ingresado no es valido' : null,
     );
