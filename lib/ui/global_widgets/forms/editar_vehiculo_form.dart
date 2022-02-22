@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pa_donde_app/blocs/blocs.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 
 import 'package:pa_donde_app/data/models/vehiculo_modelo.dart';
 import 'package:pa_donde_app/data/services/vehiculo_servicio.dart';
+import 'package:pa_donde_app/global/enums/tipo_vehiculo_enum.dart';
+import 'package:pa_donde_app/global/regexp/regexp_locales.dart';
 
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
-import 'package:pa_donde_app/ui/global_widgets/inputs/input_form_redondo.dart'
-    as input_redondo;
+import 'package:pa_donde_app/ui/global_widgets/inputs/input_form.dart';
 
-import 'package:pa_donde_app/ui/global_widgets/inputs/input_form_elevado.dart'
-    as input_elevado;
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
-import 'package:pa_donde_app/ui/global_widgets/text/formulario_texto.dart';
-
-import 'package:pa_donde_app/ui/utils/validaciones_generales.dart'
-    as validaciones_generales;
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/confirmacion_show.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/informativo_show.dart';
 //---------------------------------------------------------------------
 
 // ignore: must_be_immutable
@@ -48,6 +48,8 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
 
   final styleInput = const TextStyle(height: 0.4);
   bool color = false;
+  // ignore: prefer_const_constructors
+  Size size = Size(0, 0);
 
   _FormEditarVehiuloState(Vehiculo vehiculo) {
     _vehiculo = vehiculo;
@@ -56,7 +58,7 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
   // print(_vehiculo.placa);
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    size = MediaQuery.of(context).size;
 
     // Espacio entre cada input
     const tamanioSeparador = 15.0;
@@ -70,17 +72,11 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
             const SizedBox(height: tamanioSeparador),
             _tipoPlacaColor(),
             const SizedBox(height: tamanioSeparador),
-            _nombreLabel(_generalMaterial(_crearDocumentoTitular(_vehiculo!)),
-                'Documento del titular'),
+            _crearMarca(_vehiculo!),
             const SizedBox(height: tamanioSeparador),
-            _nombreLabel(_generalMaterial(_crearMarca(_vehiculo!)),
-                "Marca del vehiculo"),
+            _crearModelo(_vehiculo!),
             const SizedBox(height: tamanioSeparador),
-            _nombreLabel(_generalMaterial(_crearModelo(_vehiculo!)),
-                "Modelo del  vehiculo"),
-            const SizedBox(height: tamanioSeparador),
-            _nombreLabel(
-                _generalMaterial(_crearAnio(_vehiculo!)), "Año del vehiculo"),
+            _crearAnio(_vehiculo!),
             const SizedBox(height: tamanioSeparador),
             SizedBox(
                 width: size.width * 1, child: _crearBotonEditar(_vehiculo!)),
@@ -96,43 +92,32 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
   /// Método auxiliar que  ayuda a validar todos los campos del registro
   void _validarFormulario(Vehiculo vehiculo) async {
     // Verfica que todos los campos del formulario esten completos
-    // if (!keyForm.currentState!.validate()) {
-    //   customShapeSnackBar(
-    //       context: context,
-    //       titulo: "Recuerda que todos los campos son obligatorios");
-    //   return;
-    // }
-    // Verifica que las contraseñas coincidan
-    // if (inputControllerContrasenia.text != inputControllerConContrasenia.text) {
-    //   customShapeSnackBar(
-    //       context: context, titulo: 'Las contraseñas no coinciden');
-    //   return;
-    // }
+    if (!keyForm.currentState!.validate()) {
+      mostrarShowDialogInformativo(
+          context: context,
+          titulo: 'Campos obligatorios',
+          contenido: "Recuerda que todos los campos son obligatorios");
+      return;
+    }
 
-    // if (!validaciones_generales
-    //     .validarEmailDominio(inputControllerCorreo.text.trim())) {
-    //   customShapeSnackBar(
-    //       context: context,
-    //       titulo: "Solo se permiten correos de la universidad");
-    //   return;
-    // }
+    if (!RegExpLocales.expresionPlacaCarro.hasMatch(vehiculo.placa)) {
+      mostrarShowDialogInformativo(
+          context: context,
+          titulo: 'Placa Invalida',
+          contenido: "No es una placa valida");
+      return;
+    }
+    mostrarShowDialogCargando(
+        context: context, titulo: "Estamos editando tu vehiculo");
 
-    // mostrarShowDialogCargando(context: context, titulo: 'REGISTRANDOTE');
-    // await Future.delayed(const Duration(seconds: 1));
-    // Navigator.pop(context);
-
-    // UsuarioServicio usuarioServicio = UsuarioServicio();
-    // AutenticacionServicio autenticacionServicio = AutenticacionServicio();
-    // final Usuario? response =
-    //     await usuarioServicio.crearUsuarioServicio(usuario);
-    // // Si todo esta bien redirige a la siguiente página
-    // keyForm.currentState!.save();
-
-    // mostrarShowDialogCargando(context: context, titulo: 'REGISTRO EXITO');
-    // await Future.delayed(const Duration(seconds: 1));
-    // Navigator.pop(context);
-    // autenticacionServicio.usuarioServiciosActual = response!;
-    // Navigator.pushReplacementNamed(context, 'inicio');
+    var vehiculoServicio = VehiculoServicio();
+    var respuesta = await vehiculoServicio.editarServicio(vehiculo: vehiculo);
+    Navigator.of(context).pop();
+    mostrarShowDialogConfirmar(
+        context: context,
+        titulo: "CONFIRMACION",
+        contenido: respuesta["msg"],
+        paginaRetorno: 'inicio');
   }
 
   /*____________________________________________________________*/
@@ -143,19 +128,14 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
     final size = MediaQuery.of(context).size;
     return Row(
       children: [
-        SizedBox(
-            width: size.width * 0.45,
-            child: _nombreLabel(_crearTipoVehiculo(), 'Tipo Vehículo')),
+        SizedBox(child: _crearTipoVehiculo()),
         Column(
           children: [
+            SizedBox(width: size.width * 0.42, child: _crearPlaca(_vehiculo!)),
             SizedBox(
-                width: size.width * 0.42,
-                child: _nombreLabel(
-                    _generalMaterial(_crearPlaca(_vehiculo!)), 'Placa')),
-            SizedBox(
-                width: size.width * 0.42,
-                child: _nombreLabel(
-                    _generalMaterial(_crearColor(_vehiculo!)), 'Color')),
+              height: size.width * 0.02,
+            ),
+            SizedBox(width: size.width * 0.42, child: _crearColor(_vehiculo!)),
           ],
         ),
       ],
@@ -173,12 +153,6 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
             },
             child: _cardVehiculo(redondo)),
         const SizedBox(width: 20),
-        // GestureDetector(
-        //     onTap: () {
-        //       color = true;
-        //       setState(() {});
-        //     },
-        //     child: _cardMoto(redondo)),
       ],
     );
   }
@@ -190,7 +164,9 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
       elevation: 10,
       borderRadius: BorderRadius.all(Radius.circular(redondo)),
       child: Container(
-        child: Icon(Icons.drive_eta_outlined, size: size.width * 0.24),
+        child: (_vehiculo!.tipoVehiculo != TipoVehiculo.carro)
+            ? Icon(Icons.motorcycle_rounded, size: size.width * 0.24)
+            : SvgPicture.asset("img/icons/carro_icon.svg"),
         height: size.height * 0.14,
         width: size.width * 0.4,
         decoration: BoxDecoration(
@@ -209,57 +185,12 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
     );
   }
 
-  // Widget _cardMoto(double redondo) {
-  //   final size = MediaQuery.of(context).size;
-
-  //   return Material(
-  //     elevation: 10,
-  //     borderRadius: BorderRadius.all(Radius.circular(redondo)),
-  //     child: Container(
-  //       child: Icon(Icons.motorcycle_rounded, size: size.width * 0.24),
-  //       height: size.height * 0.13,
-  //       width: size.width * 0.4,
-  //       decoration: BoxDecoration(
-  //           boxShadow: [
-  //             BoxShadow(
-  //               color:
-  //                   color ? Theme.of(context).primaryColor : Colors.transparent,
-  //               offset: const Offset(1.0, 1.0), //(x,y)
-  //               blurRadius: 9.0,
-  //             ),
-  //           ],
-  //           color: Colors.white,
-  //           borderRadius: BorderRadius.all(Radius.circular(redondo))),
-  //     ),
-  //   );
-  // }
-
-  Widget _generalMaterial(Widget widget) {
-    return Material(
-      elevation: 7,
-      borderRadius: const BorderRadius.all(Radius.circular(20)),
-      child: widget,
-    );
-  }
-
-  Widget _nombreLabel(Widget widget, String texto) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        textoRegular(texto: texto, context: context),
-        const SizedBox(height: 2),
-        widget
-      ],
-    );
-  }
-
   ///  Input - Campo de la Placa del Vehiculo
   Widget _crearPlaca(Vehiculo vehiculo) {
     return TextFormField(
       initialValue: vehiculo.placa,
-      style: styleInput,
-      decoration:
-          input_elevado.inputDecorationElevado('', '', context, Colors.white),
+      decoration: inputDecoration('Placa', 'Placa del vehiculo', context,
+          Theme.of(context).primaryColor, null, size.height * 0.03),
       onSaved: (value) => vehiculo.placa = value,
       onChanged: (value) => vehiculo.placa = value,
       validator: (value) =>
@@ -271,9 +202,8 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
   Widget _crearColor(Vehiculo vehiculo) {
     return TextFormField(
       initialValue: vehiculo.color,
-      style: styleInput,
-      decoration:
-          input_redondo.inputDecorationRedondo('', '', context, Colors.white),
+      decoration: inputDecoration('Color', 'Color del vehiculo', context,
+          Theme.of(context).primaryColor, null, size.height * 0.03),
       onSaved: (value) => vehiculo.color = value,
       onChanged: (value) => vehiculo.color = value,
       validator: (value) =>
@@ -281,36 +211,15 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
     );
   }
 
-  /// Input - Campo número de cedula del titular del vehiculo
-  Widget _crearDocumentoTitular(Vehiculo vehiculo) {
-    return TextFormField(
-      initialValue: vehiculo.documentoTitular,
-      style: styleInput,
-      onSaved: (value) => vehiculo.documentoTitular = int.parse(value!),
-      onChanged: (value) => vehiculo.documentoTitular = int.parse(value),
-      keyboardType: TextInputType.number,
-      decoration:
-          input_redondo.inputDecorationRedondo('', '', context, Colors.white),
-      validator: (value) => (validaciones_generales.isNumber(value!))
-          ? null
-          : 'Solo se perminten números',
-    );
-  }
-
   /// Input - Campo de la marca del vehiculo
   Widget _crearMarca(Vehiculo vehiculo) {
     return TextFormField(
       initialValue: vehiculo.marca,
-      style: styleInput,
       keyboardType: TextInputType.text,
-      decoration:
-          input_redondo.inputDecorationRedondo('', '', context, Colors.white),
+      decoration: inputDecoration('Marca', 'Marca del vehiculo', context,
+          Theme.of(context).primaryColor, null, size.height * 0.03),
       onSaved: (value) => vehiculo.marca = value,
       onChanged: (value) => vehiculo.marca = value,
-      validator: (value) => (validaciones_generales.validarEmail(value) ||
-              !validaciones_generales.validarEmailDominio(value))
-          ? 'El correo ingresado no es valido'
-          : null,
     );
   }
 
@@ -318,15 +227,13 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
   Widget _crearModelo(Vehiculo vehiculo) {
     return TextFormField(
       initialValue: vehiculo.modelo,
-      style: styleInput,
       scrollPadding: const EdgeInsets.all(1),
-      obscureText: true,
       onSaved: (value) => vehiculo.modelo = value,
       onChanged: (value) => vehiculo.modelo = value,
-      decoration:
-          input_redondo.inputDecorationRedondo('', '', context, Colors.white),
+      decoration: inputDecoration('Modelo', 'Modelo del vehiculo', context,
+          Theme.of(context).primaryColor, null, size.height * 0.03),
       validator: (value) =>
-          (value!.isEmpty) ? 'El correo ingresado no es valido' : null,
+          (value!.isEmpty) ? 'El modelo ingresado no es valido' : null,
     );
   }
 
@@ -334,12 +241,11 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
   Widget _crearAnio(Vehiculo vehiculo) {
     return TextFormField(
       initialValue: vehiculo.anio,
-      style: styleInput,
+      keyboardType: TextInputType.number,
       scrollPadding: const EdgeInsets.all(1),
-      obscureText: true,
       onChanged: (value) => conContrasenia = value,
-      decoration:
-          input_redondo.inputDecorationRedondo('', '', context, Colors.white),
+      decoration: inputDecoration('Año', 'Año del vehiculo', context,
+          Theme.of(context).primaryColor, null, size.height * 0.03),
       validator: (value) => (value!.isEmpty) ? 'El digito no es valido' : null,
     );
   }
@@ -364,14 +270,26 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
       child: IconButton(
         icon: Text(
           'Eliminar',
-          style: TextStyle(fontSize: size.width * 0.045, color: Colors.red),
+          style: TextStyle(
+              fontSize: size.width * 0.045,
+              color: Theme.of(context).primaryColor),
         ),
         color: Colors.black87,
-        onPressed: () {
+        onPressed: () async {
           mostrarShowDialogCargando(
-              context: context, titulo: "Estammos eliminando tu vehiculo");
+              context: context, titulo: "Estamos eliminando tu vehiculo");
           var vehiculoServicio = VehiculoServicio();
-          vehiculoServicio.eliminarVehiculo(placa: vehiculo.placa);
+          var respuesta =
+              await vehiculoServicio.eliminarVehiculo(vehiculo: vehiculo);
+          var nuevosVehiculos = await vehiculoServicio.getVehiculos();
+          BlocProvider.of<PreserviciosBloc>(context)
+              .add(OnAgregarVehiculo(nuevosVehiculos));
+          Navigator.of(context).pop();
+          mostrarShowDialogConfirmar(
+              context: context,
+              titulo: "CONFIRMACION",
+              contenido: respuesta["msg"],
+              paginaRetorno: 'inicio');
         },
       ),
     );

@@ -13,15 +13,11 @@ class PreserviciosState extends Equatable {
   /// Variable para guardar los datos del servicio.
   final Servicio servicio;
 
-  /// Guardar el lugar de origen si primero elige el destino
-  final String busquedaInicio;
-
   const PreserviciosState({
     required this.pageController,
     required this.servicio,
     this.vehiculos = const [],
     this.precios = const [],
-    this.busquedaInicio = '',
   });
 
   PreserviciosState copyWith({
@@ -30,16 +26,20 @@ class PreserviciosState extends Equatable {
     List<AuxilioEconomico>? precios,
     Servicio? servicio,
     String? busquedaInicio,
+    int? controlarIndex,
   }) =>
       PreserviciosState(
         pageController: pageController ?? this.pageController,
         servicio: servicio ?? this.servicio,
         vehiculos: vehiculos ?? this.vehiculos,
         precios: precios ?? this.precios,
-        busquedaInicio: busquedaInicio ?? this.busquedaInicio,
       );
 
   @override
-  List<Object> get props =>
-      [pageController, servicio, vehiculos, precios, busquedaInicio];
+  List<Object> get props => [
+        pageController,
+        servicio,
+        vehiculos,
+        precios,
+      ];
 }

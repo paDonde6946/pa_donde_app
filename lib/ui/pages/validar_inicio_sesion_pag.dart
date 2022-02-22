@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pa_donde_app/data/services/vehiculo_servicio.dart';
 import 'package:provider/provider.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
@@ -36,22 +37,25 @@ class ValidarInicioSesion extends StatelessWidget {
     // final sockettServicce = Provider.of<SocketServicio>(context);
 
     final autenticado = await authService.logeado();
-    await Future.delayed(const Duration(seconds: 4));
     if (autenticado) {
       // sockettServicce.connect();
 
-      /// Consulta los vehiculos del usuario
-      final preServicios = await ServicioRServicio().getPreServicio();
+      /// Consulta los auxilios economicos que puede tener un servicio
+      final auxilioEconomicoServicio =
+          await ServicioRServicio().getAuxiliosEconomicos();
+
+      /// Consulta los vehiculos que puede tener un servicio
+      final vehiculosServicio = await VehiculoServicio().getVehiculos();
 
       BlocProvider.of<PreserviciosBloc>(context)
-          .add(OnAgregarVehiculo(preServicios.vehiculos!));
+          .add(OnAgregarVehiculo(vehiculosServicio));
 
       // Bloc de usuario
       BlocProvider.of<UsuarioBloc>(context)
           .add(OnActualizarUsuario(authService.usuarioServiciosActual));
 
       BlocProvider.of<PreserviciosBloc>(context)
-          .add(OnAgregarPrecios(preServicios.auxilioEconomico!));
+          .add(OnAgregarPrecios(auxilioEconomicoServicio));
 
       SchedulerBinding.instance!.addPostFrameCallback((_) {
         Navigator.pushReplacement(

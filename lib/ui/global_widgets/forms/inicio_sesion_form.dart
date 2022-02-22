@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
@@ -6,10 +8,13 @@ import 'package:pa_donde_app/ui/global_widgets/inputs/input_form.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
 
 import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
+import 'package:pa_donde_app/data/services/servicios_servicio.dart';
+import 'package:pa_donde_app/data/services/vehiculo_servicio.dart';
+
+import 'package:pa_donde_app/blocs/blocs.dart';
 
 import 'package:pa_donde_app/ui/utils/snack_bars.dart';
 import 'package:pa_donde_app/ui/utils/validaciones_generales.dart';
-import 'package:provider/provider.dart';
 //---------------------------------------------------------------------
 
 class FormInicioSesion extends StatefulWidget {
@@ -76,7 +81,22 @@ class _FormInicioSesionState extends State<FormInicioSesion> {
       FocusScope.of(context).unfocus();
       // Si todo esta bien redirige a la siguiente página
       keyForm.currentState!.save();
+
+      /// Consulta los auxilios economicos que puede tener un servicio
+      final auxilioEconomicoServicio =
+          await ServicioRServicio().getAuxiliosEconomicos();
+
+      /// Consulta los vehiculos que puede tener un servicio
+      final vehiculosServicio = await VehiculoServicio().getVehiculos();
+
+      BlocProvider.of<PreserviciosBloc>(context)
+          .add(OnAgregarVehiculo(vehiculosServicio));
+
+      BlocProvider.of<PreserviciosBloc>(context)
+          .add(OnAgregarPrecios(auxilioEconomicoServicio));
+
       autenticacionServicio.autenticando = true;
+
       Navigator.pushNamed(context, 'inicio');
     }
   }
@@ -91,7 +111,7 @@ class _FormInicioSesionState extends State<FormInicioSesion> {
       controller: inputControllerCorreo,
       keyboardType: TextInputType.emailAddress,
       decoration: inputDecoration('Correo institucional', 'Ingresa tu correo',
-          context, Colors.black, null),
+          context, Colors.black, null, 0),
       validator: (value) =>
           (validarEmail(value)) ? 'El correo ingresado no es valido' : null,
     );
@@ -103,8 +123,8 @@ class _FormInicioSesionState extends State<FormInicioSesion> {
       scrollPadding: const EdgeInsets.all(1),
       obscureText: true,
       onChanged: (value) => inputControllerContrasenia.text = value,
-      decoration: inputDecoration(
-          'Contraseña', 'Ingresa tu contraseña', context, Colors.black, null),
+      decoration: inputDecoration('Contraseña', 'Ingresa tu contraseña',
+          context, Colors.black, null, 0),
       validator: (value) =>
           (value!.isEmpty) ? 'El correo ingresado no es valido' : null,
     );

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 /// Método auxiliar para darle estilo al input
-InputDecoration inputDecoration(
-    String label, String hint, BuildContext context, Color color, Icon? icon) {
+InputDecoration inputDecoration(String label, String hint, BuildContext context,
+    Color color, Icon? icon, double tamanioLetra) {
   final size = MediaQuery.of(context).size;
   return InputDecoration(
     filled: true,
@@ -16,7 +16,7 @@ InputDecoration inputDecoration(
     labelStyle: TextStyle(
         // fontFamily: Tipografia.light,
         color: color,
-        fontSize: size.height * 0.02),
+        fontSize: tamanioLetra == 0 ? size.height * 0.02 : tamanioLetra),
     labelText: label,
     suffixIcon: icon,
     hintStyle: TextStyle(color: color),

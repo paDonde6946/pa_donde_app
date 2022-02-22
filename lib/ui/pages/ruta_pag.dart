@@ -2,7 +2,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
@@ -20,15 +19,22 @@ import 'package:pa_donde_app/ui/global_widgets/show_dialogs/informativo_show.dar
 //---------------------------------------------------------------------
 
 class RutaPag extends StatefulWidget {
-  const RutaPag({Key? key}) : super(key: key);
+  const RutaPag({
+    Key? key,
+  }) : super(key: key);
 
   @override
+  // ignore: no_logic_in_create_state
   _RutaPagState createState() => _RutaPagState();
 }
 
 class _RutaPagState extends State<RutaPag> {
   /// LATE sirve para esperar a que se cree.
   late LocalizacionBloc localizacionBloc;
+
+  callback() {
+    setState(() {});
+  }
 
   PageController controller = PageController();
   int page = 0;
@@ -102,9 +108,9 @@ class _RutaPagState extends State<RutaPag> {
   Widget panel1() {
     return Column(children: [
       const SizedBox(height: 20),
-      const BuscadorBarraInicio(),
+      BuscadorBarraInicio(callbackFunction: callback),
       const SizedBox(height: 20),
-      const BuscadorBarraDestino(),
+      BuscadorBarraDestino(callbackFunction: callback),
       btnContinuar()
     ]);
   }
@@ -127,20 +133,13 @@ class _RutaPagState extends State<RutaPag> {
 
   Widget btnContinuar() {
     final size = MediaQuery.of(context).size;
-    // final busquedaBloc = BlocProvider.of<BusquedaBloc>(context);
-    // final localizacionBloc = BlocProvider.of<LocalizacionBloc>(context);
-    // final mapaBloc = BlocProvider.of<MapsBloc>(context);
 
     return Column(
       children: [
         SizedBox(height: size.height * 0.02),
         SizedBox(
           width: size.width * 0.9,
-          child: BtnAnaranja(
-              titulo: 'Continuar',
-              function: () {
-                validarCampos();
-              }),
+          child: BtnAnaranja(titulo: 'Continuar', function: validarCampos),
         ),
       ],
     );

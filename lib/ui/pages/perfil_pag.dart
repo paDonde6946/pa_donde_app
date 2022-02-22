@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pa_donde_app/blocs/blocs.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/confirmacion_show.dart';
 import 'package:pa_donde_app/ui/pages/editar_contrasenia_pag.dart';
 import 'package:pa_donde_app/ui/pages/historial_pag.dart';
 
@@ -16,7 +17,6 @@ import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
 import 'package:pa_donde_app/ui/helpers/helpers.dart';
 
 import 'package:pa_donde_app/ui/pages/editar_perfil_pag.dart';
-import 'package:pa_donde_app/ui/pages/inicio_sesion_pag.dart';
 //---------------------------------------------------------------------
 
 class PerfilPag extends StatefulWidget {
@@ -163,11 +163,18 @@ class _PerfilPagState extends State<PerfilPag> {
               mostrarShowDialogCargando(
                   context: context, titulo: 'CERRANDO SESIÓN');
               await Future.delayed(const Duration(seconds: 1));
-              Navigator.pop(context);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const InicioSesionPag()));
+
+              // Navigator.of(context).pop();f
+
+              mostrarShowDialogConfirmar(
+                  context: context,
+                  titulo: "CONFIRMACION",
+                  contenido: 'Usted ha cerrado sesion correctamente',
+                  paginaRetorno: 'login');
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => const InicioSesionPag()));
               AutenticacionServicio.eliminarToken();
             },
             icon: Icon(Icons.login, size: size.width * 0.075)),

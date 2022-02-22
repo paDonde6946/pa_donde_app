@@ -1,40 +1,84 @@
-import 'package:pa_donde_app/data/models/ruta_destino_modelo.dart';
+// To parse this JSON data, do
+//
+//     final servicio = servicioFromJson(jsonString);
+
+import 'dart:convert';
+
+import 'package:pa_donde_app/data/response/busqueda_response.dart';
+
+Servicio servicioFromJson(String str) => Servicio.fromJson(json.decode(str));
+
+String servicioToJson(Servicio data) => json.encode(data.toJson());
 
 class Servicio {
   String? _estado;
   String? _nombreOrigen;
   String? _nombreDestino;
   String? _polylineRuta;
-  String? _horaInicio;
   String? _idVehiculo;
-  DateTime? _fecha;
+  String? _fechayhora;
   int? _cantidadCupos;
   String? _auxilioEconomico;
-  RutaDestino? _rutaDestino;
+  String? _distancia;
+  String? _duracion;
+  List<Feature>? _historialOrigen;
+  List<Feature>? _historialDestino;
 
   Servicio({
     String? pEstado,
     String? pNombreOrigen,
     String? pNombreDestino,
     String? pPolylineRuta,
-    String? pHoraInicio,
-    DateTime? pFecha,
+    String? pFechayhora,
     String? pIdVehiculo,
     int? pCantidadCupos,
     String? pAuxilioEconomico,
-    RutaDestino? pRutaDestino,
+    String? pDistancia,
+    String? pDuracion,
+    List<Feature>? pHistorialOrigen,
+    List<Feature>? pHistorialDestino,
   }) {
     estado = pEstado;
     nombreOrigen = pNombreOrigen;
     nombreDestino = pNombreDestino;
     polylineRuta = pPolylineRuta;
-    horaInicio = pHoraInicio;
-    fecha = pFecha;
+    fechayhora = pFechayhora;
     idVehiculo = pIdVehiculo;
     cantidadCupos = pCantidadCupos;
     auxilioEconomico = pAuxilioEconomico;
-    rutaDestino = pRutaDestino;
+    distancia = pDistancia;
+    duracion = pDuracion;
+    historialOrigen = pHistorialOrigen;
+    historialDestino = pHistorialDestino;
   }
+
+  factory Servicio.fromJson(Map<String, dynamic> json) => Servicio(
+        pNombreOrigen: json["nombreOrigen"],
+        pNombreDestino: json["nombreDestino"],
+        pPolylineRuta: json["polylineRuta"],
+        pFechayhora: json["fechayhora"],
+        pIdVehiculo: json["idVehiculo"],
+        pCantidadCupos: json["cantidadCupos"],
+        pAuxilioEconomico: json["idAuxilioEconomico"],
+        pDistancia: json["distancia"],
+        pDuracion: json["duracion"],
+        pHistorialOrigen: json["historialOrigen"],
+        pHistorialDestino: json["historialDestino"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "nombreOrigen": nombreOrigen,
+        "nombreDestino": nombreDestino,
+        "polylineRuta": polylineRuta,
+        "fechayhora": fechayhora.toString(),
+        "idVehiculo": idVehiculo,
+        "cantidadCupos": cantidadCupos,
+        "idAuxilioEconomico": auxilioEconomico,
+        "distancia": distancia,
+        "duracion": duracion,
+        "historialOrigen": historialOrigen,
+        "historialDestino": historialDestino,
+      };
 
   get estado => _estado;
 
@@ -60,16 +104,10 @@ class Servicio {
     _nombreDestino = nombreDestino;
   }
 
-  get horaInicio => _horaInicio;
+  get fechayhora => _fechayhora;
 
-  set horaInicio(horaInicio) {
-    _horaInicio = horaInicio;
-  }
-
-  get fecha => _fecha;
-
-  set fecha(fecha) {
-    _fecha = fecha;
+  set fechayhora(fechayHora) {
+    _fechayhora = fechayHora;
   }
 
   get idVehiculo => _idVehiculo;
@@ -90,9 +128,27 @@ class Servicio {
     _auxilioEconomico = auxilioEconomico;
   }
 
-  get rutaDestino => _rutaDestino;
+  get distancia => _distancia;
 
-  set rutaDestino(pRutaDestino) {
-    _rutaDestino = pRutaDestino;
+  set distancia(pDistancia) {
+    _distancia = pDistancia;
+  }
+
+  get duracion => _duracion;
+
+  set duracion(pDuracion) {
+    _duracion = pDuracion;
+  }
+
+  get historialOrigen => _historialOrigen;
+
+  set historialOrigen(pHistorialOrigen) {
+    _historialOrigen = pHistorialOrigen;
+  }
+
+  get historialDestino => _historialDestino;
+
+  set historialDestino(pHistorialDestino) {
+    _historialDestino = pHistorialDestino;
   }
 }

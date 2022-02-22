@@ -101,6 +101,7 @@ class BusquedaOrigen extends SearchDelegate<BusquedaResultado> {
               onTap: () {
                 final nuevaLocalizacion =
                     LatLng(lugar.center![1], lugar.center![0]);
+
                 close(
                     context,
                     BusquedaResultado(

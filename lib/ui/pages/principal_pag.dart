@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:pa_donde_app/data/models/servicio_modelo.dart';
+import 'package:pa_donde_app/ui/pages/detalle_postulado_servicio_pag.dart';
+import 'package:pa_donde_app/ui/pages/detalle_tu_servicio_pag.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'detalle_servicio_pag.dart';
 
@@ -16,16 +20,30 @@ class PrincipalPag extends StatefulWidget {
 }
 
 class _PrincipalPagState extends State<PrincipalPag> {
+  PageController controller = PageController();
+  int page = 0;
+  Servicio servicio = Servicio(
+    pAuxilioEconomico: "61f1f9e7d41447b8ea79d2eb",
+    pCantidadCupos: 3,
+    pDistancia: "4451.591",
+    pDuracion: "802.541",
+    pFechayhora: "2022-02-20T10:37:00.000+00:00",
+    pIdVehiculo: "6190885bf803e870847c6e73",
+    pNombreDestino: "Hayuelos Centro Comercial",
+    pNombreOrigen: "Tintal Plaza",
+    pPolylineRuta:
+        "yui[tprcMm@}@`CcBdEjGV~@t@Tx@SXo@e@qAuCo@u[e_@}p@qr@qWk^aVuSoR{Ma@cANqB",
+  );
+
   @override
   Widget build(BuildContext context) {
-    setState(() {});
     return Scaffold(appBar: appBar(), body: body());
   }
 
   Widget body() {
     // final usuario = Provider.of<AutenticacionServicio>(context, listen: false)
     //  .usuarioServiciosActual;
-    ///TODO: Cambiar cuando este listo
+    // /TODO: Cambiar cuando este listo
     // if (usuario.cambio_contrasenia == 0) {
     //   SchedulerBinding.instance!.addPostFrameCallback((_) {
     //     mostrarShowDialogConfirmar(
@@ -37,85 +55,284 @@ class _PrincipalPagState extends State<PrincipalPag> {
     //     // add your code here.
     //   });
     // }
-
-    return ListView(
+    final size = MediaQuery.of(context).size;
+    return Stack(
       children: [
-        GestureDetector(
-          child: cardDeServicio(
-              titulo: "Pa Donde",
-              destino: "Calle 74 A - No. 113 A - 47",
-              origen: "Calle 74 A - No. 113 A - 47",
-              fecha: DateTime.parse("1969-07-20 20:18:04Z"),
-              cuposDisponibles: "4"),
-              
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+                margin: const EdgeInsets.only(left: 30, top: 10),
+                child: Text(
+                  "Tus servicios",
+                  style: TextStyle(fontSize: size.width * 0.05),
+                )),
+            SizedBox(
+              width: double.infinity,
+              height: 120,
+              child: PageView(
+                onPageChanged: (i) {
+                  page = i;
+                },
+                controller: controller,
+                children: [
+                  cardTuServicio(servicio),
+                  cardTuServicio(servicio),
+                ],
+              ),
+            ),
+            Container(
+                margin: const EdgeInsets.only(left: 30),
+                child: Text(
+                  "Servicios Postulados",
+                  style: TextStyle(fontSize: size.width * 0.05),
+                )),
+            SizedBox(
+              width: double.infinity,
+              height: 140,
+              child: PageView(
+                onPageChanged: (i) {
+                  page = i;
+                },
+                controller: controller,
+                children: [
+                  cardSerPostulados(servicio),
+                  cardSerPostulados(servicio),
+                ],
+              ),
+            )
+          ],
         ),
-        cardDeServicio(
-            titulo: "Pa Donde",
-            destino: "Calle 74 A - No. 113 A - 47",
-            origen: "Calle 74 A - No. 113 A - 47",
-            fecha: DateTime.parse("1969-07-20 20:18:04Z"),
-            cuposDisponibles: "3")
+        SlidingUpPanel(
+          maxHeight: 500,
+          minHeight: 300,
+          parallaxEnabled: true,
+          parallaxOffset: .5,
+          panelBuilder: (sc) {
+            return ListView(
+              children: [
+                Container(
+                    margin: const EdgeInsets.only(left: 30, top: 10),
+                    child: Text(
+                      "Servicios Generales",
+                      style: TextStyle(fontSize: size.width * 0.04),
+                    )),
+                cardDeServicio(servicio),
+              ],
+            );
+          },
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(18.0), topRight: Radius.circular(18.0)),
+          onPanelSlide: (double pos) => setState(() {}),
+        ),
       ],
     );
   }
 
-  Widget cardDeServicio(
-      {String? titulo, String? origen, String? destino, DateTime? fecha, String? cuposDisponibles}) {
-    return Card(
-      // color: Theme.of(context).primaryColor.withOpacity(0.35),
-      color: const Color.fromRGBO(238, 246, 232, 1),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      margin: const EdgeInsets.all(15),
-      elevation: 3,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.only(right: 30, left: 30, top: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                tituloDelServicio(titulo: titulo),
-                Row(children: [
-                  const Icon(Icons.access_time_outlined, size: 20),
-                  textoDelServicio(
-                      texto: DateFormat(' EEE, MMM d, ''yy').format(DateTime.now())),
-                ]),
-              ],
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.only(left: 40, top: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+  Widget cardTuServicio(Servicio servicio) {
+    final fecha = servicio.fechayhora.split("T");
+
+    return GestureDetector(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const DetalleTuServicio()),
+      ),
+      child: Container(
+        width: 300,
+        margin: const EdgeInsets.all(15),
+        child: Material(
+          borderRadius: BorderRadius.circular(20),
+          color: const Color.fromRGBO(238, 246, 232, 1),
+          elevation: 5,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.only(right: 30, left: 30, top: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    subTitulosDelServicio(subtitulo: "Destino"),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(Icons.access_time_outlined, size: 20),
+                        const SizedBox(width: 10),
+                        textoDelServicio(
+                            texto: fecha[0] + ' ' + fecha[1].split(".")[0]),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.only(left: 20),
+                child: textoDelServicio(texto: servicio.nombreDestino),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Row(
                     children: [
-                      subTitulosDelServicio(subtitulo: "Origen"),
-                      textoDelServicio(texto: origen),
-                      const SizedBox(
-                        height: 6,
-                      ),
-                      subTitulosDelServicio(subtitulo: "Destino"),
-                      textoDelServicio(texto: destino)
+                      subTitulosDelServicio(subtitulo: "Cupos"),
+                      const SizedBox(width: 10),
+                      textoDelServicio(texto: servicio.cantidadCupos),
                     ],
                   ),
-                ),
-                Column(
-                  children: [
-                     Container(child: subTitulosDelServicio(subtitulo: "Cupos"),padding: const EdgeInsets.only(right: 50)),
-                      Container(child: textoDelServicio(texto: cuposDisponibles), padding: const EdgeInsets.only(bottom: 18, right: 80),),
-                    botonDelServicio(nombreBoton: "Ver mas"),
-                  ],
-                )
-              ],
+                  Row(
+                    children: [
+                      subTitulosDelServicio(subtitulo: "Pasajeros"),
+                      const SizedBox(width: 10),
+                      textoDelServicio(texto: servicio.cantidadCupos),
+                    ],
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget cardDeServicio(Servicio servicio) {
+    final fecha = servicio.fechayhora.split("T");
+    return Container(
+      margin: const EdgeInsets.all(15),
+      child: Material(
+        borderRadius: BorderRadius.circular(20),
+        color: const Color.fromRGBO(238, 246, 232, 1),
+        elevation: 5,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.only(right: 30, left: 30, top: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  tituloDelServicio(titulo: "Pa Donde"),
+                  Row(children: [
+                    const Icon(Icons.access_time_outlined, size: 20),
+                    textoDelServicio(
+                        texto: fecha[0] + ' ' + fecha[1].split(".")[0]),
+                  ]),
+                ],
+              ),
             ),
-          )
-        ],
+            Container(
+              padding: const EdgeInsets.only(left: 40, top: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        subTitulosDelServicio(subtitulo: "Origen"),
+                        textoDelServicio(texto: servicio.nombreOrigen),
+                        const SizedBox(
+                          height: 6,
+                        ),
+                        subTitulosDelServicio(subtitulo: "Destino"),
+                        textoDelServicio(texto: servicio.nombreDestino)
+                      ],
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                          child: subTitulosDelServicio(subtitulo: "Cupos"),
+                          padding: const EdgeInsets.only(right: 50)),
+                      Container(
+                        child: textoDelServicio(texto: servicio.cantidadCupos),
+                        padding: const EdgeInsets.only(bottom: 18, right: 80),
+                      ),
+                      botonDelServicio(nombreBoton: "Ver mas"),
+                    ],
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget cardSerPostulados(Servicio servicio) {
+    final fecha = servicio.fechayhora.split("T");
+
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const DetallePostuladoServicio()),
+        );
+      },
+      child: Container(
+        width: 300,
+        margin: const EdgeInsets.all(15),
+        child: Material(
+          borderRadius: BorderRadius.circular(20),
+          color: const Color.fromRGBO(238, 246, 232, 1),
+          elevation: 5,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.only(right: 30, left: 30, top: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    subTitulosDelServicio(subtitulo: "Origen"),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(Icons.access_time_outlined, size: 20),
+                        const SizedBox(width: 10),
+                        textoDelServicio(
+                            texto: fecha[0] + ' ' + fecha[1].split(".")[0]),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.only(left: 20),
+                child: textoDelServicio(texto: servicio.nombreOrigen),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                          padding: const EdgeInsets.only(left: 30),
+                          child: subTitulosDelServicio(subtitulo: "Destino")),
+                      Container(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: textoDelServicio(texto: servicio.nombreDestino),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.chat, size: 35)),
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -133,6 +350,7 @@ class _PrincipalPagState extends State<PrincipalPag> {
 
   Text tituloDelServicio({titulo}) {
     return Text(titulo,
+        overflow: TextOverflow.ellipsis,
         style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w500,
@@ -148,7 +366,7 @@ class _PrincipalPagState extends State<PrincipalPag> {
   }
 
   Widget textoDelServicio({texto}) {
-    return Text(texto);
+    return Text(texto.toString());
   }
 
   Widget botonDelServicio({String nombreBoton = ''}) {
@@ -166,11 +384,11 @@ class _PrincipalPagState extends State<PrincipalPag> {
           nombreBoton,
           style: const TextStyle(fontSize: 20, color: Colors.white),
         ),
-        onPressed: () => {
+        onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const DetalleServicioPag()),
-          ),
+          );
         },
       ),
     );

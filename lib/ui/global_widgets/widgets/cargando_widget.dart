@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class Cargando extends StatelessWidget {
   final Size size;
 
-  Cargando({Key? key, required this.size}) : super(key: key);
+  const Cargando({Key? key, required this.size}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
