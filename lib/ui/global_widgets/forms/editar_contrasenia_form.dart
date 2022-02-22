@@ -3,6 +3,7 @@ import 'package:pa_donde_app/data/services/usuario_servicio.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
+import 'package:pa_donde_app/ui/global_widgets/inputs/input_form.dart';
 import 'package:pa_donde_app/ui/global_widgets/inputs/input_form_elevado.dart';
 import 'package:pa_donde_app/ui/global_widgets/text/formulario_texto.dart';
 
@@ -38,10 +39,10 @@ class _FormEditarContraseniaState extends State<FormEditarContrasenia> {
         child: Column(
           children: [
             _nombreLabel(
-                _generalMaterial(_crearContrasenia(context)), 'Contraseña'),
+                _crearContrasenia(context), 'Contraseña'),
             SizedBox(height: size.height * 0.01),
             _nombreLabel(
-                _generalMaterial(_crearConContrasenia()), 'Repetir Contraseña'),
+                _crearConContrasenia(), 'Repetir Contraseña'),
             SizedBox(height: size.height * 0.04),
             _crearBtnInicioSesion(),
           ],
@@ -95,14 +96,6 @@ class _FormEditarContraseniaState extends State<FormEditarContrasenia> {
     );
   }
 
-  Widget _generalMaterial(Widget widget) {
-    return Material(
-      elevation: 7,
-      borderRadius: const BorderRadius.all(Radius.circular(20)),
-      child: widget,
-    );
-  }
-
   /// Input - Campo de la contraseña
   Widget _crearContrasenia(BuildContext context) {
     return TextFormField(
@@ -111,7 +104,7 @@ class _FormEditarContraseniaState extends State<FormEditarContrasenia> {
       obscureText: true,
       onChanged: (value) => inputControllerContrasenia.text = value,
       decoration:
-          inputDecorationElevado('', 'Nueva contraseña', context, Colors.white),
+          inputDecoration('', 'Nueva contraseña', context, Theme.of(context).primaryColor, null, 0),
       validator: (value) =>
           (value!.isEmpty) ? 'El correo ingresado no es valido' : null,
     );
@@ -124,8 +117,8 @@ class _FormEditarContraseniaState extends State<FormEditarContrasenia> {
       scrollPadding: const EdgeInsets.all(1),
       obscureText: true,
       onChanged: (value) => inputControllerConContrasenia.text = value,
-      decoration: inputDecorationElevado(
-          '', 'Repetir nueva contraseña', context, Colors.white),
+      decoration: inputDecoration(
+          '', 'Repetir nueva contraseña', context, Theme.of(context).primaryColor, null, 0),
       validator: (value) =>
           (value!.isEmpty) ? 'El correo ingresado no es valido' : null,
     );
