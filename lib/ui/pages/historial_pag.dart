@@ -1,5 +1,10 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:pa_donde_app/data/models/servicio_modelo.dart';
+
+import 'detalle_historial_pag.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 // import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
@@ -16,94 +21,9 @@ class HistorialPag extends StatefulWidget {
 class _HistorialPagState extends State<HistorialPag> {
   @override
   Widget build(BuildContext context) {
+    Servicio servicio = Servicio();
     // setState(() {});
-    return Scaffold(appBar: appBar(), body: body());
-  }
-
-  Widget body() {
-    return ListView(
-      children: [
-        Container(
-          child: cardDeServicio(
-              destino: "Calle 74 A - No. 113 A - 47",
-              fecha: DateTime.parse("1969-07-20 20:18:04Z"),
-              placa: "AAAXXX",
-              valorServicio: "30000"),
-        ),
-      ],
-    );
-  }
-
-  Widget cardDeServicio(
-      {String? destino,
-      DateTime? fecha,
-      String? placa,
-      String? valorServicio}) {
-    final size = MediaQuery.of(context).size;
-    return Column(
-      children: [
-        Card(
-          color: const Color.fromRGBO(238, 246, 232, 1),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          margin: const EdgeInsets.all(15),
-          elevation: 3,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Column(
-                children: [
-                  Container(
-                      padding: EdgeInsets.only(left: size.width * 0.02),
-                      child: cuadroEstrella(
-                          '5.0')),
-                  const Icon(Icons.drive_eta_outlined, size: 45)
-                ],
-              ),
-              Container(
-                padding: const EdgeInsets.only(top: 20),
-                child: Container(
-                  padding: const EdgeInsets.only(bottom: 18),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      subTitulosDelServicio(subtitulo: "Destino"),
-                      textoDelServicio(texto: destino),
-                      const SizedBox(
-                        height: 6,
-                      ),
-                      subTitulosDelServicio(subtitulo: "Placa"),
-                      textoDelServicio(texto: placa),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: size.width * 0.05,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  subTitulosDelServicio(subtitulo: "Valor"),
-                  textoDelServicio(texto: valorServicio),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  Row(
-                    children: [
-                      const Icon(Icons.access_time_outlined, size: 20),
-                      textoDelServicio(
-                          texto: DateFormat(' EEE, MMM d, ' 'yy')
-                              .format(DateTime.now())),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
+    return Scaffold(appBar: appBar(), body: _tabSection(servicio));
   }
 
   PreferredSizeWidget appBar() {
@@ -142,6 +62,201 @@ class _HistorialPagState extends State<HistorialPag> {
           Icons.star,
           color: Colors.yellow,
           size: media.width * 0.04,
+        ),
+      ],
+    );
+  }
+
+  Widget _tabSection(Servicio servicio) {
+    return DefaultTabController(
+      length: 2,
+      child: Column(
+        children: <Widget>[
+          const SizedBox(
+            height: 10,
+          ),
+          TabBar(
+              unselectedLabelColor: Theme.of(context).primaryColorLight,
+              indicatorSize: TabBarIndicatorSize.label,
+              indicator: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Theme.of(context).primaryColorLight),
+              // ignore: prefer_const_literals_to_create_immutables
+              tabs: [
+                Tab(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text("Usuario"),
+                  ),
+                ),
+                Tab(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text("Conductor"),
+                  ),
+                ),
+              ]),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.62,
+            child: TabBarView(children: [
+              cardDeServicioUsuario(servicio),
+              cardDeServicioConductor(servicio)
+            ]),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget cardDeServicioUsuario(Servicio servicio) {
+    final size = MediaQuery.of(context).size;
+    return ListView(
+      children: [
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const DetalleHistorialServicioPag()),
+            );
+          },
+          child: Card(
+            color: const Color.fromRGBO(238, 246, 232, 1),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            margin: const EdgeInsets.all(15),
+            elevation: 3,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  children: [
+                    Container(
+                        padding: EdgeInsets.only(left: size.width * 0.02),
+                        child: cuadroEstrella('5.0')),
+                    const Icon(Icons.person_outlined, size: 45)
+                  ],
+                ),
+                Container(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Container(
+                    padding: const EdgeInsets.only(bottom: 18),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        subTitulosDelServicio(subtitulo: "Destino"),
+                        textoDelServicio(
+                            texto:
+                                "Calle 74 A - No. 113 A - 47"), // servicio.historialDestino.toString()
+                        const SizedBox(
+                          height: 6,
+                        ),
+                        subTitulosDelServicio(subtitulo: "Placa"),
+                        textoDelServicio(
+                            texto: "AAAXXX"), // servicio.idVehiculo.toString()
+                      ],
+                    ),
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    subTitulosDelServicio(subtitulo: "Valor"),
+                    textoDelServicio(
+                        texto: "30000"), //servicio.auxilioEconomico.toString()
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    Row(
+                      children: [
+                        const Icon(Icons.access_time_outlined, size: 20),
+                        textoDelServicio(
+                            texto: DateFormat(' EEE, MMM d, ' 'yy')
+                                .format(DateTime.now())),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget cardDeServicioConductor(Servicio servicio) {
+    final size = MediaQuery.of(context).size;
+    return ListView(
+      children: [
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const DetalleHistorialServicioPag()),
+            );
+          },
+          child: Card(
+            color: const Color.fromRGBO(238, 246, 232, 1),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            margin: const EdgeInsets.all(15),
+            elevation: 3,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  children: [
+                    Container(
+                        padding: EdgeInsets.only(left: size.width * 0.02),
+                        child: cuadroEstrella('5.0')),
+                    const Icon(Icons.drive_eta_outlined, size: 45)
+                  ],
+                ),
+                Container(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Container(
+                    padding: const EdgeInsets.only(bottom: 18),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        subTitulosDelServicio(subtitulo: "Destino"),
+                        textoDelServicio(
+                            texto:
+                                "Calle 74 A - No. 113 A - 47"), // servicio.historialDestino.toString()
+                        const SizedBox(
+                          height: 6,
+                        ),
+                        subTitulosDelServicio(subtitulo: "Placa"),
+                        textoDelServicio(
+                            texto: "AAAXXX"), // servicio.idVehiculo.toString()
+                      ],
+                    ),
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    subTitulosDelServicio(subtitulo: "Valor"),
+                    textoDelServicio(
+                        texto: "30000"), //servicio.auxilioEconomico.toString()
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    Row(
+                      children: [
+                        const Icon(Icons.access_time_outlined, size: 20),
+                        textoDelServicio(
+                            texto: DateFormat(' EEE, MMM d, ' 'yy')
+                                .format(DateTime.now())),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ),
       ],
     );

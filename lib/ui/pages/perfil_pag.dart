@@ -189,7 +189,7 @@ class _PerfilPagState extends State<PerfilPag> {
         width: 200,
         child: FadeInImage(
           image: NetworkImage(
-              'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/User.svg/768px-User.svg.png'),
+              'https://media.istockphoto.com/vectors/people-icon-logo-isolated-on-white-background-vector-id1183215612?k=20&m=1183215612&s=170667a&w=0&h=GcHhIXJBau012RiKnc4LjvJC9PDzdELjtPqjdfW3QKk='),
           placeholder: AssetImage('img/gif/cargando.gif'),
           fadeInDuration: Duration(milliseconds: 200),
           height: 300.0,
