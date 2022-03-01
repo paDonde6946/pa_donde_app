@@ -23,6 +23,7 @@ void main() {
       BlocProvider(create: (context) => LocalizacionBloc()),
       BlocProvider(create: (context) => PreserviciosBloc()),
       BlocProvider(create: (context) => PaginasBloc()),
+      BlocProvider(create: (context) => ServicioBloc()),
       BlocProvider(
           create: (context) => MapsBloc(
               localizacionBloc: BlocProvider.of<LocalizacionBloc>(context))),

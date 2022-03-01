@@ -18,5 +18,15 @@ class ServicioBloc extends Bloc<ServicioEvent, ServicioState> {
     on<OnActualizarServiciosPostulados>((event, emit) {
       emit(state.copyWith(serviciosPostulados: event.serviciosPostulados));
     });
+
+    on<OnActualizarHistorialConductor>((event, emit) {
+      emit(
+          state.copyWith(historialComoConductor: event.historialComoConductor));
+    });
+
+    on<OnActualizarHistorialUsuario>((event, emit) {
+      emit(
+          state.copyWith(historialComoUsuario: event.historialComoUsuario));
+    });
   }
 }

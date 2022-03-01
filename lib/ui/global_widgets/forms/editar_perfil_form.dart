@@ -182,6 +182,7 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
   Widget _crearEmail() {
     inputControllerCorreo.text = usuario.correo;
     return TextFormField(
+      enabled: false,
       style: styleInput,
       initialValue: usuario.correo,
       keyboardType: TextInputType.emailAddress,

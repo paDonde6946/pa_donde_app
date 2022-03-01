@@ -1,8 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:pa_donde_app/blocs/blocs.dart';
 import 'package:pa_donde_app/data/models/servicio_modelo.dart';
+import 'package:pa_donde_app/data/services/servicios_servicio.dart';
+import 'package:pa_donde_app/ui/global_widgets/widgets/cargando_widget.dart';
 
 import 'detalle_historial_pag.dart';
 
@@ -19,11 +23,19 @@ class HistorialPag extends StatefulWidget {
 }
 
 class _HistorialPagState extends State<HistorialPag> {
+  // List<Servicio> servicio = [];
+  List<Servicio>? usuarioHistorial = [];
+  List<Servicio>? conductorHistorial = [];
   @override
   Widget build(BuildContext context) {
-    Servicio servicio = Servicio();
+    getHistorial(context);
     // setState(() {});
-    return Scaffold(appBar: appBar(), body: _tabSection(servicio));
+    final media = MediaQuery.of(context).size;
+    return Scaffold(
+        appBar: appBar(),
+        body: (usuarioHistorial == null || conductorHistorial == null)
+            ? Cargando(size: media)
+            : _tabSection());
   }
 
   PreferredSizeWidget appBar() {
@@ -67,7 +79,26 @@ class _HistorialPagState extends State<HistorialPag> {
     );
   }
 
-  Widget _tabSection(Servicio servicio) {
+  getHistorial(context) async {
+    usuarioHistorial =
+        BlocProvider.of<ServicioBloc>(context).state.historialComoUsuario;
+    conductorHistorial =
+        BlocProvider.of<ServicioBloc>(context).state.historialComoConductor;
+
+    if (usuarioHistorial == null || conductorHistorial == null) {
+      ServicioRServicio servicioServicio = ServicioRServicio();
+      var response = await servicioServicio.getHistorial();
+      usuarioHistorial = response.serviciosComoUsuario;
+      conductorHistorial = response.serviciosComoConductor;
+      BlocProvider.of<ServicioBloc>(context)
+          .add(OnActualizarHistorialUsuario(usuarioHistorial));
+      BlocProvider.of<ServicioBloc>(context)
+          .add(OnActualizarHistorialConductor(conductorHistorial));
+    }
+    setState(() {});
+  }
+
+  Widget _tabSection() {
     return DefaultTabController(
       length: 2,
       child: Column(
@@ -98,18 +129,45 @@ class _HistorialPagState extends State<HistorialPag> {
               ]),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.62,
-            child: TabBarView(children: [
-              cardDeServicioUsuario(servicio),
-              cardDeServicioConductor(servicio)
-            ]),
+            child: TabBarView(
+                children: [panelHistorialUsuario(), panelHistorialConductor()]),
           ),
         ],
       ),
     );
   }
 
+  Widget panelHistorialUsuario() {
+    if (usuarioHistorial!.isNotEmpty) {
+      for (var i = 0; i < usuarioHistorial!.length; i++) {
+        return Container(child: cardDeServicioUsuario(usuarioHistorial![i]));
+      }
+    } else {
+      return Text("No posee historial como usuario");
+    }
+
+    return Text("");
+  }
+
+  Widget panelHistorialConductor() {
+    if (conductorHistorial!.isNotEmpty) {
+      for (var i = 0; i < conductorHistorial!.length; i++) {
+        return Container(
+            child: cardDeServicioConductor(conductorHistorial![i]));
+      }
+    } else {
+      return Text("No posee historial como conductor");
+    }
+
+    return Text("");
+  }
+
   Widget cardDeServicioUsuario(Servicio servicio) {
     final size = MediaQuery.of(context).size;
+    final placa = _validarVehiculoServicio(servicio.idVehiculo);
+    final auxilio = _validarPrecioServicio(servicio.auxilioEconomico);
+    final fecha = servicio.fechayhora.split("T");
+
     return ListView(
       children: [
         GestureDetector(
@@ -146,14 +204,17 @@ class _HistorialPagState extends State<HistorialPag> {
                       children: [
                         subTitulosDelServicio(subtitulo: "Destino"),
                         textoDelServicio(
-                            texto:
-                                "Calle 74 A - No. 113 A - 47"), // servicio.historialDestino.toString()
+                            texto: servicio.nombreDestino.toString()),
                         const SizedBox(
-                          height: 6,
+                          height: 15,
                         ),
-                        subTitulosDelServicio(subtitulo: "Placa"),
-                        textoDelServicio(
-                            texto: "AAAXXX"), // servicio.idVehiculo.toString()
+                        Row(
+                          children: [
+                            const Icon(Icons.access_time_outlined, size: 20),
+                            textoDelServicio(
+                                texto: fecha[0] + " " + fecha[1].split(".")[0]),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -162,19 +223,12 @@ class _HistorialPagState extends State<HistorialPag> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     subTitulosDelServicio(subtitulo: "Valor"),
-                    textoDelServicio(
-                        texto: "30000"), //servicio.auxilioEconomico.toString()
+                    textoDelServicio(texto: auxilio),
                     const SizedBox(
-                      height: 12,
+                      height: 5,
                     ),
-                    Row(
-                      children: [
-                        const Icon(Icons.access_time_outlined, size: 20),
-                        textoDelServicio(
-                            texto: DateFormat(' EEE, MMM d, ' 'yy')
-                                .format(DateTime.now())),
-                      ],
-                    ),
+                    subTitulosDelServicio(subtitulo: "Placa"),
+                    textoDelServicio(texto: placa),
                   ],
                 ),
               ],
@@ -187,6 +241,9 @@ class _HistorialPagState extends State<HistorialPag> {
 
   Widget cardDeServicioConductor(Servicio servicio) {
     final size = MediaQuery.of(context).size;
+    final placa = _validarVehiculoServicio(servicio.idVehiculo);
+    final auxilio = _validarPrecioServicio(servicio.auxilioEconomico);
+    final fecha = servicio.fechayhora.split("T");
     return ListView(
       children: [
         GestureDetector(
@@ -223,14 +280,17 @@ class _HistorialPagState extends State<HistorialPag> {
                       children: [
                         subTitulosDelServicio(subtitulo: "Destino"),
                         textoDelServicio(
-                            texto:
-                                "Calle 74 A - No. 113 A - 47"), // servicio.historialDestino.toString()
+                            texto: servicio.nombreDestino.toString()),
                         const SizedBox(
-                          height: 6,
+                          height: 15,
                         ),
-                        subTitulosDelServicio(subtitulo: "Placa"),
-                        textoDelServicio(
-                            texto: "AAAXXX"), // servicio.idVehiculo.toString()
+                        Row(
+                          children: [
+                            const Icon(Icons.access_time_outlined, size: 20),
+                            textoDelServicio(
+                                texto: fecha[0] + " " + fecha[1].split(".")[0]),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -239,19 +299,12 @@ class _HistorialPagState extends State<HistorialPag> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     subTitulosDelServicio(subtitulo: "Valor"),
-                    textoDelServicio(
-                        texto: "30000"), //servicio.auxilioEconomico.toString()
+                    textoDelServicio(texto: auxilio),
                     const SizedBox(
-                      height: 12,
+                      height: 5,
                     ),
-                    Row(
-                      children: [
-                        const Icon(Icons.access_time_outlined, size: 20),
-                        textoDelServicio(
-                            texto: DateFormat(' EEE, MMM d, ' 'yy')
-                                .format(DateTime.now())),
-                      ],
-                    ),
+                    subTitulosDelServicio(subtitulo: "Placa"),
+                    textoDelServicio(texto: placa),
                   ],
                 ),
               ],
@@ -260,5 +313,30 @@ class _HistorialPagState extends State<HistorialPag> {
         ),
       ],
     );
+  }
+
+  String _validarVehiculoServicio(String uid) {
+    final vehiculos =
+        BlocProvider.of<PreserviciosBloc>(context).state.vehiculos;
+
+    for (var vehiculo in vehiculos) {
+      if (vehiculo.uid == uid) {
+        return vehiculo.placa;
+      }
+    }
+    return '';
+  }
+
+  String _validarPrecioServicio(String auxilio) {
+    final auxilioEconomico =
+        BlocProvider.of<PreserviciosBloc>(context).state.precios;
+
+    for (var precio in auxilioEconomico) {
+      if (precio.uid == auxilio) {
+        NumberFormat formato = NumberFormat("#,##0", "es_AR");
+        return '\$ ' + formato.format(precio.valor);
+      }
+    }
+    return '';
   }
 }

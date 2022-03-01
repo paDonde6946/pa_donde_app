@@ -24,3 +24,15 @@ class OnActualizarServiciosDelUsuario extends ServicioEvent {
 
   const OnActualizarServiciosDelUsuario(this.serviciosDelUsuario);
 }
+
+class OnActualizarHistorialConductor extends ServicioEvent {
+  final List<Servicio>? historialComoConductor;
+
+  const OnActualizarHistorialConductor(this.historialComoConductor);
+}
+
+class OnActualizarHistorialUsuario extends ServicioEvent {
+  final List<Servicio>? historialComoUsuario;
+
+  const OnActualizarHistorialUsuario(this.historialComoUsuario);
+}

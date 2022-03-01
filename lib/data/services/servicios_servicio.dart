@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:pa_donde_app/data/models/auxilio_economico_modelo.dart';
 import 'package:pa_donde_app/data/models/servicio_modelo.dart';
+import 'package:pa_donde_app/data/response/historial_response.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/global/entorno_variable_global.dart';
@@ -57,5 +58,18 @@ class ServicioRServicio {
       return true;
     }
     return false;
+  }
+
+    Future<HistorialResponse> getHistorial() async {
+    String? token = await _storage.read(key: 'token');
+
+    final uri = Uri.http(EntornoVariable.host, '/app/darHistorial');
+
+    final response = await http.get(uri, headers: {"x-token": token});
+    print(response.body);
+
+    final data = historialResponseFromJson(response.body);
+    
+    return data;
   }
 }
