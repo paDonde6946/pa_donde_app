@@ -16,29 +16,45 @@ class ServicioState extends Equatable {
   //  Lista de historial del usuario
   final List<Servicio>? historialComoUsuario;
 
-  const ServicioState(
-      {this.serviciosPostulados = const [],
-      this.serviciciosGenerales = const [],
-      this.serviciosDelUsuario = const [],
-      this.historialComoConductor,
-      this.historialComoUsuario});
+  /// Servicio que es seleccionado por el usuario.
+  final Servicio servicioSeleccionado;
+
+  const ServicioState({
+    this.serviciosPostulados = const [],
+    this.serviciciosGenerales = const [],
+    this.serviciosDelUsuario = const [],
+    this.historialComoConductor,
+    this.historialComoUsuario,
+    required this.servicioSeleccionado,
+  });
 
   ServicioState copyWith({
     List<Servicio>? serviciosPostulados,
     List<Servicio>? serviciciosGenerales,
     List<Servicio>? serviciosDelUsuario,
     List<Servicio>? historialComoConductor,
-    List<Servicio>? historialComoUsuario
+    List<Servicio>? historialComoUsuario,
+    Servicio? servicioSeleccionado,
   }) =>
       ServicioState(
-        serviciosPostulados: serviciosPostulados ?? this.serviciosPostulados,
-        serviciciosGenerales: serviciciosGenerales ?? this.serviciciosGenerales,
-        serviciosDelUsuario: serviciosDelUsuario ?? this.serviciosDelUsuario,
-        historialComoConductor: historialComoConductor ?? this.historialComoConductor,
-        historialComoUsuario: historialComoUsuario ?? this.historialComoUsuario
-      );
+          serviciosPostulados: serviciosPostulados ?? this.serviciosPostulados,
+          serviciciosGenerales:
+              serviciciosGenerales ?? this.serviciciosGenerales,
+          serviciosDelUsuario: serviciosDelUsuario ?? this.serviciosDelUsuario,
+          historialComoConductor:
+              historialComoConductor ?? this.historialComoConductor,
+          historialComoUsuario:
+              historialComoUsuario ?? this.historialComoUsuario,
+          servicioSeleccionado: 
+              servicioSeleccionado ?? this.servicioSeleccionado);
 
   @override
-  List<Object?> get props =>
-      [serviciosPostulados, serviciciosGenerales, serviciosDelUsuario, historialComoConductor, historialComoUsuario];
+  List<Object?> get props => [
+        serviciosPostulados,
+        serviciciosGenerales,
+        serviciosDelUsuario,
+        servicioSeleccionado,
+        historialComoConductor,
+        historialComoUsuario
+      ];
 }

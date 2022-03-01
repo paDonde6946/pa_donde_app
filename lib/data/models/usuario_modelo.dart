@@ -1,23 +1,27 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 
-import 'package:flutter/cupertino.dart';
+import 'package:pa_donde_app/data/response/busqueda_response.dart';
 
 Usuario usuarioFromJson(String str) => Usuario.fromJson(json.decode(str));
 
 String usuarioToJson(Usuario data) => json.encode(data.toJson());
 
 class Usuario with ChangeNotifier {
-  Usuario(
-      {String? pCorreo,
-      int? pTipoUsuario,
-      String? pNombre,
-      String? pApellido,
-      int? pCelular,
-      String? pConstrasenia,
-      int? pCambioContrasenia,
-      String? pUid,
-      int? pCalificacionUsuario,int? pCalificacionConductor
-      }) {
+  Usuario({
+    String? pCorreo,
+    int? pTipoUsuario,
+    String? pNombre,
+    String? pApellido,
+    int? pCelular,
+    String? pConstrasenia,
+    int? pCambioContrasenia,
+    String? pUid,
+    int? pCalificacionUsuario,
+    int? pCalificacionConductor,
+    List<Feature>? pHistorialOrigen,
+    List<Feature>? pHistorialDestino,
+  }) {
     correo = pCorreo;
     tipoUsuario = pTipoUsuario;
     nombre = pNombre;
@@ -28,6 +32,8 @@ class Usuario with ChangeNotifier {
     uid = pUid;
     calificacionUsuario = pCalificacionUsuario;
     calificacionConductor = pCalificacionConductor;
+    historialOrigen = pHistorialOrigen;
+    historialDestino = pHistorialDestino;
   }
 
   /// ATRIBUTOS DE LA CLASE
@@ -41,19 +47,25 @@ class Usuario with ChangeNotifier {
   String? _uid;
   int? _calificacionUsuario;
   int? _calificacionConductor;
+  List<Feature>? _historialOrigen;
+  List<Feature>? _historialDestino;
 
   /// Constructor para transformar de un Mapa dinamico a json
   factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
-      pCorreo: json["correo"],
-      pTipoUsuario: json["tipoUsuario"],
-      pNombre: json["nombre"],
-      pApellido: json["apellido"],
-      pCelular: json["celular"],
-      pConstrasenia: json["contrasenia"],
-      pCambioContrasenia: json["cambio_contrasenia"],
-      pUid: json["uid"],
-      pCalificacionUsuario: json["calificacionUsuario"],
-      pCalificacionConductor: json["calificacionConductor"]
+        pCorreo: json["correo"],
+        pTipoUsuario: json["tipoUsuario"],
+        pNombre: json["nombre"],
+        pApellido: json["apellido"],
+        pCelular: json["celular"],
+        pConstrasenia: json["contrasenia"],
+        pCambioContrasenia: json["cambio_contrasenia"],
+        pUid: json["uid"],
+        pCalificacionUsuario: json["calificacionUsuario"],
+        pCalificacionConductor: json["calificacionConductor"],
+        pHistorialDestino: List<Feature>.from(
+            json["historialDestino"].map((x) => Feature.fromJson(x))),
+        pHistorialOrigen: List<Feature>.from(
+            json["historialOrigen"].map((x) => Feature.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -153,5 +165,17 @@ class Usuario with ChangeNotifier {
   set calificacionConductor(value) {
     _calificacionConductor = value;
     notifyListeners();
+  }
+
+  get historialOrigen => _historialOrigen;
+
+  set historialOrigen(value) {
+    _historialOrigen = value;
+  }
+
+  get historialDestino => _historialDestino;
+
+  set historialDestino(value) {
+    _historialDestino = value;
   }
 }

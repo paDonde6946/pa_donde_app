@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:pa_donde_app/data/models/auxilio_economico_modelo.dart';
 import 'package:pa_donde_app/data/models/servicio_modelo.dart';
 import 'package:pa_donde_app/data/response/historial_response.dart';
+import 'package:pa_donde_app/data/response/servicio_response.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/global/entorno_variable_global.dart';
@@ -26,6 +27,7 @@ class ServicioRServicio {
   /// Create storage que permite almacenar el token en el dispositivo fisico
   final _storage = const FlutterSecureStorage();
 
+  /// Obtiene los precios establecidos que puede tener un servicio
   Future<List<AuxilioEconomico>> getAuxiliosEconomicos() async {
     String? token = await _storage.read(key: 'token');
 
@@ -38,6 +40,7 @@ class ServicioRServicio {
     return data.auxilioEconomico!;
   }
 
+  /// Se envian los datos correspondientes para poder crear un servicio y guardarlo en la BD
   Future<bool> crearServicio(Servicio servicio) async {
     // EndPoint para crear el servicio
     final url = Uri.http(EntornoVariable.host, '/app/agregarServicio');
@@ -71,5 +74,30 @@ class ServicioRServicio {
     final data = historialResponseFromJson(response.body);
     
     return data;
+}
+  Future<List<Servicio>> darServiciosCreadosPorUsuario() async {
+    // EndPoint para crear el servicio
+    final uri = Uri.http(EntornoVariable.host, '/app/darServiciosCreados');
+
+    String? token = await _storage.read(key: 'token');
+
+    final response = await http.get(uri, headers: {"x-token": token});
+
+    final data = servicioResponseFromJson(response.body);
+
+    return data.servicios!;
+  }
+
+  Future<List<Servicio>> darServiciosPostuladosPorUsuario() async {
+    // EndPoint para crear el servicio
+    final uri = Uri.http(EntornoVariable.host, '/app/darServiciosPostulados');
+
+    String? token = await _storage.read(key: 'token');
+
+    final response = await http.get(uri, headers: {"x-token": token});
+
+    final data = servicioResponseFromJson(response.body);
+
+    return data.servicios!;
   }
 }

@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pa_donde_app/blocs/blocs.dart';
-import 'package:pa_donde_app/ui/global_widgets/show_dialogs/confirmacion_show.dart';
-import 'package:pa_donde_app/ui/pages/editar_contrasenia_pag.dart';
-import 'package:pa_donde_app/ui/pages/historial_pag.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/models/usuario_modelo.dart';
@@ -13,9 +9,14 @@ import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
 
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/confirmacion_show.dart';
+
+import 'package:pa_donde_app/blocs/blocs.dart';
 
 import 'package:pa_donde_app/ui/helpers/helpers.dart';
 
+import 'package:pa_donde_app/ui/pages/editar_contrasenia_pag.dart';
+import 'package:pa_donde_app/ui/pages/historial_pag.dart';
 import 'package:pa_donde_app/ui/pages/editar_perfil_pag.dart';
 //---------------------------------------------------------------------
 
@@ -30,11 +31,11 @@ class _PerfilPagState extends State<PerfilPag> {
   callback() {
     setState(() {});
   }
-  
+
   @override
   Widget build(BuildContext context) {
     Usuario usuarioServicio =
-      BlocProvider.of<UsuarioBloc>(context).state.usuario;
+        BlocProvider.of<UsuarioBloc>(context).state.usuario;
 
     return Scaffold(
       body: ListView(children: [
@@ -86,8 +87,11 @@ class _PerfilPagState extends State<PerfilPag> {
               titulo: "Editar Perfil",
               function: () {
                 SchedulerBinding.instance!.addPostFrameCallback((_) {
-                  Navigator.of(context).push(
-                      navegarMapaFadeIn(context, EditarPerfilPag(callbackFunction: callback,)));
+                  Navigator.of(context).push(navegarMapaFadeIn(
+                      context,
+                      EditarPerfilPag(
+                        callbackFunction: callback,
+                      )));
                 });
               },
             ),
@@ -123,8 +127,7 @@ class _PerfilPagState extends State<PerfilPag> {
                 Container(
                     padding: const EdgeInsets.only(left: 30),
                     child: cuadroEstrella(
-                        usuarioServicio.calificacionUsuario.toString())
-                    )
+                        usuarioServicio.calificacionUsuario.toString()))
               ],
             ),
             Column(
@@ -134,8 +137,7 @@ class _PerfilPagState extends State<PerfilPag> {
                 Container(
                     padding: const EdgeInsets.only(left: 30),
                     child: cuadroEstrella(
-                        usuarioServicio.calificacionConductor.toString())
-                    )
+                        usuarioServicio.calificacionConductor.toString()))
               ],
             ),
           ],

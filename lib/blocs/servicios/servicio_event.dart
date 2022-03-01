@@ -36,3 +36,8 @@ class OnActualizarHistorialUsuario extends ServicioEvent {
 
   const OnActualizarHistorialUsuario(this.historialComoUsuario);
 }
+class OnServicioSeleccionado extends ServicioEvent {
+  final Servicio servicioSeleccionado;
+
+  const OnServicioSeleccionado(this.servicioSeleccionado);
+}
