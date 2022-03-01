@@ -39,9 +39,28 @@ class _AgregarServicioParte3State extends State<AgregarServicioParte3> {
             titulo: 'Finalizar',
             function: () async {
               final servicioBloc = BlocProvider.of<PreserviciosBloc>(context);
+              final busquedaBloc = BlocProvider.of<BusquedaBloc>(context);
               if (seleccion >= 0) {
+                final tamanioHistorialOrigen =
+                    busquedaBloc.state.historialOrigen.length;
+                final tamanioHistorialDestino =
+                    busquedaBloc.state.historialDestino.length;
+
                 servicioBloc.servicio!.auxilioEconomico =
                     servicioBloc.precios![seleccion].uid;
+                servicioBloc.servicio!.historialOrigen =
+                    busquedaBloc.state.historialOrigen.sublist(
+                        0,
+                        tamanioHistorialOrigen < 10
+                            ? tamanioHistorialOrigen
+                            : 10);
+                servicioBloc.servicio!.historialDestino =
+                    busquedaBloc.state.historialDestino.sublist(
+                        0,
+                        tamanioHistorialDestino < 10
+                            ? tamanioHistorialDestino
+                            : 10);
+
                 servicioBloc.add(OnCrearServicio(servicioBloc.servicio!));
 
                 await ServicioRServicio().crearServicio(servicioBloc.servicio!);

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:pa_donde_app/blocs/servicios/servicio_bloc.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:provider/provider.dart'
@@ -23,6 +24,7 @@ void main() {
       BlocProvider(create: (context) => LocalizacionBloc()),
       BlocProvider(create: (context) => PreserviciosBloc()),
       BlocProvider(create: (context) => PaginasBloc()),
+      BlocProvider(create: (context) => ServicioBloc()),
       BlocProvider(
           create: (context) => MapsBloc(
               localizacionBloc: BlocProvider.of<LocalizacionBloc>(context))),
@@ -55,8 +57,10 @@ class _MyAppState extends State<MyApp> {
         title: 'Pa Donde',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-            primaryColor: const Color.fromRGBO(94, 153, 45, 1),
-            primaryColorLight: const Color.fromRGBO(232, 119, 29, 1)),
+          primaryColor: const Color.fromRGBO(94, 153, 45, 1),
+          primaryColorLight: const Color.fromRGBO(232, 119, 29, 1),
+          backgroundColor: const Color.fromRGBO(238, 246, 232, 1),
+        ),
         initialRoute: 'validarInicioSesion',
         routes: generarRutas(),
         localizationsDelegates: const [

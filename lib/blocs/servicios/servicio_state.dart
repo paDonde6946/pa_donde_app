@@ -10,23 +10,34 @@ class ServicioState extends Equatable {
   /// Lista de servicios creados por el usuario
   final List<Servicio> serviciosDelUsuario;
 
-  const ServicioState(
-      {this.serviciosPostulados = const [],
-      this.serviciciosGenerales = const [],
-      this.serviciosDelUsuario = const []});
+  /// Servicio que es seleccionado por el usuario.
+  final Servicio servicioSeleccionado;
+
+  const ServicioState({
+    this.serviciosPostulados = const [],
+    this.serviciciosGenerales = const [],
+    this.serviciosDelUsuario = const [],
+    required this.servicioSeleccionado,
+  });
 
   ServicioState copyWith({
     List<Servicio>? serviciosPostulados,
     List<Servicio>? serviciciosGenerales,
     List<Servicio>? serviciosDelUsuario,
+    Servicio? servicioSeleccionado,
   }) =>
       ServicioState(
         serviciosPostulados: serviciosPostulados ?? this.serviciosPostulados,
         serviciciosGenerales: serviciciosGenerales ?? this.serviciciosGenerales,
         serviciosDelUsuario: serviciosDelUsuario ?? this.serviciosDelUsuario,
+        servicioSeleccionado: servicioSeleccionado ?? this.servicioSeleccionado,
       );
 
   @override
-  List<Object> get props =>
-      [serviciosPostulados, serviciciosGenerales, serviciosDelUsuario];
+  List<Object> get props => [
+        serviciosPostulados,
+        serviciciosGenerales,
+        serviciosDelUsuario,
+        servicioSeleccionado
+      ];
 }

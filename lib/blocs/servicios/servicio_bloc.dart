@@ -6,7 +6,7 @@ part 'servicio_event.dart';
 part 'servicio_state.dart';
 
 class ServicioBloc extends Bloc<ServicioEvent, ServicioState> {
-  ServicioBloc() : super(const ServicioState()) {
+  ServicioBloc() : super(ServicioState(servicioSeleccionado: Servicio())) {
     on<OnActualizarServiciosDelUsuario>((event, emit) {
       emit(state.copyWith(serviciosDelUsuario: event.serviciosDelUsuario));
     });
@@ -17,6 +17,10 @@ class ServicioBloc extends Bloc<ServicioEvent, ServicioState> {
 
     on<OnActualizarServiciosPostulados>((event, emit) {
       emit(state.copyWith(serviciosPostulados: event.serviciosPostulados));
+    });
+
+    on<OnServicioSeleccionado>((event, emit) {
+      emit(state.copyWith(servicioSeleccionado: event.servicioSeleccionado));
     });
   }
 }

@@ -26,6 +26,15 @@ class InicioPag extends StatefulWidget {
 }
 
 class _InicioPagState extends State<InicioPag> {
+  late LocalizacionBloc localizacionBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    localizacionBloc = BlocProvider.of<LocalizacionBloc>(context);
+    localizacionBloc.getPosicioActual();
+  }
+
   callback() {
     setState(() {});
   }

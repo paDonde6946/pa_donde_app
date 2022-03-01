@@ -55,9 +55,9 @@ class BusquedaBloc extends Bloc<BusquedaEvent, BusquedaState> {
     // Deecodificar
     final puntos = decodePolyline(geometria!, accuracyExponent: 6);
 
-    String puntosCodificados = encodePolyline(puntos);
-
-    servicio.polylineRuta = puntosCodificados;
+    servicio.polylineRuta = geometria;
+    servicio.distancia = distancia.toString();
+    servicio.duracion = duracion.toString();
     preserviciosBloc.add(OnCrearServicio(servicio));
 
     final latLngLista = puntos

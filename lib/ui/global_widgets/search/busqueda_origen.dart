@@ -106,7 +106,7 @@ class BusquedaOrigen extends SearchDelegate<BusquedaResultado> {
                     context,
                     BusquedaResultado(
                       cancelo: false,
-                      manual: false,
+                      manual: true,
                       posicion: LatLng(lugar.center![1], lugar.center![0]),
                       nombreDestino: lugar.text,
                       descripcion: lugar.placeName,

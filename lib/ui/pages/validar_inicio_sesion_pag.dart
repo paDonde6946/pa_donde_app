@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pa_donde_app/blocs/servicios/servicio_bloc.dart';
+import 'package:pa_donde_app/data/models/usuario_modelo.dart';
 import 'package:pa_donde_app/data/services/vehiculo_servicio.dart';
 import 'package:provider/provider.dart';
 
@@ -39,6 +41,11 @@ class ValidarInicioSesion extends StatelessWidget {
     final autenticado = await authService.logeado();
     if (autenticado) {
       // sockettServicce.connect();
+      /// Agrega en el bloc la informacion del usuario
+      BlocProvider.of<UsuarioBloc>(context)
+          .add(OnActualizarUsuario(authService.usuarioServiciosActual));
+
+      agregarHistorialesBusqueda(context, authService.usuarioServiciosActual);
 
       /// Consulta los auxilios economicos que puede tener un servicio
       final auxilioEconomicoServicio =
@@ -47,15 +54,27 @@ class ValidarInicioSesion extends StatelessWidget {
       /// Consulta los vehiculos que puede tener un servicio
       final vehiculosServicio = await VehiculoServicio().getVehiculos();
 
+      /// Agrega en el bloc los vehiculos del usuario.
       BlocProvider.of<PreserviciosBloc>(context)
           .add(OnAgregarVehiculo(vehiculosServicio));
 
-      // Bloc de usuario
-      BlocProvider.of<UsuarioBloc>(context)
-          .add(OnActualizarUsuario(authService.usuarioServiciosActual));
-
+      /// Agrega en el bloc los precios establecidos
       BlocProvider.of<PreserviciosBloc>(context)
           .add(OnAgregarPrecios(auxilioEconomicoServicio));
+
+      /// Obtiene los servicios que han sido creados por el usuario
+      final serviciosDelUsuario =
+          await ServicioRServicio().darServiciosCreadosPorUsuario();
+
+      BlocProvider.of<ServicioBloc>(context)
+          .add(OnActualizarServiciosDelUsuario(serviciosDelUsuario));
+
+      /// Obtiene los servicios que se ha postulado el usuario
+      final serviciosPostulados =
+          await ServicioRServicio().darServiciosPostuladosPorUsuario();
+
+      BlocProvider.of<ServicioBloc>(context)
+          .add(OnActualizarServiciosPostulados(serviciosPostulados));
 
       SchedulerBinding.instance!.addPostFrameCallback((_) {
         Navigator.pushReplacement(
@@ -72,6 +91,18 @@ class ValidarInicioSesion extends StatelessWidget {
                 pageBuilder: (context, __, ___) => const InicioSesionPag(),
                 transitionDuration: const Duration(milliseconds: 10)));
       });
+    }
+  }
+
+  void agregarHistorialesBusqueda(BuildContext context, Usuario usuario) {
+    for (var feature in usuario.historialOrigen) {
+      BlocProvider.of<BusquedaBloc>(context)
+          .add(OnAgregarHistorialOrigenEvent(feature));
+    }
+
+    for (var feature in usuario.historialDestino) {
+      BlocProvider.of<BusquedaBloc>(context)
+          .add(OnAgregarHistorialDestionoEvent(feature));
     }
   }
 }

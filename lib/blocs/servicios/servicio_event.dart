@@ -24,3 +24,9 @@ class OnActualizarServiciosDelUsuario extends ServicioEvent {
 
   const OnActualizarServiciosDelUsuario(this.serviciosDelUsuario);
 }
+
+class OnServicioSeleccionado extends ServicioEvent {
+  final Servicio servicioSeleccionado;
+
+  const OnServicioSeleccionado(this.servicioSeleccionado);
+}
