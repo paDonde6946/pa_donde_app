@@ -7,7 +7,6 @@ import 'package:pa_donde_app/data/services/usuario_servicio.dart';
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 import 'package:pa_donde_app/ui/global_widgets/inputs/input_form.dart';
-import 'package:pa_donde_app/ui/global_widgets/inputs/input_form_elevado.dart';
 
 import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
 import 'package:pa_donde_app/ui/global_widgets/text/formulario_texto.dart';
@@ -30,6 +29,7 @@ class FormEditarPerfil extends StatefulWidget {
   @override
   // ignore: no_logic_in_create_state
   State<FormEditarPerfil> createState() =>
+      // ignore: no_logic_in_create_state
       _FormEditarPerfilState(callbackFunction);
 }
 
@@ -137,8 +137,8 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
     return TextFormField(
       style: styleInput,
       initialValue: usuario.nombre,
-      decoration: inputDecoration(
-          '', 'Ingresa tu nombre', context, Theme.of(context).primaryColor, null, 0),
+      decoration: inputDecoration('', 'Ingresa tu nombre', context,
+          Theme.of(context).primaryColor, null, 0),
       onSaved: (value) => usuario.nombre = value,
       onChanged: (value) => usuario.nombre = value,
       validator: (value) =>
@@ -151,8 +151,8 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
     return TextFormField(
       style: styleInput,
       initialValue: usuario.apellido,
-      decoration: inputDecoration(
-          '', 'Ingresa tu apellido', context, Theme.of(context).primaryColor, null, 0),
+      decoration: inputDecoration('', 'Ingresa tu apellido', context,
+          Theme.of(context).primaryColor, null, 0),
       onSaved: (value) => usuario.apellido = value,
       onChanged: (value) => usuario.apellido = value,
       validator: (value) =>
@@ -186,8 +186,8 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
       style: styleInput,
       initialValue: usuario.correo,
       keyboardType: TextInputType.emailAddress,
-      decoration: inputDecoration(
-          '', 'Ingresa tu correo', context, Theme.of(context).primaryColor, null, 0),
+      decoration: inputDecoration('', 'Ingresa tu correo', context,
+          Theme.of(context).primaryColor, null, 0),
       validator: (value) =>
           (validarEmail(value)) ? 'El correo ingresado no es valido' : null,
     );

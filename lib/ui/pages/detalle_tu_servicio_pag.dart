@@ -1,30 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
-import 'package:intl/intl.dart';
+import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
+import 'package:pa_donde_app/ui/pages/editar_servicio_pag.dart';
+
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+
+import 'package:intl/intl.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/models/ruta_destino_modelo.dart';
 import 'package:pa_donde_app/data/models/servicio_modelo.dart';
 import 'package:pa_donde_app/data/response/busqueda_response.dart';
 
-import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 import 'package:pa_donde_app/ui/global_widgets/views/mapa_view.dart';
+import 'package:pa_donde_app/ui/global_widgets/button/boton_sin_contorno.dart';
 
 import 'package:pa_donde_app/blocs/blocs.dart';
 //---------------------------------------------------------------------
 
 class DetalleTuServicio extends StatefulWidget {
-  const DetalleTuServicio({Key? key}) : super(key: key);
+  final Function? callbackFunction;
+
+  const DetalleTuServicio({Key? key, required this.callbackFunction})
+      : super(key: key);
 
   @override
-  State<DetalleTuServicio> createState() => _DetalleTuServicioState();
+  State<DetalleTuServicio> createState() =>
+      // ignore: no_logic_in_create_state
+      _DetalleTuServicioState(callbackFunction);
 }
 
 class _DetalleTuServicioState extends State<DetalleTuServicio> {
+  final Function? callbackFunction;
   Servicio servicio = Servicio();
+
+  _DetalleTuServicioState(this.callbackFunction);
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,17 +51,19 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
 
     return Scaffold(
       appBar: appBar(),
-      body: Column(
+      body: ListView(
         children: [
           cardDeServicio(),
-          _listadoUsuariosPostulados(),
           _mostrarMapa(),
+          _listadoUsuariosPostulados(),
+          _botonIniciarServicio(),
         ],
       ),
     );
   }
 
   PreferredSizeWidget appBar() {
+    callbackFunction;
     return AppBar(
         centerTitle: true,
         foregroundColor: Colors.black,
@@ -62,7 +82,7 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
     return Card(
       color: Theme.of(context).backgroundColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      margin: const EdgeInsets.all(10),
+      margin: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
       elevation: 5,
       child: Column(
         children: [
@@ -108,7 +128,11 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
               ),
             ],
           ),
-          _botonesEditarYEliminar()
+          Container(
+            margin: const EdgeInsets.only(bottom: 7),
+            width: size.width * 0.6,
+            child: _botonesEditarYEliminar(),
+          ),
         ],
       ),
     );
@@ -116,15 +140,26 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
 
   Widget _botonesEditarYEliminar() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        BtnAnaranja(
-          function: () {},
+        BtnSinContorno(
+          function: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  EditarServicioPag(callbackFunction: callbackFunction),
+            ),
+          ),
           titulo: 'Editar',
+          icon: Icons.edit,
+          tamanioLetra: 15,
         ),
-        BtnAnaranja(
+        const SizedBox(width: 15),
+        BtnSinContorno(
           function: () {},
           titulo: 'Eliminar',
+          icon: Icons.delete_outline_rounded,
+          tamanioLetra: 15,
         ),
       ],
     );
@@ -188,7 +223,7 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
                 builder: (context, mapState) {
               Map<String, Polyline> polylines = Map.from(mapState.polylines);
               return MapaView(
-                  initialLocalizacion: latLngLista[0],
+                  initialLocalizacion: latLngLista[latLngLista.length - 1],
                   markers: mapState.markers.values.toSet(),
                   polylines: polylines.values.toSet());
             });
@@ -201,17 +236,14 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
   }
 
   Widget _listadoUsuariosPostulados() {
-    final size = MediaQuery.of(context).size;
-
     return Container(
-        height: size.height * 0.2,
         padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: ListView(
+        child: Column(
           children: [
             // SizedBox(height: 5),
-            const Text('Tus pasajeros'),
+            tituloDelServicio(titulo: 'Tus pasajeros'),
             const SizedBox(height: 10),
-            _cardUsuarioPostulado('Steven Estrada', 0),
+            
             const SizedBox(height: 20),
             _cardUsuarioPostulado('Steven Estrada', 0),
             const SizedBox(height: 20),
@@ -221,6 +253,15 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
             const SizedBox(height: 20),
           ],
         ));
+  }
+
+  Widget _botonIniciarServicio() {
+    return Center(
+      child: BtnAnaranja(
+        titulo: 'Iniciar',
+        function: () {},
+      ),
+    );
   }
 
   Widget _cardUsuarioPostulado(String nombre, int posicion) {

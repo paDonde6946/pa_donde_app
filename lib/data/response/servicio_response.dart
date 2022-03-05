@@ -29,23 +29,3 @@ class ServicioResponse {
         "servicios": List<dynamic>.from(servicios!.map((x) => x.toJson())),
       };
 }
-
-class Pasajero {
-  Pasajero({
-    this.id,
-    this.pasajero,
-  });
-
-  String? id;
-  String? pasajero;
-
-  factory Pasajero.fromJson(Map<String, dynamic> json) => Pasajero(
-        id: json["_id"],
-        pasajero: json["pasajero"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "_id": id,
-        "pasajero": pasajero,
-      };
-}

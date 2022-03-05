@@ -12,7 +12,7 @@ class ServicioBloc extends Bloc<ServicioEvent, ServicioState> {
     });
 
     on<OnActualizarServiciosGenerales>((event, emit) {
-      emit(state.copyWith(serviciciosGenerales: event.serviciciosGenerales));
+      emit(state.copyWith(serviciosGenerales: event.serviciciosGenerales));
     });
 
     on<OnActualizarServiciosPostulados>((event, emit) {
@@ -27,7 +27,7 @@ class ServicioBloc extends Bloc<ServicioEvent, ServicioState> {
     on<OnActualizarHistorialUsuario>((event, emit) {
       emit(state.copyWith(historialComoUsuario: event.historialComoUsuario));
     });
-    
+
     on<OnServicioSeleccionado>((event, emit) {
       emit(state.copyWith(servicioSeleccionado: event.servicioSeleccionado));
     });

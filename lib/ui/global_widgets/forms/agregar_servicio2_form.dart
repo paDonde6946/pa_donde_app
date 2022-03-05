@@ -22,13 +22,14 @@ class _AgregarServicioParte2State extends State<AgregarServicioParte2> {
     final size = MediaQuery.of(context).size;
     validarContieneDatos();
     return Container(
-        padding: EdgeInsets.symmetric(horizontal: size.width * 0.06),
-        child: Stack(
-          children: [
-            listadoCarros(),
-            titulo(),
-          ],
-        ));
+      padding: EdgeInsets.symmetric(horizontal: size.width * 0.06),
+      child: Stack(
+        children: [
+          listadoCarros(),
+          titulo(),
+        ],
+      ),
+    );
   }
 
   /// Metodo para crear el titulo del form y los botones superiores
@@ -126,20 +127,23 @@ class _AgregarServicioParte2State extends State<AgregarServicioParte2> {
 
   /// Crea el listado de los carros del usuario
   Widget listadoCarros() {
-    return BlocBuilder<PreserviciosBloc, PreserviciosState>(
-      builder: (context, snapshot) {
-        return ListView.builder(
-            itemCount: snapshot.vehiculos.length,
-            itemBuilder: (context, i) => Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: _cardCarro(
-                      BlocProvider.of<PreserviciosBloc>(context)
-                          .state
-                          .vehiculos[i]
-                          .placa,
-                      i),
-                ));
-      },
+    return Container(
+      margin: const EdgeInsets.only(top: 10),
+      child: BlocBuilder<PreserviciosBloc, PreserviciosState>(
+        builder: (context, snapshot) {
+          return ListView.builder(
+              itemCount: snapshot.vehiculos.length,
+              itemBuilder: (context, i) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: _cardCarro(
+                        BlocProvider.of<PreserviciosBloc>(context)
+                            .state
+                            .vehiculos[i]
+                            .placa,
+                        i),
+                  ));
+        },
+      ),
     );
   }
 }

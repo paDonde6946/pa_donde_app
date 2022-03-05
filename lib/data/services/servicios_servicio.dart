@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:pa_donde_app/data/models/auxilio_economico_modelo.dart';
+import 'package:pa_donde_app/data/models/pasajeros_modelo.dart';
 import 'package:pa_donde_app/data/models/servicio_modelo.dart';
 import 'package:pa_donde_app/data/response/historial_response.dart';
 import 'package:pa_donde_app/data/response/servicio_response.dart';
@@ -63,7 +65,7 @@ class ServicioRServicio {
     return false;
   }
 
-    Future<HistorialResponse> getHistorial() async {
+  Future<HistorialResponse> getHistorial() async {
     String? token = await _storage.read(key: 'token');
 
     final uri = Uri.http(EntornoVariable.host, '/app/darHistorial');
@@ -72,9 +74,11 @@ class ServicioRServicio {
     print(response.body);
 
     final data = historialResponseFromJson(response.body);
-    
+
     return data;
-}
+  }
+
+  /// Obtine la lista de servicios creados por el usuario
   Future<List<Servicio>> darServiciosCreadosPorUsuario() async {
     // EndPoint para crear el servicio
     final uri = Uri.http(EntornoVariable.host, '/app/darServiciosCreados');
@@ -88,6 +92,7 @@ class ServicioRServicio {
     return data.servicios!;
   }
 
+  /// Obtiene la lista de servicios que el usuario se postulo
   Future<List<Servicio>> darServiciosPostuladosPorUsuario() async {
     // EndPoint para crear el servicio
     final uri = Uri.http(EntornoVariable.host, '/app/darServiciosPostulados');
@@ -99,5 +104,45 @@ class ServicioRServicio {
     final data = servicioResponseFromJson(response.body);
 
     return data.servicios!;
+  }
+
+  /// Obtiene la lista de servicios generales en la que el usuario puede postularse
+  Future<List<Servicio>> darServiciosGenerales() async {
+    // EndPoint para crear el servicio
+    final uri = Uri.http(EntornoVariable.host, '/app/darServiciosDisponibles');
+
+    String? token = await _storage.read(key: 'token');
+
+    final response = await http.get(uri, headers: {"x-token": token});
+
+    final data = servicioResponseFromJson(response.body);
+
+    return data.servicios!;
+  }
+
+  Future<bool> actualizarServicio(Servicio servicio) async {
+    // EndPoint para crear el servicio
+    final uri =
+        Uri.http(EntornoVariable.host, "/app/editarServicio/${servicio.uid}");
+
+    String? token = await _storage.read(key: 'token');
+
+    final data = {
+      "fechayhora": servicio.fechayhora,
+      "cantidadCupos": servicio.cantidadCupos,
+    };
+
+    final response = await http.put(
+      uri,
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        "x-token": token,
+      },
+      body: json.encode(data),
+    );
+
+    final res = json.decode(response.body);
+
+    return res["ok"];
   }
 }

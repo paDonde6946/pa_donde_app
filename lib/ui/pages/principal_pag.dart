@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pa_donde_app/blocs/blocs.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/confirmacion_show.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'detalle_servicio_pag.dart';
@@ -9,8 +11,6 @@ import 'detalle_servicio_pag.dart';
 import 'package:pa_donde_app/ui/pages/detalle_postulado_servicio_pag.dart';
 import 'package:pa_donde_app/ui/pages/detalle_tu_servicio_pag.dart';
 import 'package:pa_donde_app/data/models/servicio_modelo.dart';
-// import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
-// import 'package:provider/provider.dart';
 //---------------------------------------------------------------------
 
 class PrincipalPag extends StatefulWidget {
@@ -21,106 +21,183 @@ class PrincipalPag extends StatefulWidget {
 }
 
 class _PrincipalPagState extends State<PrincipalPag> {
+  /// Metodo para refrescar la pagina
+  callback() {
+    setState(() {});
+  }
+
   PageController controller = PageController();
   int page = 0;
-  Servicio servicio = Servicio(
-    pAuxilioEconomico: "61f1f9e7d41447b8ea79d2eb",
-    pCantidadCupos: 3,
-    pDistancia: "4451.591",
-    pDuracion: "802.541",
-    pFechayhora: "2022-02-20T10:37:00.000+00:00",
-    pIdVehiculo: "6190885bf803e870847c6e73",
-    pNombreDestino: "Hayuelos Centro Comercial",
-    pNombreOrigen: "Tintal Plaza",
-    pPolylineRuta:
-        "m|p}G~zoelCbBaFag@_TwV~y@rsA|t@xePjcDrpIfyCyqHj|Syy@hsH}~@nfHg`DzgRdPzpD`z@tkCl|IhsLzwFdnHppTn|L|q@zh@f^ttAufGtyK`wPlkRztBbqDnGda@iwCzeC}oA{o@xVqe@r`MlrJo|G`fHdlCvbForF`fFgjCysAqDqw@",
-  );
 
   @override
   Widget build(BuildContext context) {
+    validarCambioContrasenia();
+
     return Scaffold(appBar: appBar(), body: body());
   }
 
+  /// Encabezado de la pagina
+  PreferredSizeWidget appBar() {
+    return AppBar(
+        centerTitle: true,
+        foregroundColor: Colors.black,
+        backgroundColor: Theme.of(context).primaryColor,
+        title: const Text(
+          "PaDonde",
+          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+        ));
+  }
+
+  /// Cuerpo de la pagina
   Widget body() {
-    // final usuario = Provider.of<AutenticacionServicio>(context, listen: false)
-    //  .usuarioServiciosActual;
-    // /TODO: Cambiar cuando este listo
-    // if (usuario.cambio_contrasenia == 0) {
-    //   SchedulerBinding.instance!.addPostFrameCallback((_) {
-    //     mostrarShowDialogConfirmar(
-    //         context: context,
-    //         titulo: "Cambio de Contraseña",
-    //         contenido:
-    //             "Hemos notado que has cambiado tu contraseña. Para mayor seguridad cambia la contraseña por una personal.",
-    //         paginaRetorno: 'editarPerfil');
-    //     // add your code here.
-    //   });
-    // }
-    final size = MediaQuery.of(context).size;
+    final serviciosDelUsuario =
+        BlocProvider.of<ServicioBloc>(context).state.serviciosDelUsuario;
+
+    final serviciosPostulados =
+        BlocProvider.of<ServicioBloc>(context).state.serviciosPostulados;
+
     return Stack(
       children: [
         Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-                margin: const EdgeInsets.only(left: 30, top: 10),
-                child: Text(
-                  "Tus servicios",
-                  style: TextStyle(fontSize: size.width * 0.05),
-                )),
-            SizedBox(
-              width: double.infinity,
-              height: 120,
-              child: listadoServiciosDelUsuario(),
-            ),
-            Container(
-                margin: const EdgeInsets.only(left: 30),
-                child: Text(
-                  "Servicios Postulados",
-                  style: TextStyle(fontSize: size.width * 0.05),
-                )),
-            SizedBox(
-              width: double.infinity,
-              height: 140,
-              child: PageView(
-                onPageChanged: (i) {
-                  page = i;
-                },
-                controller: controller,
-                children: [
-                  cardSerPostulados(servicio),
-                  cardSerPostulados(servicio),
-                ],
-              ),
-            )
+            serviciosDelUsuario.isEmpty
+                ? Container()
+                : mostrarServiciosDelUsuario(),
+            serviciosPostulados.isEmpty
+                ? Container()
+                : mostrarServiciosPostulados(),
           ],
         ),
-        SlidingUpPanel(
-          maxHeight: 500,
-          minHeight: 300,
-          parallaxEnabled: true,
-          parallaxOffset: .5,
-          panelBuilder: (sc) {
-            return ListView(
-              children: [
-                Container(
-                    margin: const EdgeInsets.only(left: 30, top: 10),
-                    child: Text(
-                      "Servicios Generales",
-                      style: TextStyle(fontSize: size.width * 0.04),
-                    )),
-                cardDeServicio(servicio),
-              ],
-            );
-          },
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(18.0), topRight: Radius.circular(18.0)),
-          onPanelSlide: (double pos) => setState(() {}),
+        mostrarPanelServiciosGenerales(),
+      ],
+    );
+  }
+
+  /// Valida si el usuario ya realizo un cambio de contraseña, por el método del olvido de contraseña
+  /// dado que se le da una contraseña aleatoria se valida para que la cambie por una que pueda recordar y por seguridad
+  void validarCambioContrasenia() {
+    final usuario = BlocProvider.of<UsuarioBloc>(context).state.usuario;
+
+    if (usuario.cambioContrasenia == 0) {
+      SchedulerBinding.instance!.addPostFrameCallback((_) {
+        mostrarShowDialogConfirmar(
+            context: context,
+            titulo: "Cambio de Contraseña",
+            contenido:
+                "Hemos notado que has cambiado tu contraseña. Para mayor seguridad cambia la contraseña por una personal.",
+            paginaRetorno: 'editarPerfil');
+        // add your code here.
+      });
+    }
+  }
+
+  /// Valida si el panel esta expandido totalmente para cambiar los border redondos
+  bool validarRedondoPanel() {
+    final serviciosDelUsuario =
+        BlocProvider.of<ServicioBloc>(context).state.serviciosDelUsuario;
+
+    final serviciosPostulados =
+        BlocProvider.of<ServicioBloc>(context).state.serviciosPostulados;
+
+    if (serviciosDelUsuario.isEmpty && serviciosPostulados.isEmpty) {
+      return true;
+    }
+    return false;
+  }
+
+  /// Valida la lista de cada unos de los diferentes tipos de servicios y con base a eso. Le da un tamaño al panel de los servicios generales
+  double validarTamanioPanel() {
+    final size = MediaQuery.of(context).size;
+
+    final serviciosDelUsuario =
+        BlocProvider.of<ServicioBloc>(context).state.serviciosDelUsuario;
+
+    final serviciosPostulados =
+        BlocProvider.of<ServicioBloc>(context).state.serviciosPostulados;
+
+    if (serviciosDelUsuario.isEmpty && serviciosPostulados.isEmpty) {
+      return size.height * 0.8;
+    } else if (serviciosDelUsuario.isEmpty || serviciosPostulados.isEmpty) {
+      return size.height * 0.59;
+    } else {
+      return size.height * 0.39;
+    }
+  }
+
+  /// Muestra el panel de los servicios generales con sus respectivas validaciones
+  Widget mostrarPanelServiciosGenerales() {
+    final size = MediaQuery.of(context).size;
+    return SlidingUpPanel(
+      maxHeight: size.height * 0.9,
+      minHeight: validarTamanioPanel(),
+      parallaxEnabled: true,
+      parallaxOffset: .5,
+      panelBuilder: (sc) {
+        return listadoServiciosGenerales();
+      },
+      borderRadius: BorderRadius.only(
+          topLeft: !validarRedondoPanel()
+              ? const Radius.circular(18.0)
+              : const Radius.circular(0),
+          topRight: !validarRedondoPanel()
+              ? const Radius.circular(18.0)
+              : const Radius.circular(0)),
+      onPanelSlide: (double pos) => setState(() {}),
+    );
+  }
+
+  /// Muestra los servicios postulados con las validaciones para ocultarlo o no sino contiene ningun objeto
+  Widget mostrarServiciosPostulados() {
+    final size = MediaQuery.of(context).size;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+            margin: const EdgeInsets.only(left: 30, top: 10),
+            child: Text(
+              "Servicios Postulados",
+              style: TextStyle(fontSize: size.width * 0.045),
+            )),
+        SizedBox(
+          height: size.height * 0.17,
+          child: PageView(
+            onPageChanged: (i) {
+              page = i;
+            },
+            controller: controller,
+            children: [
+              listadoServiciosPostulados(),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  /// Muestra los servicios del usuario con las validaciones para ocultarlo o no, sino contiene ningun objeto
+  Widget mostrarServiciosDelUsuario() {
+    final size = MediaQuery.of(context).size;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+            margin: const EdgeInsets.only(left: 30, top: 10),
+            child: Text(
+              "Tus servicios",
+              style: TextStyle(fontSize: size.width * 0.045),
+            )),
+        SizedBox(
+          width: double.infinity,
+          height: size.height * 0.15,
+          child: listadoServiciosDelUsuario(),
         ),
       ],
     );
   }
 
+  /// Obtiene el listado de los servicios del usuario del Bloc y los construye en un  Widget (PageView)
   Widget listadoServiciosDelUsuario() {
     final servicios =
         BlocProvider.of<ServicioBloc>(context).state.serviciosDelUsuario;
@@ -133,6 +210,7 @@ class _PrincipalPagState extends State<PrincipalPag> {
     );
   }
 
+  /// Obtiene el listado de los servicios postulados del usuario del Bloc y los construye en un  Widget (PageView)
   Widget listadoServiciosPostulados() {
     final servicios =
         BlocProvider.of<ServicioBloc>(context).state.serviciosPostulados;
@@ -145,25 +223,41 @@ class _PrincipalPagState extends State<PrincipalPag> {
     );
   }
 
+  /// Obtiene el listado de los servicios generales que el usuario puede postularse del Bloc y los construye en un  Widget (PageView)
+  Widget listadoServiciosGenerales() {
+    final servicios =
+        BlocProvider.of<ServicioBloc>(context).state.serviciosGenerales;
+
+    return ListView.builder(
+      itemCount: servicios.length,
+      itemBuilder: (context, index) {
+        return cardDeServicio(servicios[index]);
+      },
+    );
+  }
+
+  /// Es una card general para construir la información de los servicios del usuario
   Widget cardTuServicio(Servicio servicio) {
     final fecha = servicio.fechayhora.split("T");
 
     return GestureDetector(
       onTap: () {
+        /// Actualiza el servicio con su información para mostrar en la siguiente página
         BlocProvider.of<ServicioBloc>(context)
             .add(OnServicioSeleccionado(servicio));
 
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const DetalleTuServicio()),
+          MaterialPageRoute(
+              builder: (context) =>
+                  DetalleTuServicio(callbackFunction: callback)),
         );
       },
       child: Container(
-        width: 300,
         margin: const EdgeInsets.all(15),
         child: Material(
           borderRadius: BorderRadius.circular(20),
-          color: const Color.fromRGBO(238, 246, 232, 1),
+          color: Theme.of(context).backgroundColor,
           elevation: 5,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -218,6 +312,7 @@ class _PrincipalPagState extends State<PrincipalPag> {
     );
   }
 
+  /// Es una card general para construir la información de los servicios generales
   Widget cardDeServicio(Servicio servicio) {
     final fecha = servicio.fechayhora.split("T");
     return GestureDetector(
@@ -234,7 +329,7 @@ class _PrincipalPagState extends State<PrincipalPag> {
         margin: const EdgeInsets.all(15),
         child: Material(
           borderRadius: BorderRadius.circular(20),
-          color: const Color.fromRGBO(238, 246, 232, 1),
+          color: Theme.of(context).backgroundColor,
           elevation: 5,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -297,6 +392,7 @@ class _PrincipalPagState extends State<PrincipalPag> {
     );
   }
 
+  /// Es una card general para construir la información de los servicios generales
   Widget cardSerPostulados(Servicio servicio) {
     final fecha = servicio.fechayhora.split("T");
 
@@ -315,7 +411,7 @@ class _PrincipalPagState extends State<PrincipalPag> {
         margin: const EdgeInsets.all(15),
         child: Material(
           borderRadius: BorderRadius.circular(20),
-          color: const Color.fromRGBO(238, 246, 232, 1),
+          color: Theme.of(context).backgroundColor,
           elevation: 5,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -372,17 +468,7 @@ class _PrincipalPagState extends State<PrincipalPag> {
     );
   }
 
-  PreferredSizeWidget appBar() {
-    return AppBar(
-        centerTitle: true,
-        foregroundColor: Colors.black,
-        backgroundColor: Theme.of(context).primaryColor,
-        title: const Text(
-          "PaDonde",
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-        ));
-  }
-
+  /// Texto general para poder incluir los titulos dentro de la card
   Text tituloDelServicio({titulo}) {
     return Text(titulo,
         overflow: TextOverflow.ellipsis,
@@ -392,6 +478,7 @@ class _PrincipalPagState extends State<PrincipalPag> {
             color: Theme.of(context).primaryColor));
   }
 
+  /// SubTexto general para poder incluir los subtitulos dentro de la card
   Widget subTitulosDelServicio({subtitulo}) {
     return Text(subtitulo,
         textAlign: TextAlign.start,
@@ -400,10 +487,12 @@ class _PrincipalPagState extends State<PrincipalPag> {
             color: Theme.of(context).primaryColor));
   }
 
+  /// Texto del servicio
   Widget textoDelServicio({texto}) {
     return Text(texto.toString());
   }
 
+  ///
   Widget botonDelServicio({String nombreBoton = ''}) {
     return Container(
       height: 40,

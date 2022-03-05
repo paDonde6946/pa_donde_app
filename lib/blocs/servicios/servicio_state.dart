@@ -5,7 +5,7 @@ class ServicioState extends Equatable {
   final List<Servicio> serviciosPostulados;
 
   /// Lita dee servicios generales (el usuario puede postularse)
-  final List<Servicio> serviciciosGenerales;
+  final List<Servicio> serviciosGenerales;
 
   /// Lista de servicios creados por el usuario
   final List<Servicio> serviciosDelUsuario;
@@ -21,7 +21,7 @@ class ServicioState extends Equatable {
 
   const ServicioState({
     this.serviciosPostulados = const [],
-    this.serviciciosGenerales = const [],
+    this.serviciosGenerales = const [],
     this.serviciosDelUsuario = const [],
     this.historialComoConductor,
     this.historialComoUsuario,
@@ -30,7 +30,7 @@ class ServicioState extends Equatable {
 
   ServicioState copyWith({
     List<Servicio>? serviciosPostulados,
-    List<Servicio>? serviciciosGenerales,
+    List<Servicio>? serviciosGenerales,
     List<Servicio>? serviciosDelUsuario,
     List<Servicio>? historialComoConductor,
     List<Servicio>? historialComoUsuario,
@@ -38,20 +38,19 @@ class ServicioState extends Equatable {
   }) =>
       ServicioState(
           serviciosPostulados: serviciosPostulados ?? this.serviciosPostulados,
-          serviciciosGenerales:
-              serviciciosGenerales ?? this.serviciciosGenerales,
+          serviciosGenerales: serviciosGenerales ?? this.serviciosGenerales,
           serviciosDelUsuario: serviciosDelUsuario ?? this.serviciosDelUsuario,
           historialComoConductor:
               historialComoConductor ?? this.historialComoConductor,
           historialComoUsuario:
               historialComoUsuario ?? this.historialComoUsuario,
-          servicioSeleccionado: 
+          servicioSeleccionado:
               servicioSeleccionado ?? this.servicioSeleccionado);
 
   @override
   List<Object?> get props => [
         serviciosPostulados,
-        serviciciosGenerales,
+        serviciosGenerales,
         serviciosDelUsuario,
         servicioSeleccionado,
         historialComoConductor,
