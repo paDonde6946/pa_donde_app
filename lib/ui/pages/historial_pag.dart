@@ -172,6 +172,8 @@ class _HistorialPagState extends State<HistorialPag> {
       children: [
         GestureDetector(
           onTap: () {
+            BlocProvider.of<ServicioBloc>(context)
+                .add(OnServicioSeleccionado(servicio));
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -248,6 +250,8 @@ class _HistorialPagState extends State<HistorialPag> {
       children: [
         GestureDetector(
           onTap: () {
+            BlocProvider.of<ServicioBloc>(context)
+                .add(OnServicioSeleccionado(servicio));
             Navigator.push(
               context,
               MaterialPageRoute(

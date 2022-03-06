@@ -14,31 +14,23 @@ class _AgregarVehiculoState extends State<AgregarVehiculo> {
     return Scaffold(
       body: SafeArea(
         child: ListView(
-          children: [_crearAppBar(), const FormAgregarVehiulo()],
+          children: [appBar(context), const FormAgregarVehiulo()],
         ),
       ),
     );
   }
 
   /// Encabezado de la pagina de registro del usuario (AppBar Modificado)
-  Widget _crearAppBar() {
+  PreferredSizeWidget appBar(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Container(
-      height: 80,
-      color: Theme.of(context).primaryColor,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Icon(
-            Icons.directions_bike,
-            size: size.width * 0.2,
-          ),
-          Text(
-            "AGREGAR VEHICULO",
-            style: TextStyle(fontSize: size.width * 0.045),
-          ),
-        ],
-      ),
-    );
+    return AppBar(
+        centerTitle: true,
+        foregroundColor: Colors.black,
+        backgroundColor: Theme.of(context).primaryColor,
+        title: Text(
+          "Agregar Vehículo",
+          style: TextStyle(
+              fontSize: size.width * 0.045, fontWeight: FontWeight.bold),
+        ));
   }
 }

@@ -4,6 +4,7 @@
 
 import 'dart:convert';
 
+import 'package:pa_donde_app/data/models/pasajeros_modelo.dart';
 import 'package:pa_donde_app/data/response/busqueda_response.dart';
 
 Servicio servicioFromJson(String str) => Servicio.fromJson(json.decode(str));
@@ -23,6 +24,8 @@ class Servicio {
   String? _duracion;
   List<Feature>? _historialOrigen;
   List<Feature>? _historialDestino;
+  List<PasajeroElement>? _pasajeros;
+  String? _uid;
 
   Servicio({
     String? pEstado,
@@ -37,6 +40,8 @@ class Servicio {
     String? pDuracion,
     List<Feature>? pHistorialOrigen,
     List<Feature>? pHistorialDestino,
+    String? pUid,
+    List<PasajeroElement>? pPasajeros,
   }) {
     estado = pEstado;
     nombreOrigen = pNombreOrigen;
@@ -50,21 +55,25 @@ class Servicio {
     duracion = pDuracion;
     historialOrigen = pHistorialOrigen;
     historialDestino = pHistorialDestino;
+    uid = pUid;
+    pasajeros = pPasajeros;
   }
 
   factory Servicio.fromJson(Map<String, dynamic> json) => Servicio(
-        pNombreOrigen: json["nombreOrigen"],
-        pNombreDestino: json["nombreDestino"],
-        pPolylineRuta: json["polylineRuta"],
-        pFechayhora: json["fechayhora"],
-        pIdVehiculo: json["idVehiculo"],
-        pCantidadCupos: json["cantidadCupos"],
-        pAuxilioEconomico: json["idAuxilioEconomico"],
-        pDistancia: json["distancia"],
-        pDuracion: json["duracion"],
-        pHistorialOrigen: json["historialOrigen"],
-        pHistorialDestino: json["historialDestino"],
-      );
+      pNombreOrigen: json["nombreOrigen"],
+      pNombreDestino: json["nombreDestino"],
+      pPolylineRuta: json["polylineRuta"],
+      pFechayhora: json["fechayhora"],
+      pIdVehiculo: json["idVehiculo"],
+      pCantidadCupos: json["cantidadCupos"],
+      pAuxilioEconomico: json["idAuxilioEconomico"],
+      pDistancia: json["distancia"],
+      pDuracion: json["duracion"],
+      pHistorialOrigen: json["historialOrigen"],
+      pHistorialDestino: json["historialDestino"],
+      pUid: json["uid"],
+      pPasajeros: List<PasajeroElement>.from(
+          json["pasajeros"]!.map((x) => PasajeroElement.fromJson(x))));
 
   Map<String, dynamic> toJson() => {
         "nombreOrigen": nombreOrigen,
@@ -78,6 +87,7 @@ class Servicio {
         "duracion": duracion,
         "historialOrigen": historialOrigen,
         "historialDestino": historialDestino,
+        "uid": uid,
       };
 
   get estado => _estado;
@@ -150,5 +160,17 @@ class Servicio {
 
   set historialDestino(pHistorialDestino) {
     _historialDestino = pHistorialDestino;
+  }
+
+  get uid => _uid;
+
+  set uid(pUid) {
+    _uid = pUid;
+  }
+
+  get pasajeros => _pasajeros;
+
+  set pasajeros(pPasajeros) {
+    _pasajeros = pPasajeros;
   }
 }

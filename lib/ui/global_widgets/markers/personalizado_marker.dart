@@ -10,6 +10,11 @@ Future<BitmapDescriptor> getImagenMarker() async {
       "img/icons/pin_localizacion.png");
 }
 
+Future<BitmapDescriptor> getImagenMarkerPerson() async {
+  return await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(size: Size(5, 5)), "img/icons/icon.png");
+}
+
 Future<BitmapDescriptor> getNetworkImagenMarker() async {
   final response = await Dio().get(
       'https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png',

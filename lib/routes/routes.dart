@@ -11,6 +11,7 @@ import 'package:pa_donde_app/ui/pages/inicio_pag.dart';
 import 'package:pa_donde_app/ui/pages/inicio_sesion_pag.dart';
 import 'package:pa_donde_app/ui/pages/marker_pag.dart';
 import 'package:pa_donde_app/ui/pages/market.dart';
+import 'package:pa_donde_app/ui/pages/principal_pag.dart';
 import 'package:pa_donde_app/ui/pages/recuperar_contrasenia_pag.dart';
 import 'package:pa_donde_app/ui/pages/ruta_pag.dart';
 import 'package:pa_donde_app/ui/pages/validar_inicio_sesion_pag.dart';
@@ -32,7 +33,8 @@ Map<String, WidgetBuilder> generarRutas() {
     'editarVehiculo': (_) => const EditarVehiculo(vehiculo: null),
     'marker': (_) => const MarkerPage(),
     'prueba': (_) => const PruebaPag(),
-    'chat': (_) => ChatPag()
+    'chat': (_) => ChatPag(),
+    'principal': (_) => const PrincipalPag()
   };
 
   return _rutas;

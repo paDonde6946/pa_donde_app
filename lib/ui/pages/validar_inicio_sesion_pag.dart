@@ -76,6 +76,13 @@ class ValidarInicioSesion extends StatelessWidget {
       BlocProvider.of<ServicioBloc>(context)
           .add(OnActualizarServiciosPostulados(serviciosPostulados));
 
+      /// Obtiene los servicios que generales que el usuario puede postularse
+      final serviciosGenerales =
+          await ServicioRServicio().darServiciosGenerales();
+
+      BlocProvider.of<ServicioBloc>(context)
+          .add(OnActualizarServiciosGenerales(serviciosGenerales));
+
       SchedulerBinding.instance!.addPostFrameCallback((_) {
         Navigator.pushReplacement(
             context,

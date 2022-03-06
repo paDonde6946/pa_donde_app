@@ -111,7 +111,7 @@ class MapsBloc extends Bloc<MapsEvent, MapsState> {
     double duracionViaje = (rutaDestino.duracion / 60).floorToDouble();
 
     /// Marcodor Personalizado
-    final marcadorPersonalizado = await getNetworkImagenMarker();
+    final marcadorPersonalizado = await getImagenMarkerPerson();
     final marcadorPersonalizadoFinal = await getFinalMarkerPersonalizado(
         rutaDestino.lugarFinal.text!,
         distanciaKM.toInt(),
