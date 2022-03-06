@@ -87,10 +87,9 @@ class _AgregarServicioParte2State extends State<AgregarServicioParte2> {
         setState(() {});
       },
       child: Material(
-        elevation: 10,
+        elevation: 3,
         borderRadius: const BorderRadius.all(Radius.circular(20)),
         child: Container(
-          // margin: const EdgeInsets.symmetric(vertical: 20),
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(
             // mainAxisAlignment: MainAxisAlignment.spaceBetween,

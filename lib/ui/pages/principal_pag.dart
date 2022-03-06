@@ -293,14 +293,16 @@ class _PrincipalPagState extends State<PrincipalPag> {
                     children: [
                       subTitulosDelServicio(subtitulo: "Cupos"),
                       const SizedBox(width: 10),
-                      textoDelServicio(texto: servicio.cantidadCupos),
+                      textoDelServicio(
+                          texto: servicio.cantidadCupos -
+                              servicio.pasajeros.length),
                     ],
                   ),
                   Row(
                     children: [
                       subTitulosDelServicio(subtitulo: "Pasajeros"),
                       const SizedBox(width: 10),
-                      textoDelServicio(texto: servicio.cantidadCupos),
+                      textoDelServicio(texto: servicio.pasajeros.length),
                     ],
                   ),
                 ],

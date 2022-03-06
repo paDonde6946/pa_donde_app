@@ -120,6 +120,7 @@ class ServicioRServicio {
     return data.servicios!;
   }
 
+  /// Actualiza el servicio creado por el usuario
   Future<bool> actualizarServicio(Servicio servicio) async {
     // EndPoint para crear el servicio
     final uri =
@@ -140,6 +141,21 @@ class ServicioRServicio {
       },
       body: json.encode(data),
     );
+
+    final res = json.decode(response.body);
+
+    return res["ok"];
+  }
+
+  /// Se elimina el servicio del usuario que lo creo
+  Future<bool> eliminarServicio(Servicio servicio) async {
+    // EndPoint para crear el servicio
+    final uri =
+        Uri.http(EntornoVariable.host, "/app/eliminarServicio/${servicio.uid}");
+
+    String? token = await _storage.read(key: 'token');
+
+    final response = await http.delete(uri, headers: {"x-token": token});
 
     final res = json.decode(response.body);
 

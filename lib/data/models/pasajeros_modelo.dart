@@ -1,24 +1,3 @@
-// To parse this JSON data, do
-//
-//     final pasejeros = pasejerosFromJson(jsonString);
-
-import 'dart:convert';
-
-Pasejeros pasejerosFromJson(String str) => Pasejeros.fromJson(json.decode(str));
-
-class Pasejeros {
-  Pasejeros({
-    this.pasajeros,
-  });
-
-  List<PasajeroElement>? pasajeros;
-
-  factory Pasejeros.fromJson(Map<String, dynamic> json) => Pasejeros(
-        pasajeros: List<PasajeroElement>.from(
-            json["pasajeros"].map((x) => PasajeroElement.fromJson(x))),
-      );
-}
-
 class PasajeroElement {
   PasajeroElement({
     this.pasajero,

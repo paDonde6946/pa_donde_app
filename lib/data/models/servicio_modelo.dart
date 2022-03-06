@@ -73,7 +73,7 @@ class Servicio {
       pHistorialDestino: json["historialDestino"],
       pUid: json["uid"],
       pPasajeros: List<PasajeroElement>.from(
-          json["pasajeros"].map((x) => PasajeroElement.fromJson(x))));
+          json["pasajeros"]!.map((x) => PasajeroElement.fromJson(x))));
 
   Map<String, dynamic> toJson() => {
         "nombreOrigen": nombreOrigen,

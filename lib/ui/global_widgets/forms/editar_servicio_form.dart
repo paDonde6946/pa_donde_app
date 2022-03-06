@@ -20,6 +20,7 @@ class EditarServicioForm extends StatefulWidget {
 
   @override
   State<EditarServicioForm> createState() =>
+      // ignore: no_logic_in_create_state
       _EditarServicioFormState(callbackFunction);
 }
 
@@ -37,6 +38,17 @@ class _EditarServicioFormState extends State<EditarServicioForm> {
   // CONTROLADORES DE CADA INPUT
   TextEditingController inputCupos = TextEditingController();
 
+  @override
+  void initState() {
+    servicio =
+        BlocProvider.of<ServicioBloc>(context).state.servicioSeleccionado;
+    final separarFecha = servicio.fechayhora.split("T");
+
+    fecha2 = separarFecha[0].toString();
+    hora2 = separarFecha[1].split(".")[0];
+    super.initState();
+  }
+
   _EditarServicioFormState(this.callbackFunction);
 
   @override
@@ -45,9 +57,6 @@ class _EditarServicioFormState extends State<EditarServicioForm> {
     taminoLetra = size.width * 0.04;
     servicio =
         BlocProvider.of<ServicioBloc>(context).state.servicioSeleccionado;
-    final separarFecha = servicio.fechayhora.split("T");
-    fecha2 = separarFecha[0].toString();
-    hora2 = separarFecha[1].split(".")[0];
 
     // Espacio entre cada input
     const tamanioSeparador = 7.0;
@@ -99,6 +108,7 @@ class _EditarServicioFormState extends State<EditarServicioForm> {
 
       servicioBloc.cantidadCupos =
           int.parse(cupos.isEmpty ? servicio.cantidadCupos.toString() : cupos);
+
       if (servicioBloc.cantidadCupos <= 0 || servicioBloc.cantidadCupos >= 6) {
         mostrarShowDialogInformativo(
             context: context,
@@ -113,36 +123,41 @@ class _EditarServicioFormState extends State<EditarServicioForm> {
               contenido:
                   "Debe ingresar una fecha y hora menor a 24 horas de la hora actual (${DateTime.now()})");
         } else {
-          servicioBloc.fechayhora = formateandoFecha;
-
-          // preServicioBloc.controller!.jumpToPage(2);
-          // preServicioBloc.add(OnCambiarPagina(preServicioBloc.controller!));
-          // preServicioBloc.add(OnCrearServicio(servicioBloc));
-          final validar =
-              await ServicioRServicio().actualizarServicio(servicio);
-
-          /// Actualiza el servicio con su información para mostrar en la siguiente página
-          BlocProvider.of<ServicioBloc>(context)
-              .add(OnServicioSeleccionado(servicioBloc));
-          if (validar) {
-            callbackFunction!();
+          if (servicioBloc.cantidadCupos < servicio.pasajeros.length) {
             mostrarShowDialogInformativo(
                 context: context,
-                titulo: 'Actualizado',
-                contenido: "Los campos fueron actualizados");
+                titulo: 'Cupos',
+                contenido:
+                    "La cantidad de cupos no es valida. Debe de ingresar un valor superior o igual al número de pasajeros");
           } else {
-            mostrarShowDialogInformativo(
-                context: context,
-                titulo: 'No se actualizo',
-                contenido: "Los campos no fueron actualizados");
-          }
+            servicioBloc.fechayhora = formateandoFecha;
 
-          Navigator.pop(context);
-          return;
+            final validar =
+                await ServicioRServicio().actualizarServicio(servicio);
+
+            /// Actualiza el servicio con su información para mostrar en la siguiente página
+            BlocProvider.of<ServicioBloc>(context)
+                .add(OnServicioSeleccionado(servicioBloc));
+            if (validar) {
+              callbackFunction!();
+              mostrarShowDialogInformativo(
+                  context: context,
+                  titulo: 'Actualizado',
+                  contenido: "Los campos fueron actualizados");
+            } else {
+              mostrarShowDialogInformativo(
+                  context: context,
+                  titulo: 'No se actualizo',
+                  contenido: "Los campos no fueron actualizados");
+            }
+
+            Navigator.pop(context);
+            return;
+          }
         }
       }
 
-      throw Exception();
+      // throw Exception();
     } catch (e) {
       mostrarShowDialogInformativo(
           context: context,
