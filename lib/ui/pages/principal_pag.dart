@@ -381,7 +381,7 @@ class _PrincipalPagState extends State<PrincipalPag> {
                               textoDelServicio(texto: servicio.cantidadCupos),
                           padding: const EdgeInsets.only(bottom: 18, right: 80),
                         ),
-                        botonDelServicio(nombreBoton: "Ver mas"),
+                        botonDelServicio("Ver mas", servicio),
                       ],
                     )
                   ],
@@ -495,7 +495,7 @@ class _PrincipalPagState extends State<PrincipalPag> {
   }
 
   ///
-  Widget botonDelServicio({String nombreBoton = ''}) {
+  Widget botonDelServicio(String nombreBoton, Servicio servicio) {
     return Container(
       height: 40,
       width: 100,
@@ -511,6 +511,9 @@ class _PrincipalPagState extends State<PrincipalPag> {
           style: const TextStyle(fontSize: 20, color: Colors.white),
         ),
         onPressed: () {
+          BlocProvider.of<ServicioBloc>(context)
+              .add(OnServicioSeleccionado(servicio));
+
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const DetalleServicioPag()),

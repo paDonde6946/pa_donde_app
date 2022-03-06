@@ -24,7 +24,7 @@ class AutenticacionServicio with ChangeNotifier {
   Future<Usuario?> login(String correo, String contrasenia) async {
     autenticando = true;
 
-    String path = "/app/login/usuario/$correo/$contrasenia";
+    String path = "/app/login/usuario/${correo.trim()}/$contrasenia";
 
     final uri = Uri.http(EntornoVariable.host, path);
     final headers = {HttpHeaders.contentTypeHeader: 'application/json'};

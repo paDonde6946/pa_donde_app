@@ -62,10 +62,14 @@ class Usuario with ChangeNotifier {
         pUid: json["uid"],
         pCalificacionUsuario: json["calificacionUsuario"],
         pCalificacionConductor: json["calificacionConductor"],
-        pHistorialDestino: List<Feature>.from(
-            json["historialDestino"].map((x) => Feature.fromJson(x))),
-        pHistorialOrigen: List<Feature>.from(
-            json["historialOrigen"].map((x) => Feature.fromJson(x))),
+        pHistorialDestino: json["historialDestino"] != null
+            ? List<Feature>.from(
+                json["historialDestino"].map((x) => Feature.fromJson(x)))
+            : [],
+        pHistorialOrigen: json["historialDestino"] != null
+            ? List<Feature>.from(
+                json["historialOrigen"]?.map((x) => Feature.fromJson(x)))
+            : [],
       );
 
   Map<String, dynamic> toJson() => {
