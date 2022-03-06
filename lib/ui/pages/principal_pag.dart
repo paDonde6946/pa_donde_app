@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pa_donde_app/blocs/blocs.dart';
+import 'package:pa_donde_app/ui/helpers/helpers.dart';
+import 'package:pa_donde_app/ui/pages/chat_pag.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'detalle_servicio_pag.dart';
@@ -360,7 +363,12 @@ class _PrincipalPagState extends State<PrincipalPag> {
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20),
                     child: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          SchedulerBinding.instance!.addPostFrameCallback((_) {
+                            Navigator.of(context)
+                                .push(navegarMapaFadeIn(context, ChatPag()));
+                          });
+                        },
                         icon: const Icon(Icons.chat, size: 35)),
                   )
                 ],

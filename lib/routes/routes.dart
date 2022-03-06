@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pa_donde_app/ui/pages/acceso_gps_pag.dart';
 import 'package:pa_donde_app/ui/pages/agregar_vehiculo_pag.dart';
 import 'package:pa_donde_app/ui/pages/cargando_gps_pag.dart';
+import 'package:pa_donde_app/ui/pages/chat_pag.dart';
 import 'package:pa_donde_app/ui/pages/editar_perfil_pag.dart';
 import 'package:pa_donde_app/ui/pages/editar_vehiculo_pag.dart';
 import 'package:pa_donde_app/ui/pages/inicio_pag.dart';
@@ -21,7 +22,9 @@ Map<String, WidgetBuilder> generarRutas() {
     'inicio': (_) => const InicioPag(),
     'recuperarContrasenia': (_) => const RecuperarContraseniaPag(),
     'validarInicioSesion': (_) => const ValidarInicioSesion(),
-    'editarPerfil': (_) => EditarPerfilPag(callbackFunction: (){},),
+    'editarPerfil': (_) => EditarPerfilPag(
+          callbackFunction: () {},
+        ),
     'agregarVehiculo': (_) => const AgregarVehiculo(),
     'ruta': (_) => const RutaPag(),
     'accesoGPS': (_) => const AccesoGPSPag(),
@@ -29,6 +32,7 @@ Map<String, WidgetBuilder> generarRutas() {
     'editarVehiculo': (_) => const EditarVehiculo(vehiculo: null),
     'marker': (_) => const MarkerPage(),
     'prueba': (_) => const PruebaPag(),
+    'chat': (_) => ChatPag()
   };
 
   return _rutas;
