@@ -74,10 +74,10 @@ class _FormInicioSesionState extends State<FormInicioSesion> {
     AutenticacionServicio autenticacionServicio =
         Provider.of<AutenticacionServicio>(context, listen: false);
 
+    autenticacionServicio.autenticando = true;
     final response = await autenticacionServicio.login(
         inputControllerCorreo.text.trim(),
         inputControllerContrasenia.text.trim());
-
     if (response == null) {
       customShapeSnackBar(context: context, titulo: 'Información invalida');
     } else {
@@ -129,13 +129,14 @@ class _FormInicioSesionState extends State<FormInicioSesion> {
       BlocProvider.of<ServicioBloc>(context)
           .add(OnActualizarServiciosGenerales(serviciosGenerales));
 
-      SchedulerBinding.instance!.addPostFrameCallback((_) {
-        Navigator.pushReplacement(
-            context,
-            PageRouteBuilder(
-                pageBuilder: (context, __, ___) => const InicioPag(),
-                transitionDuration: const Duration(milliseconds: 10)));
-      });
+      // SchedulerBinding.instance!.addPostFrameCallback((_) {
+      //   Navigator.push(
+      //       context,
+      //       PageRouteBuilder(
+      //           pageBuilder: (context, __, ___) => const InicioPag(),
+      //           transitionDuration: const Duration(milliseconds: 10)));
+      // });
+      Navigator.pushNamed(context, 'inicio');
     }
   }
 
