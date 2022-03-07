@@ -18,6 +18,7 @@ import 'package:pa_donde_app/ui/helpers/helpers.dart';
 import 'package:pa_donde_app/ui/pages/editar_contrasenia_pag.dart';
 import 'package:pa_donde_app/ui/pages/historial_pag.dart';
 import 'package:pa_donde_app/ui/pages/editar_perfil_pag.dart';
+import 'package:pa_donde_app/ui/pages/principal_pag.dart';
 //---------------------------------------------------------------------
 
 class PerfilPag extends StatefulWidget {
@@ -165,8 +166,8 @@ class _PerfilPagState extends State<PerfilPag> {
               mostrarShowDialogCargando(
                   context: context, titulo: 'CERRANDO SESIÓN');
               await Future.delayed(const Duration(seconds: 1));
-
-              // Navigator.of(context).pop();f
+              BlocProvider.of<PaginasBloc>(context)
+                  .add(const OnCambiarPaginaPrincipal(PrincipalPag(), 0));
 
               mostrarShowDialogConfirmar(
                   context: context,
