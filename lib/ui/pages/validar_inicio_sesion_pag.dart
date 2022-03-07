@@ -36,7 +36,6 @@ class ValidarInicioSesion extends StatelessWidget {
   Future checkLoginState(BuildContext context) async {
     final authService =
         Provider.of<AutenticacionServicio>(context, listen: false);
-    // final sockettServicce = Provider.of<SocketServicio>(context);
 
     final autenticado = await authService.logeado();
     if (autenticado) {

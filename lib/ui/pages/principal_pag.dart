@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pa_donde_app/blocs/blocs.dart';
+import 'package:pa_donde_app/ui/global_widgets/forms/agregar_servicio3_form.dart';
 import 'package:pa_donde_app/ui/helpers/helpers.dart';
 import 'package:pa_donde_app/ui/pages/chat_pag.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/confirmacion_show.dart';
@@ -181,6 +182,8 @@ class _PrincipalPagState extends State<PrincipalPag> {
   Widget mostrarServiciosDelUsuario() {
     final size = MediaQuery.of(context).size;
 
+    setState(() {});
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -203,7 +206,7 @@ class _PrincipalPagState extends State<PrincipalPag> {
   Widget listadoServiciosDelUsuario() {
     final servicios =
         BlocProvider.of<ServicioBloc>(context).state.serviciosDelUsuario;
-
+    setState(() {});
     return PageView.builder(
       itemCount: servicios.length,
       itemBuilder: (context, index) {
@@ -326,7 +329,9 @@ class _PrincipalPagState extends State<PrincipalPag> {
 
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const DetalleServicioPag()),
+          MaterialPageRoute(
+              builder: (context) =>
+                  DetalleServicioPag(callbackFunction: callback)),
         );
       },
       child: Container(
@@ -407,7 +412,9 @@ class _PrincipalPagState extends State<PrincipalPag> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => const DetallePostuladoServicio()),
+              builder: (context) => DetallePostuladoServicio(
+                    callbackFunction: callback,
+                  )),
         );
       },
       child: Container(
@@ -523,7 +530,9 @@ class _PrincipalPagState extends State<PrincipalPag> {
 
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const DetalleServicioPag()),
+            MaterialPageRoute(
+                builder: (context) =>
+                    DetalleServicioPag(callbackFunction: callback)),
           );
         },
       ),

@@ -8,24 +8,40 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/models/ruta_destino_modelo.dart';
-import 'package:pa_donde_app/data/response/busqueda_response.dart';
 import 'package:pa_donde_app/data/models/servicio_modelo.dart';
 
+import 'package:pa_donde_app/data/response/busqueda_response.dart';
+
+import 'package:pa_donde_app/data/services/servicios_servicio.dart';
+
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/validacion_show.dart';
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 import 'package:pa_donde_app/ui/global_widgets/views/mapa_view.dart';
+
+import 'package:pa_donde_app/ui/utils/snack_bars.dart';
 
 import 'package:pa_donde_app/blocs/blocs.dart';
 //---------------------------------------------------------------------
 
 class DetalleServicioPag extends StatefulWidget {
-  const DetalleServicioPag({Key? key}) : super(key: key);
+  final Function? callbackFunction;
+
+  const DetalleServicioPag({Key? key, required this.callbackFunction})
+      : super(key: key);
 
   @override
-  State<DetalleServicioPag> createState() => _DetalleServicioPagState();
+  State<DetalleServicioPag> createState() =>
+      // ignore: no_logic_in_create_state
+      _DetalleServicioPagState(callbackFunction);
 }
 
 class _DetalleServicioPagState extends State<DetalleServicioPag> {
+  final Function? callbackFunction;
+
   Servicio servicio = Servicio();
+
+  _DetalleServicioPagState(this.callbackFunction);
 
   @override
   Widget build(BuildContext context) {
@@ -37,12 +53,14 @@ class _DetalleServicioPagState extends State<DetalleServicioPag> {
       body: Column(
         children: [
           cardDeServicio(),
+          _botonPostularse(),
           _mostrarMapa(),
         ],
       ),
     );
   }
 
+  /// AppBar personalizado que se muestra en la parte superior de la pantalla
   PreferredSizeWidget appBar() {
     return AppBar(
         centerTitle: true,
@@ -54,6 +72,7 @@ class _DetalleServicioPagState extends State<DetalleServicioPag> {
         ));
   }
 
+  /// Es el contendero de la información del servicio
   Widget cardDeServicio() {
     final fecha = servicio.fechayhora.split("T");
     final precio = _validarPrecioServicio();
@@ -108,24 +127,54 @@ class _DetalleServicioPagState extends State<DetalleServicioPag> {
               ),
             ],
           ),
-          _botonesEditarYEliminar()
         ],
       ),
     );
   }
 
-  Widget _botonesEditarYEliminar() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        BtnAnaranja(
-          function: () {},
-          titulo: 'Postularse',
-        ),
-      ],
+  /// Contienes los botones del servicio  (postularse)
+  Widget _botonPostularse() {
+    return BtnAnaranja(
+      function: () async {
+        mostrarShowDialogValidar(
+          context: context,
+          titulo: '¿Desea postularse al servicio?',
+          contenido: 'Se apartara un cupo para que pueda tomar el servicio',
+          paginaRetorno: 'inicio',
+          icono: Icons.check_box_outlined,
+          funtion: () async {
+            final servicioBloc = BlocProvider.of<ServicioBloc>(context);
+
+            servicioBloc.buscarYactualizarServicioGenerales(servicio);
+
+            servicioBloc.actualizarServicioPostulado(servicio);
+
+            final validar =
+                await ServicioRServicio().postularseServicio(servicio.uid);
+            Navigator.of(context, rootNavigator: true).pop(context);
+            if (validar) {
+              mostrarShowDialogCargando(
+                  context: context, titulo: 'Postulandose...');
+              await Future.delayed(const Duration(seconds: 2));
+              Navigator.of(context, rootNavigator: true).pop(context);
+              mostrarShowDialogCargando(
+                  context: context, titulo: 'Se ha postulado al servicio');
+              await Future.delayed(const Duration(seconds: 1));
+              Navigator.of(context, rootNavigator: true).pop(context);
+              callbackFunction!();
+              Navigator.pop(context);
+            } else {
+              customShapeSnackBar(
+                  context: context, titulo: "No se pudo postular al servicio");
+            }
+          },
+        );
+      },
+      titulo: 'Postularse',
     );
   }
 
+  ///  Valida el valor del precio del servicio con una lista que se encuentra preCargada en el Bloc
   String _validarPrecioServicio() {
     final auxilioEconomico =
         BlocProvider.of<PreserviciosBloc>(context).state.precios;
@@ -139,6 +188,7 @@ class _DetalleServicioPagState extends State<DetalleServicioPag> {
     return '';
   }
 
+  ///  Valida la placa del vehiculo que va a prestar el servicio con una lista que se encuentra preCargada en el Bloc
   String _validarVehiculoServicio() {
     final vehiculos =
         BlocProvider.of<PreserviciosBloc>(context).state.vehiculos;
@@ -151,6 +201,7 @@ class _DetalleServicioPagState extends State<DetalleServicioPag> {
     return '';
   }
 
+  /// Muestra el mapa con la ruta establecida de destino.
   Widget _mostrarMapa() {
     final size = MediaQuery.of(context).size;
     final mapaBloc = BlocProvider.of<MapsBloc>(context);

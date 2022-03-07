@@ -302,6 +302,10 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
           paginaRetorno: 'inicio',
           icono: Icons.delete_forever_outlined,
           funtion: () async {
+            final servicioBloc = BlocProvider.of<ServicioBloc>(context);
+
+            servicioBloc.buscarYactualizarServicioDelUsuario(servicio);
+
             final validar =
                 await ServicioRServicio().eliminarServicio(servicio);
             Navigator.of(context, rootNavigator: true).pop(context);
@@ -314,7 +318,7 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
                   context: context, titulo: 'Servicio Eliminado');
               await Future.delayed(const Duration(seconds: 1));
               Navigator.of(context, rootNavigator: true).pop(context);
-
+              callbackFunction!();
               Navigator.pop(context);
             } else {
               customShapeSnackBar(
