@@ -72,7 +72,6 @@ class ServicioRServicio {
     final uri = Uri.http(EntornoVariable.host, '/app/darHistorial');
 
     final response = await http.get(uri, headers: {"x-token": token});
-    print(response.body);
 
     final data = historialResponseFromJson(response.body);
 
@@ -197,6 +196,54 @@ class ServicioRServicio {
 
     final data = {
       "idServicio": uid,
+    };
+
+    final response = await http.post(
+      uri,
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        "x-token": token,
+      },
+      body: json.encode(data),
+    );
+
+    final res = json.decode(response.body);
+
+    return res["ok"];
+  }
+
+  Future<bool> iniciarServicio(String uid) async {
+    // EndPoint para crear el servicio
+    final uri = Uri.http(EntornoVariable.host, "/app/iniciarServicio");
+
+    String? token = await _storage.read(key: 'token');
+
+    final data = {
+      "uidServicio": uid,
+    };
+
+    final response = await http.post(
+      uri,
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        "x-token": token,
+      },
+      body: json.encode(data),
+    );
+
+    final res = json.decode(response.body);
+
+    return res["ok"];
+  }
+
+  Future<bool> finalizarServicio(String uid) async {
+    // EndPoint para crear el servicio
+    final uri = Uri.http(EntornoVariable.host, "/app/finalizarServicio");
+
+    String? token = await _storage.read(key: 'token');
+
+    final data = {
+      "uidServicio": uid,
     };
 
     final response = await http.post(
