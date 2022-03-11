@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pa_donde_app/data/models/usuario_modelo.dart';
+import 'package:pa_donde_app/ui/pages/inicio_pag.dart';
 import 'package:provider/provider.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
@@ -71,16 +74,24 @@ class _FormInicioSesionState extends State<FormInicioSesion> {
     AutenticacionServicio autenticacionServicio =
         Provider.of<AutenticacionServicio>(context, listen: false);
 
+    autenticacionServicio.autenticando = true;
     final response = await autenticacionServicio.login(
         inputControllerCorreo.text.trim(),
         inputControllerContrasenia.text.trim());
-
     if (response == null) {
       customShapeSnackBar(context: context, titulo: 'Información invalida');
     } else {
       FocusScope.of(context).unfocus();
       // Si todo esta bien redirige a la siguiente página
       keyForm.currentState!.save();
+      final authService =
+          Provider.of<AutenticacionServicio>(context, listen: false);
+
+      /// Agrega en el bloc la informacion del usuario
+      BlocProvider.of<UsuarioBloc>(context)
+          .add(OnActualizarUsuario(authService.usuarioServiciosActual));
+
+      agregarHistorialesBusqueda(context, authService.usuarioServiciosActual);
 
       /// Consulta los auxilios economicos que puede tener un servicio
       final auxilioEconomicoServicio =
@@ -89,15 +100,55 @@ class _FormInicioSesionState extends State<FormInicioSesion> {
       /// Consulta los vehiculos que puede tener un servicio
       final vehiculosServicio = await VehiculoServicio().getVehiculos();
 
+      /// Agrega en el bloc los vehiculos del usuario.
       BlocProvider.of<PreserviciosBloc>(context)
           .add(OnAgregarVehiculo(vehiculosServicio));
 
+      /// Agrega en el bloc los precios establecidos
       BlocProvider.of<PreserviciosBloc>(context)
           .add(OnAgregarPrecios(auxilioEconomicoServicio));
 
-      autenticacionServicio.autenticando = true;
+      /// Obtiene los servicios que han sido creados por el usuario
+      final serviciosDelUsuario =
+          await ServicioRServicio().darServiciosCreadosPorUsuario();
 
+      BlocProvider.of<ServicioBloc>(context)
+          .add(OnActualizarServiciosDelUsuario(serviciosDelUsuario));
+
+      /// Obtiene los servicios que se ha postulado el usuario
+      final serviciosPostulados =
+          await ServicioRServicio().darServiciosPostuladosPorUsuario();
+
+      BlocProvider.of<ServicioBloc>(context)
+          .add(OnActualizarServiciosPostulados(serviciosPostulados));
+
+      /// Obtiene los servicios que generales que el usuario puede postularse
+      final serviciosGenerales =
+          await ServicioRServicio().darServiciosGenerales();
+
+      BlocProvider.of<ServicioBloc>(context)
+          .add(OnActualizarServiciosGenerales(serviciosGenerales));
+
+      // SchedulerBinding.instance!.addPostFrameCallback((_) {
+      //   Navigator.push(
+      //       context,
+      //       PageRouteBuilder(
+      //           pageBuilder: (context, __, ___) => const InicioPag(),
+      //           transitionDuration: const Duration(milliseconds: 10)));
+      // });
       Navigator.pushNamed(context, 'inicio');
+    }
+  }
+
+  void agregarHistorialesBusqueda(BuildContext context, Usuario usuario) {
+    for (var feature in usuario.historialOrigen) {
+      BlocProvider.of<BusquedaBloc>(context)
+          .add(OnAgregarHistorialOrigenEvent(feature));
+    }
+
+    for (var feature in usuario.historialDestino) {
+      BlocProvider.of<BusquedaBloc>(context)
+          .add(OnAgregarHistorialDestionoEvent(feature));
     }
   }
 

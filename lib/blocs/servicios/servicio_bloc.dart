@@ -32,4 +32,35 @@ class ServicioBloc extends Bloc<ServicioEvent, ServicioState> {
       emit(state.copyWith(servicioSeleccionado: event.servicioSeleccionado));
     });
   }
+
+  void actualizarServicioPostulado(Servicio servicio) {
+    final servicios = [servicio, ...state.serviciosPostulados];
+    add(OnActualizarServiciosPostulados(servicios));
+  }
+
+  void actualizarServicioGeneral(Servicio servicio) {
+    final servicios = [servicio, ...state.serviciosGenerales];
+    add(OnActualizarServiciosGenerales(servicios));
+  }
+
+  void actualizarServicioDelUsuario(Servicio servicio) {
+    final servicios = [servicio, ...state.serviciosDelUsuario];
+    add(OnActualizarServiciosDelUsuario(servicios));
+  }
+
+  void buscarYactualizarServicioPostulado(Servicio servicio) {
+    state.serviciosPostulados.remove(servicio);
+
+    add(OnActualizarServiciosPostulados(state.serviciosPostulados));
+  }
+
+  void buscarYactualizarServicioDelUsuario(Servicio servicio) {
+    state.serviciosDelUsuario.remove(servicio);
+    add(OnActualizarServiciosDelUsuario(state.serviciosDelUsuario));
+  }
+
+  void buscarYactualizarServicioGenerales(Servicio servicio) {
+    state.serviciosGenerales.remove(servicio);
+    add(OnActualizarServiciosGenerales(state.serviciosGenerales));
+  }
 }

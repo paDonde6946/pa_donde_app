@@ -4,15 +4,16 @@ import 'dart:io';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:pa_donde_app/data/models/auxilio_economico_modelo.dart';
-import 'package:pa_donde_app/data/models/pasajeros_modelo.dart';
-import 'package:pa_donde_app/data/models/servicio_modelo.dart';
-import 'package:pa_donde_app/data/response/historial_response.dart';
-import 'package:pa_donde_app/data/response/servicio_response.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/global/entorno_variable_global.dart';
+
+import 'package:pa_donde_app/data/models/auxilio_economico_modelo.dart';
+import 'package:pa_donde_app/data/models/servicio_modelo.dart';
+
 import 'package:pa_donde_app/data/response/auxilio_economico_response.dart';
+import 'package:pa_donde_app/data/response/historial_response.dart';
+import 'package:pa_donde_app/data/response/servicio_response.dart';
 //---------------------------------------------------------------------
 
 class ServicioRServicio {
@@ -71,7 +72,6 @@ class ServicioRServicio {
     final uri = Uri.http(EntornoVariable.host, '/app/darHistorial');
 
     final response = await http.get(uri, headers: {"x-token": token});
-    print(response.body);
 
     final data = historialResponseFromJson(response.body);
 
@@ -156,6 +156,104 @@ class ServicioRServicio {
     String? token = await _storage.read(key: 'token');
 
     final response = await http.delete(uri, headers: {"x-token": token});
+
+    final res = json.decode(response.body);
+
+    return res["ok"];
+  }
+
+  /// El usuario que se postulo para poder tomar un servicio puede cancelar el servicio con esta peticion
+  Future<bool> cancelarServicio(String uid) async {
+    // EndPoint para crear el servicio
+    final uri = Uri.http(EntornoVariable.host, "/app/desPostularse");
+
+    String? token = await _storage.read(key: 'token');
+
+    final data = {
+      "uidServicio": uid,
+    };
+
+    final response = await http.post(
+      uri,
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        "x-token": token,
+      },
+      body: json.encode(data),
+    );
+
+    final res = json.decode(response.body);
+
+    return res["ok"];
+  }
+
+  /// el usuario que este interesado en postularse para poder tomar un servicio con esta peticion
+  Future<bool> postularseServicio(String uid) async {
+    // EndPoint para crear el servicio
+    final uri = Uri.http(EntornoVariable.host, "/app/separaCupo");
+
+    String? token = await _storage.read(key: 'token');
+
+    final data = {
+      "idServicio": uid,
+    };
+
+    final response = await http.post(
+      uri,
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        "x-token": token,
+      },
+      body: json.encode(data),
+    );
+
+    final res = json.decode(response.body);
+
+    return res["ok"];
+  }
+
+  Future<bool> iniciarServicio(String uid) async {
+    // EndPoint para crear el servicio
+    final uri = Uri.http(EntornoVariable.host, "/app/iniciarServicio");
+
+    String? token = await _storage.read(key: 'token');
+
+    final data = {
+      "uidServicio": uid,
+    };
+
+    final response = await http.post(
+      uri,
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        "x-token": token,
+      },
+      body: json.encode(data),
+    );
+
+    final res = json.decode(response.body);
+
+    return res["ok"];
+  }
+
+  Future<bool> finalizarServicio(String uid) async {
+    // EndPoint para crear el servicio
+    final uri = Uri.http(EntornoVariable.host, "/app/finalizarServicio");
+
+    String? token = await _storage.read(key: 'token');
+
+    final data = {
+      "uidServicio": uid,
+    };
+
+    final response = await http.post(
+      uri,
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        "x-token": token,
+      },
+      body: json.encode(data),
+    );
 
     final res = json.decode(response.body);
 

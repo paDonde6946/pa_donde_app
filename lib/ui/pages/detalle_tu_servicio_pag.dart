@@ -45,14 +45,20 @@ class DetalleTuServicio extends StatefulWidget {
 class _DetalleTuServicioState extends State<DetalleTuServicio> {
   final Function? callbackFunction;
   Servicio servicio = Servicio();
+  var validar;
+  _DetalleTuServicioState(this.callbackFunction);
+
+  @override
+  void initState() {
+    validar = false;
+    super.initState();
+  }
 
   /// Metodo para refrescar la pagina
   callback() {
     callbackFunction!();
     setState(() {});
   }
-
-  _DetalleTuServicioState(this.callbackFunction);
 
   @override
   void dispose() {
@@ -260,14 +266,28 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
   Widget _botonesDelServicio() {
     final size = MediaQuery.of(context).size;
 
+    /// Validar si
+    ///  True: Se elimina el servicio
+    ///  False: se Iniica el servicio
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         SizedBox(
           width: size.width * 0.6,
           child: BtnAnaranja(
-            titulo: 'Iniciar',
-            function: () {},
+            titulo: validar == false ? 'Iniciar' : 'Detener',
+            function: () async {
+              if (validar) {
+                await ServicioRServicio().finalizarServicio(servicio.uid);
+                validar = false;
+              } else {
+                final a =
+                    await ServicioRServicio().iniciarServicio(servicio.uid);
+                print(a);
+                validar = true;
+              }
+              setState(() {});
+            },
           ),
         ),
 
@@ -302,6 +322,10 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
           paginaRetorno: 'inicio',
           icono: Icons.delete_forever_outlined,
           funtion: () async {
+            final servicioBloc = BlocProvider.of<ServicioBloc>(context);
+
+            servicioBloc.buscarYactualizarServicioDelUsuario(servicio);
+
             final validar =
                 await ServicioRServicio().eliminarServicio(servicio);
             Navigator.of(context, rootNavigator: true).pop(context);
@@ -314,7 +338,7 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
                   context: context, titulo: 'Servicio Eliminado');
               await Future.delayed(const Duration(seconds: 1));
               Navigator.of(context, rootNavigator: true).pop(context);
-
+              callbackFunction!();
               Navigator.pop(context);
             } else {
               customShapeSnackBar(

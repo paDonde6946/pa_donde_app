@@ -8,25 +8,40 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/models/ruta_destino_modelo.dart';
-import 'package:pa_donde_app/data/response/busqueda_response.dart';
 import 'package:pa_donde_app/data/models/servicio_modelo.dart';
+
+import 'package:pa_donde_app/data/response/busqueda_response.dart';
 
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 import 'package:pa_donde_app/ui/global_widgets/views/mapa_view.dart';
+import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja_icono.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/validacion_show.dart';
 
 import 'package:pa_donde_app/blocs/blocs.dart';
+
+import 'package:pa_donde_app/data/services/servicios_servicio.dart';
+
+import 'package:pa_donde_app/ui/utils/snack_bars.dart';
 //---------------------------------------------------------------------
 
 class DetallePostuladoServicio extends StatefulWidget {
-  const DetallePostuladoServicio({Key? key}) : super(key: key);
+  final Function? callbackFunction;
+
+  const DetallePostuladoServicio({Key? key, required this.callbackFunction})
+      : super(key: key);
 
   @override
   State<DetallePostuladoServicio> createState() =>
-      _DetallePostuladoServicioState();
+      // ignore: no_logic_in_create_state
+      _DetallePostuladoServicioState(callbackFunction);
 }
 
 class _DetallePostuladoServicioState extends State<DetallePostuladoServicio> {
   Servicio servicio = Servicio();
+  final Function? callbackFunction;
+
+  _DetallePostuladoServicioState(this.callbackFunction);
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +53,14 @@ class _DetallePostuladoServicioState extends State<DetallePostuladoServicio> {
       body: Column(
         children: [
           cardDeServicio(),
+          _botonesChatYCancelar(),
           _mostrarMapa(),
         ],
       ),
     );
   }
 
+  /// AppBar personalizado que se muestra en la parte superior de la pantalla
   PreferredSizeWidget appBar() {
     return AppBar(
         centerTitle: true,
@@ -55,6 +72,7 @@ class _DetallePostuladoServicioState extends State<DetallePostuladoServicio> {
         ));
   }
 
+  /// Es el contendero de la información del servicio
   Widget cardDeServicio() {
     final fecha = servicio.fechayhora.split("T");
     final precio = _validarPrecioServicio();
@@ -109,28 +127,80 @@ class _DetallePostuladoServicioState extends State<DetallePostuladoServicio> {
               ),
             ],
           ),
-          _botonesChatYCancelar()
         ],
       ),
     );
   }
 
+  /// Contienes los botones del servicio  (para Cancelar el servicio y para chatear)
   Widget _botonesChatYCancelar() {
+    final size = MediaQuery.of(context).size;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        BtnAnaranja(
-          function: () {},
-          titulo: 'Chat',
+        SizedBox(
+          width: size.width * 0.7,
+          child: _botonCancelarPostulacion(),
         ),
-        BtnAnaranja(
+        BtnNaranjaIcon(
           function: () {},
-          titulo: 'Cancelar',
+          titulo: const Icon(
+            Icons.chat,
+            color: Colors.white,
+          ),
         ),
       ],
     );
   }
 
+  /// Contiene la logica para poder eliminar el servicio
+  Widget _botonCancelarPostulacion() {
+    return
+
+        /// boton para poder eliminar el servicio
+        BtnAnaranja(
+      titulo: 'Cancelar Postulación',
+      function: () async {
+        mostrarShowDialogValidar(
+          context: context,
+          titulo: '¿Desea cancelar el servicio?',
+          contenido:
+              'Se borrará la postulación al servicio y el cupo quedará libre',
+          paginaRetorno: 'inicio',
+          icono: Icons.unpublished,
+          funtion: () async {
+            BlocProvider.of<ServicioBloc>(context)
+                .buscarYactualizarServicioPostulado(servicio);
+
+            BlocProvider.of<ServicioBloc>(context)
+                .actualizarServicioGeneral(servicio);
+
+            final validar =
+                await ServicioRServicio().cancelarServicio(servicio.uid);
+            Navigator.of(context, rootNavigator: true).pop(context);
+            if (validar) {
+              mostrarShowDialogCargando(
+                  context: context, titulo: 'Eliminando postulación...');
+              await Future.delayed(const Duration(seconds: 2));
+              Navigator.of(context, rootNavigator: true).pop(context);
+              mostrarShowDialogCargando(
+                  context: context, titulo: 'Haz cancelado el servicio');
+              await Future.delayed(const Duration(seconds: 1));
+              Navigator.of(context, rootNavigator: true).pop(context);
+              callbackFunction!();
+              Navigator.pop(context);
+            } else {
+              customShapeSnackBar(
+                  context: context, titulo: "No se pudo cancelar el servicio");
+            }
+          },
+        );
+      },
+    );
+  }
+
+  ///  Valida el valor del precio del servicio con una lista que se encuentra preCargada en el Bloc
   String _validarPrecioServicio() {
     final auxilioEconomico =
         BlocProvider.of<PreserviciosBloc>(context).state.precios;
@@ -144,6 +214,7 @@ class _DetallePostuladoServicioState extends State<DetallePostuladoServicio> {
     return '';
   }
 
+  ///  Valida la placa del vehiculo que va a prestar el servicio con una lista que se encuentra preCargada en el Bloc
   String _validarVehiculoServicio() {
     final vehiculos =
         BlocProvider.of<PreserviciosBloc>(context).state.vehiculos;
@@ -156,6 +227,7 @@ class _DetallePostuladoServicioState extends State<DetallePostuladoServicio> {
     return '';
   }
 
+  /// Muestra el mapa con la ruta establecida de destino.
   Widget _mostrarMapa() {
     final size = MediaQuery.of(context).size;
     final mapaBloc = BlocProvider.of<MapsBloc>(context);
@@ -198,54 +270,6 @@ class _DetallePostuladoServicioState extends State<DetallePostuladoServicio> {
           onPanelSlide: (double pos) => setState(() {}),
         );
       },
-    );
-  }
-
-  Widget _cardUsuarioPostulado(String nombre, int posicion) {
-    final size = MediaQuery.of(context).size;
-
-    return Material(
-      elevation: 10,
-      borderRadius: const BorderRadius.all(Radius.circular(20)),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: size.width * 0.04,
-                  child: Icon(Icons.person_add_alt_1_outlined,
-                      size: size.width * 0.06),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(left: 30),
-                  width: size.width * 0.6,
-                  child: Text(nombre),
-                ),
-              ],
-            ),
-            IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.chat_rounded, size: size.width * 0.06))
-          ],
-        ),
-        height: size.height * 0.05,
-        width: size.width * 0.9,
-        decoration: const BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              offset: Offset(1.0, 1.0), //(x,y)
-              blurRadius: 9.0,
-            ),
-          ],
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-        ),
-      ),
     );
   }
 

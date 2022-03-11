@@ -69,7 +69,7 @@ class _AgregarServicioParte3State extends State<AgregarServicioParte3> {
                     context: context,
                     titulo: "Servicio",
                     contenido: "Su servicio ha sido creeado",
-                    paginaRetorno: 'inicio');
+                    paginaRetorno: 'validarInicioSesion');
 
                 servicioBloc.add(OnCrearServicio(Servicio()));
 
