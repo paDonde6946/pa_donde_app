@@ -30,15 +30,15 @@ class MensajeChatWidget extends StatelessWidget {
     return Align(
         alignment: (mio) ? Alignment.centerRight : Alignment.centerLeft,
         child: Container(
-          margin: const EdgeInsets.only(bottom: 5, left: 50, right: 10),
-          padding: const EdgeInsets.all(8.0),
+          margin: const EdgeInsets.only(bottom: 5, left: 10, right: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
           child: Text(texto,
-              style: (mio)
-                  ? TextStyle(color: Theme.of(context).primaryColor)
-                  : TextStyle(color: Theme.of(context).primaryColorLight)),
+              style: const TextStyle(color: Colors.black87, fontSize: 15)),
           decoration: BoxDecoration(
-              color: const Color.fromRGBO(114, 209, 237, 1),
-              borderRadius: BorderRadius.circular(20)),
+              color: (mio)
+                  ? Theme.of(context).backgroundColor
+                  : Theme.of(context).secondaryHeaderColor,
+              borderRadius: BorderRadius.circular(10)),
         ));
   }
 }

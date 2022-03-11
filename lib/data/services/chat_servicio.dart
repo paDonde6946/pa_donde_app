@@ -4,7 +4,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:pa_donde_app/data/models/vehiculo_modelo.dart';
 import 'package:pa_donde_app/global/entorno_variable_global.dart';
 
 class ChatServicio {

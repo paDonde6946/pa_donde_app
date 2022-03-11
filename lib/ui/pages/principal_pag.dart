@@ -462,8 +462,8 @@ class _PrincipalPagState extends State<PrincipalPag> {
                     child: IconButton(
                         onPressed: () {
                           SchedulerBinding.instance!.addPostFrameCallback((_) {
-                            Navigator.of(context)
-                                .push(navegarMapaFadeIn(context, ChatPag()));
+                            Navigator.of(context).push(navegarMapaFadeIn(
+                                context, ChatPag(servicio.uid)));
                           });
                         },
                         icon: const Icon(Icons.chat, size: 35)),

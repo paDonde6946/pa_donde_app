@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pa_donde_app/blocs/chat/chat_bloc.dart';
+import 'package:pa_donde_app/blocs/usuario/usuario_bloc.dart';
+import 'package:pa_donde_app/data/models/mensaje_modelo.dart';
+import 'package:pa_donde_app/data/models/usuario_modelo.dart';
 import 'package:pa_donde_app/data/services/chat_servicio.dart';
-import 'package:provider/provider.dart';
+import 'package:pa_donde_app/data/services/socket_servicio.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/ui/global_widgets/widgets/mensaje_chat_widget.dart';
@@ -8,44 +13,38 @@ import 'package:pa_donde_app/ui/global_widgets/widgets/mensaje_chat_widget.dart'
 //---------------------------------------------------------------------
 
 class ChatPag extends StatefulWidget {
+  final String servicio;
+
+  ChatPag(this.servicio, {Key? key}) : super(key: key);
+
   @override
   _ChatPagState createState() => _ChatPagState();
 }
 
 class _ChatPagState extends State<ChatPag> with TickerProviderStateMixin {
-  final _textController = new TextEditingController();
-  final _focusNode = new FocusNode();
+  final _textController = TextEditingController();
+  final _focusNode = FocusNode();
 
-  List<MensajeChatWidget> _mensajes = [];
+  final List<MensajeChatWidget> _mensajes = [];
   bool _estaEscribiendo = false;
 
   ChatServicio servicioChat = ChatServicio();
-  // SocketServicio servicioSocket;
+  late SocketServicio servicioSocket;
+  late Usuario usuario;
 
   @override
   void initState() {
+    usuario = BlocProvider.of<UsuarioBloc>(context).state.usuario;
+    servicioSocket =
+        SocketServicio(uidServicio: widget.servicio, context: context);
+    servicioSocket.connect();
+
     // this.servicioSocket = Provider.of<SocketServicio>(context, listen: false);
     // this.servicioSocket.socket.on('recibirMensaje', _escucharMensaje);
     // super.initState();
 
     // _cargarHistorial(this.servicioAutenticacion.usuarioServiciosActual.uid);
   }
-
-  // void _cargarHistorial(String usuarioID) async {
-  //   // List<MensajeModelo> chat = await this.servicioChat.getChat(usuarioID);
-
-  //   final history = chat.map((m) => MensajeChatWidget(
-  //         texto: m.mensaje,
-  //         mio: m.de == this.servicioChat.postulado.id ? false : true,
-  //         animationController: new AnimationController(
-  //             vsync: this, duration: Duration(milliseconds: 0))
-  //           ..forward(),
-  //       ));
-
-  //   setState(() {
-  //     _mensajes.insertAll(0, history);
-  //   });
-  // }
 
   // void _escucharMensaje(dynamic payload) {
   //   print(payload);
@@ -75,25 +74,27 @@ class _ChatPagState extends State<ChatPag> with TickerProviderStateMixin {
         preferredSize:
             Size(MediaQuery.of(context).size.width, size.height * 0.077),
       ),
-      body: Container(
-        child: Column(
-          children: [
-            Flexible(
-                child: ListView.builder(
-              physics: BouncingScrollPhysics(),
-              itemCount: _mensajes.length,
-              itemBuilder: (_, i) => _mensajes[i],
-              reverse: true,
-            )),
-            Divider(
-              height: 1,
+      body: Column(
+        children: [
+          Flexible(
+            child: BlocBuilder<ChatBloc, ChatState>(
+              builder: (context, state) {
+                if (state.conversacion == null) {
+                  return Container();
+                } else {
+                  return conversacion(state.conversacion!);
+                }
+              },
             ),
-            // Container(
-            //   color: Colors.white,
-            //   child: Text("Hola"),
-            // )
-          ],
-        ),
+          ),
+          Divider(
+            height: 1,
+          ),
+          Container(
+            color: Colors.white,
+            child: _entradaChat(),
+          )
+        ],
       ),
     );
   }
@@ -104,8 +105,8 @@ class _ChatPagState extends State<ChatPag> with TickerProviderStateMixin {
 
     return PreferredSize(
       child: Container(
-        decoration: new BoxDecoration(
-          gradient: new LinearGradient(colors: [
+        decoration: BoxDecoration(
+          gradient: LinearGradient(colors: [
             Theme.of(context).primaryColor,
             Theme.of(context).primaryColor,
           ]),
@@ -124,9 +125,9 @@ class _ChatPagState extends State<ChatPag> with TickerProviderStateMixin {
           children: [
             /// ICONO PARA REGRESAR A LA PAGINA ANTERIOR
             IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.arrow_back_outlined,
-                  color: Theme.of(context).focusColor,
+                  color: Colors.black,
                 ),
                 onPressed: () {
                   Navigator.pop(context);
@@ -136,13 +137,13 @@ class _ChatPagState extends State<ChatPag> with TickerProviderStateMixin {
               children: [
                 CircleAvatar(
                   child: Text(
-                    "Ho",
+                    "J",
                     style: TextStyle(
                       fontSize: size.width * 0.045,
-                      color: Colors.white,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
-                  backgroundColor: Theme.of(context).primaryColorLight,
+                  backgroundColor: Colors.white,
                   maxRadius: 14,
                 ),
                 const SizedBox(height: 0.5),
@@ -164,93 +165,101 @@ class _ChatPagState extends State<ChatPag> with TickerProviderStateMixin {
   }
 
   // /// Es la parte inferior del chat en la cual se escribe para poder ingresar y enviar un mensaje
-  // Widget _entradaChat() {
-  //   return SafeArea(
-  //     child: Container(
-  //       margin: EdgeInsets.symmetric(
-  //         horizontal: 8.0,
-  //       ),
-  //       padding: EdgeInsets.symmetric(vertical: 10.0),
-  //       child: Row(
-  //         children: <Widget>[
-  //           Flexible(
-  //               child: TextField(
-  //             controller: _textController,
-  //             onSubmitted: _enviar,
-  //             onChanged: (String texto) {
-  //               setState(() {
-  //                 if (texto.trim().length > 0) {
-  //                   _estaEscribiendo = true;
-  //                 } else {
-  //                   _estaEscribiendo = false;
-  //                 }
-  //               });
-  //             },
-  //             decoration: InputDecoration.collapsed(hintText: "Enviar mensaje"),
-  //             focusNode: _focusNode,
-  //           )),
-  //           Container(
-  //               margin: EdgeInsets.symmetric(horizontal: 4.0),
-  //               child: Row(
-  //                 children: [
-  //                   Container(
-  //                     margin: EdgeInsets.symmetric(horizontal: 4.0),
-  //                     child: IconTheme(
-  //                       data: IconThemeData(color: Colors.blue[400]),
-  //                       child: IconButton(
-  //                         highlightColor: Colors.transparent,
-  //                         splashColor: Colors.transparent,
-  //                         icon: Icon(
-  //                           Icons.send,
-  //                           color: Theme.of(context).primaryColorDark,
-  //                         ),
-  //                         onPressed: _estaEscribiendo
-  //                             ? () => _enviar(_textController.text.trim())
-  //                             : null,
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 ],
-  //               )),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
+  Widget _entradaChat() {
+    return SafeArea(
+      child: Container(
+        margin: const EdgeInsets.symmetric(
+          horizontal: 8.0,
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        child: Row(
+          children: <Widget>[
+            Flexible(
+                child: TextField(
+              controller: _textController,
+              // onSubmitted: ,
+              onChanged: (String texto) {
+                setState(() {
+                  if (texto.trim().isNotEmpty) {
+                    _estaEscribiendo = true;
+                  } else {
+                    _estaEscribiendo = false;
+                  }
+                });
+              },
+              decoration: const InputDecoration.collapsed(
+                  hintText: "Enviar mensaje..."),
+              focusNode: _focusNode,
+            )),
+            Container(
+                margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: Row(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: IconTheme(
+                        data: IconThemeData(color: Colors.blue[400]),
+                        child: IconButton(
+                          highlightColor: Colors.transparent,
+                          splashColor: Colors.transparent,
+                          icon: Icon(
+                            Icons.send,
+                            color: Theme.of(context).primaryColorLight,
+                          ),
+                          onPressed: _estaEscribiendo
+                              ? () => _enviar(_textController.text.trim())
+                              : null,
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
+          ],
+        ),
+      ),
+    );
+  }
 
   // ///Es la accion mas la animacion que realiza cuando se envian los mensajes, ademas de eso limpia el teclado
-  // _enviar(String texto) {
-  //   if (texto.length == 0) return;
+  _enviar(String texto) {
+    if (texto.isEmpty) return;
 
-  //   _textController.clear();
-  //   _focusNode.requestFocus();
+    _textController.clear();
+    _focusNode.requestFocus();
 
-  //   final newMenssage = new MensajeChatWidget(
-  //     mio: true,
-  //     texto: texto,
-  //     animationController: AnimationController(
-  //         vsync: this, duration: Duration(milliseconds: 200)),
-  //   );
-  //   _mensajes.insert(0, newMenssage);
-  //   newMenssage.animationController.forward();
-  //   setState(() {
-  //     _estaEscribiendo = false;
-  //   });
+    Mensaje mensaje = Mensaje(
+        de: usuario.uid, para: "", mensaje: texto, servicio: widget.servicio);
+    BlocProvider.of<ChatBloc>(context).state.conversacion?.add(mensaje);
 
-  //   // this.servicioSocket.emit('grabarMensaje', {
-  //   //   'de': this.servicioAutenticacion.usuarioServiciosActual.uid,
-  //   //   'para': this.servicioChat.postulado.id,
-  //   //   'mensaje': texto,
-  //   //   'servicio': this.servicioChat.servicio
-  //   // });
-  // }
+    servicioSocket.enviarMensaje(texto);
+  }
 
-  // @override
-  // void dispose() {
-  //   for (MensajeChatWidget message in _mensajes) {
-  //     message.animationController.dispose();
-  //   }
+  // Carga los mensajes
+  Widget conversacion(List<Mensaje> conversacion) {
+    List<Widget> chat = [];
+    for (Mensaje mensaje in conversacion) {
+      chat.add(MensajeChatWidget(
+        texto: mensaje.mensaje!,
+        mio: mensaje.de == usuario.uid,
+        animationController: AnimationController(
+            vsync: this, duration: const Duration(milliseconds: 0))
+          ..forward(),
+      ));
+    }
 
-  //   super.dispose();
-  // }
+    return ListView(
+      children: chat,
+      physics: BouncingScrollPhysics(),
+      reverse: true,
+    );
+  }
+
+  @override
+  void dispose() {
+    for (MensajeChatWidget message in _mensajes) {
+      message.animationController.dispose();
+    }
+
+    super.dispose();
+  }
 }

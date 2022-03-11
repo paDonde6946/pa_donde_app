@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "897024247302",
+    "project_id": "pa-donde-c6e91",
+    "storage_bucket": "pa-donde-c6e91.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:897024247302:android:61e6364515f57e59632587",
+        "android_client_info": {
+          "package_name": "com.padonde.padondeapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "897024247302-vaf9ftfj6neun8liijp9qs6osd56aell.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlcYSZBgQ6gnqBUR1hjtBXW4tmbMlVtz8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "897024247302-vaf9ftfj6neun8liijp9qs6osd56aell.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -33,7 +33,6 @@ Map<String, WidgetBuilder> generarRutas() {
     'editarVehiculo': (_) => const EditarVehiculo(vehiculo: null),
     'marker': (_) => const MarkerPage(),
     'prueba': (_) => const PruebaPag(),
-    'chat': (_) => ChatPag(),
     'principal': (_) => const PrincipalPag()
   };
 
