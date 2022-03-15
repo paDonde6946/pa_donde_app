@@ -31,6 +31,10 @@ class ServicioBloc extends Bloc<ServicioEvent, ServicioState> {
     on<OnServicioSeleccionado>((event, emit) {
       emit(state.copyWith(servicioSeleccionado: event.servicioSeleccionado));
     });
+
+    on<OnCalificarAUsuario>((event, emit) {
+      emit(state.copyWith(calificacionAUsurio: event.calificacion));
+    });
   }
 
   void actualizarServicioPostulado(Servicio servicio) {

@@ -84,8 +84,9 @@ dependencies:
   #Socket client
   socket_io_client: ^1.0.2
   
-  # Para poder guardar el token en el celular
-  # flutter_secure_storage: 3.3.3
+  # Dependencia para las estrellas (Calificar)
+  flutter_rating_bar: ^4.0.0
+
 
 dev_dependencies:
   mockito: ^5.0.16

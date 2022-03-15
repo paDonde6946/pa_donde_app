@@ -16,6 +16,8 @@ class ServicioState extends Equatable {
   //  Lista de historial del usuario
   final List<Servicio>? historialComoUsuario;
 
+  final int? calificacionAUsurio;
+
   /// Servicio que es seleccionado por el usuario.
   final Servicio servicioSeleccionado;
 
@@ -26,6 +28,7 @@ class ServicioState extends Equatable {
     this.historialComoConductor,
     this.historialComoUsuario,
     required this.servicioSeleccionado,
+    this.calificacionAUsurio = 0,
   });
 
   ServicioState copyWith({
@@ -35,17 +38,18 @@ class ServicioState extends Equatable {
     List<Servicio>? historialComoConductor,
     List<Servicio>? historialComoUsuario,
     Servicio? servicioSeleccionado,
+    int? calificacionAUsurio,
   }) =>
       ServicioState(
-          serviciosPostulados: serviciosPostulados ?? this.serviciosPostulados,
-          serviciosGenerales: serviciosGenerales ?? this.serviciosGenerales,
-          serviciosDelUsuario: serviciosDelUsuario ?? this.serviciosDelUsuario,
-          historialComoConductor:
-              historialComoConductor ?? this.historialComoConductor,
-          historialComoUsuario:
-              historialComoUsuario ?? this.historialComoUsuario,
-          servicioSeleccionado:
-              servicioSeleccionado ?? this.servicioSeleccionado);
+        serviciosPostulados: serviciosPostulados ?? this.serviciosPostulados,
+        serviciosGenerales: serviciosGenerales ?? this.serviciosGenerales,
+        serviciosDelUsuario: serviciosDelUsuario ?? this.serviciosDelUsuario,
+        historialComoConductor:
+            historialComoConductor ?? this.historialComoConductor,
+        historialComoUsuario: historialComoUsuario ?? this.historialComoUsuario,
+        servicioSeleccionado: servicioSeleccionado ?? this.servicioSeleccionado,
+        calificacionAUsurio: calificacionAUsurio ?? this.calificacionAUsurio,
+      );
 
   @override
   List<Object?> get props => [
@@ -54,6 +58,7 @@ class ServicioState extends Equatable {
         serviciosDelUsuario,
         servicioSeleccionado,
         historialComoConductor,
-        historialComoUsuario
+        historialComoUsuario,
+        calificacionAUsurio,
       ];
 }
