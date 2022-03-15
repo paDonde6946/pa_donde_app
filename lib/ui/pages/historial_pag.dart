@@ -128,9 +128,11 @@ class _HistorialPagState extends State<HistorialPag> {
                 ),
               ]),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.62,
-            child: TabBarView(
-                children: [panelHistorialUsuario(), panelHistorialConductor()]),
+            height: MediaQuery.of(context).size.height * 0.71,
+            child: TabBarView(children: <Widget>[
+              panelHistorialUsuario(),
+              panelHistorialConductor()
+            ]),
           ),
         ],
       ),
@@ -138,28 +140,32 @@ class _HistorialPagState extends State<HistorialPag> {
   }
 
   Widget panelHistorialUsuario() {
+
     if (usuarioHistorial!.isNotEmpty) {
       for (var i = 0; i < usuarioHistorial!.length; i++) {
-        return Container(child: cardDeServicioUsuario(usuarioHistorial![i]));
+        return ListView.builder(
+          shrinkWrap: true,
+          itemCount: usuarioHistorial!.length,
+          itemBuilder: (context, i) =>
+              cardDeServicioConductor(usuarioHistorial![i]),
+        );
       }
-    } else {
-      return Text("No posee historial como usuario");
     }
-
-    return Text("");
+    return Text("No posee servicios como usuario");
   }
 
   Widget panelHistorialConductor() {
     if (conductorHistorial!.isNotEmpty) {
       for (var i = 0; i < conductorHistorial!.length; i++) {
-        return Container(
-            child: cardDeServicioConductor(conductorHistorial![i]));
+        return ListView.builder(
+          shrinkWrap: true,
+          itemCount: conductorHistorial!.length,
+          itemBuilder: (context, i) =>
+              cardDeServicioConductor(conductorHistorial![i]),
+        );
       }
-    } else {
-      return Text("No posee historial como conductor");
     }
-
-    return Text("");
+    return Text("No posee servicios como conductor");
   }
 
   Widget cardDeServicioUsuario(Servicio servicio) {
@@ -168,7 +174,7 @@ class _HistorialPagState extends State<HistorialPag> {
     final auxilio = _validarPrecioServicio(servicio.auxilioEconomico);
     final fecha = servicio.fechayhora.split("T");
 
-    return ListView(
+    return Column(
       children: [
         GestureDetector(
           onTap: () {
@@ -246,7 +252,7 @@ class _HistorialPagState extends State<HistorialPag> {
     final placa = _validarVehiculoServicio(servicio.idVehiculo);
     final auxilio = _validarPrecioServicio(servicio.auxilioEconomico);
     final fecha = servicio.fechayhora.split("T");
-    return ListView(
+    return Column(
       children: [
         GestureDetector(
           onTap: () {

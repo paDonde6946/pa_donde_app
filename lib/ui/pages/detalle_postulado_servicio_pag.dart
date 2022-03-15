@@ -167,9 +167,8 @@ class _DetallePostuladoServicioState extends State<DetallePostuladoServicio> {
           titulo: '¿Desea cancelar el servicio?',
           contenido:
               'Se borrará la postulación al servicio y el cupo quedará libre',
-          paginaRetorno: 'inicio',
           icono: Icons.unpublished,
-          funtion: () async {
+          funtionContinuar: () async {
             BlocProvider.of<ServicioBloc>(context)
                 .buscarYactualizarServicioPostulado(servicio);
 

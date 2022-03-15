@@ -88,8 +88,9 @@ dependencies:
   firebase_messaging: ^11.2.7
 
   
-  # Para poder guardar el token en el celular
-  # flutter_secure_storage: 3.3.3
+  # Dependencia para las estrellas (Calificar)
+  flutter_rating_bar: ^4.0.0
+
 
 dev_dependencies:
   mockito: ^5.0.16

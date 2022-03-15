@@ -259,4 +259,30 @@ class ServicioRServicio {
 
     return res["ok"];
   }
+
+  Future<bool> calificarUsuario(
+      String uidServicio, String uidPasajero, String calificacion) async {
+    final uri = Uri.http(EntornoVariable.host, "/app/calificarPasajero");
+
+    String? token = await _storage.read(key: 'token');
+
+    final data = {
+      "uidServicio": uidServicio,
+      "uidPasajero": uidPasajero,
+      "calificacion": calificacion,
+    };
+
+    final response = await http.post(
+      uri,
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        "x-token": token,
+      },
+      body: json.encode(data),
+    );
+
+    final res = json.decode(response.body);
+
+    return res["ok"];
+  }
 }

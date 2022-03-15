@@ -140,9 +140,8 @@ class _DetalleServicioPagState extends State<DetalleServicioPag> {
           context: context,
           titulo: '¿Desea postularse al servicio?',
           contenido: 'Se apartara un cupo para que pueda tomar el servicio',
-          paginaRetorno: 'inicio',
           icono: Icons.check_box_outlined,
-          funtion: () async {
+          funtionContinuar: () async {
             final servicioBloc = BlocProvider.of<ServicioBloc>(context);
 
             servicioBloc.buscarYactualizarServicioGenerales(servicio);

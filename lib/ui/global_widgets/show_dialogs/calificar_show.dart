@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:pa_donde_app/blocs/blocs.dart';
 
-mostrarShowDialogValidar({
+mostrarShowDialogCalificar({
   required BuildContext context,
   required String titulo,
   required String contenido,
@@ -30,7 +33,23 @@ mostrarShowDialogValidar({
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(icono, size: size.width * 0.25),
+              RatingBar.builder(
+                initialRating: 0,
+                minRating: 1,
+                direction: Axis.horizontal,
+                allowHalfRating: true,
+                itemCount: 5,
+                itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                itemBuilder: (context, _) => const Icon(
+                  Icons.star,
+                  color: Colors.amber,
+                ),
+                onRatingUpdate: (rating) {
+                  print(rating.toInt());
+                  BlocProvider.of<ServicioBloc>(context)
+                      .add(OnCalificarAUsuario(rating.toInt()));
+                },
+              ),
               Text(
                 contenido,
                 style: TextStyle(fontSize: size.width * 0.043),
@@ -39,18 +58,6 @@ mostrarShowDialogValidar({
             ],
           ),
           actions: [
-            TextButton(
-              onPressed: funtionCancelar ??
-                  () {
-                    Navigator.pop(context);
-                  },
-              child: Text(
-                'CANCELAR',
-                style: TextStyle(
-                    fontSize: size.width * 0.04,
-                    color: Theme.of(context).primaryColor),
-              ),
-            ),
             TextButton(
               onPressed: funtionContinuar,
               child: Text(

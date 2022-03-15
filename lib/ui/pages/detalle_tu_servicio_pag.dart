@@ -5,12 +5,19 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
+<<<<<<< HEAD
 import 'package:pa_donde_app/ui/helpers/helpers.dart';
 import 'package:pa_donde_app/ui/pages/chat_pag.dart';
+=======
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/calificar_show.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/informativo_show.dart';
+>>>>>>> 91e88cf9d52db3b9931a92d275bceb60bc058333
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'package:intl/intl.dart';
+
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/models/ruta_destino_modelo.dart';
@@ -49,6 +56,7 @@ class DetalleTuServicio extends StatefulWidget {
 class _DetalleTuServicioState extends State<DetalleTuServicio> {
   final Function? callbackFunction;
   Servicio servicio = Servicio();
+  // ignore: prefer_typing_uninitialized_variables
   var validar;
   _DetalleTuServicioState(this.callbackFunction);
 
@@ -282,12 +290,15 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
             titulo: validar == false ? 'Iniciar' : 'Detener',
             function: () async {
               if (validar) {
-                await ServicioRServicio().finalizarServicio(servicio.uid);
-                validar = false;
+                _detenerServicio();
               } else {
+<<<<<<< HEAD
                 final a =
                     await ServicioRServicio().iniciarServicio(servicio.uid);
                 validar = true;
+=======
+                _activarServicio();
+>>>>>>> 91e88cf9d52db3b9931a92d275bceb60bc058333
               }
               setState(() {});
             },
@@ -310,6 +321,120 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
     );
   }
 
+  void _activarServicio() {
+    mostrarShowDialogValidar(
+      context: context,
+      titulo: '¿Desea iniciar el servicio?',
+      contenido:
+          'El servicio se iniciará y notificará a los pasajeros que el servicio ha comenzado.',
+      icono: Icons.emoji_transportation_outlined,
+      funtionCancelar: () {
+        validar = false;
+        Navigator.of(context, rootNavigator: true).pop(context);
+        setState(() {});
+      },
+      funtionContinuar: () async {
+        Navigator.of(context, rootNavigator: true).pop(context);
+        mostrarShowDialogCargando(context: context, titulo: 'Cargando...');
+        final servicioValidar =
+            await ServicioRServicio().iniciarServicio(servicio.uid);
+        Navigator.of(context, rootNavigator: true).pop(context);
+
+        if (servicioValidar) {
+          validar = true;
+          setState(() {});
+          mostrarShowDialogCargando(
+              context: context, titulo: 'Servicio iniciado');
+          await Future.delayed(const Duration(seconds: 1));
+          Navigator.of(context, rootNavigator: true).pop(context);
+        } else {
+          customShapeSnackBar(
+              context: context, titulo: "No se pudo iniciar el servicio");
+        }
+      },
+    );
+  }
+
+  void _detenerServicio() {
+    mostrarShowDialogValidar(
+      context: context,
+      titulo: '¿Desea finalizar el servicio?',
+      contenido:
+          'El servicio se finalizara y notificará a los pasajeros que el servicio ha finalizado.',
+      icono: Icons.emoji_transportation_outlined,
+      funtionCancelar: () {
+        validar = false;
+        Navigator.of(context, rootNavigator: true).pop(context);
+        setState(() {});
+      },
+      funtionContinuar: () async {
+        Navigator.of(context, rootNavigator: true).pop(context);
+        mostrarShowDialogCargando(context: context, titulo: 'Cargando...');
+        final servicioValidar =
+            await ServicioRServicio().finalizarServicio(servicio.uid);
+        Navigator.of(context, rootNavigator: true).pop(context);
+
+        if (servicioValidar) {
+          validar = true;
+          setState(() {});
+
+          calificacionesPasajeros();
+        } else {
+          customShapeSnackBar(
+              context: context, titulo: "No se pudo finalizar el servicio");
+        }
+      },
+    );
+  }
+
+  calificacionesPasajeros() {
+    List calificaciones = [];
+    int aux = 0;
+    for (var pasajero in servicio.pasajeros) {
+      aux = aux + 1;
+      calificaciones.add(mostrarShowDialogCalificar(
+          context: context,
+          titulo: 'Calificación',
+          contenido: 'Califica al usuario ${pasajero.pasajero!.nombre!}',
+          icono: Icons.emoji_transportation_outlined,
+          funtionContinuar: () async {
+            final calificacion = BlocProvider.of<ServicioBloc>(context)
+                .state
+                .calificacionAUsurio;
+            if (calificacion != 0) {
+              ServicioRServicio().calificarUsuario(
+                  servicio.uid, pasajero.pasajero!.id, calificacion.toString());
+              BlocProvider.of<ServicioBloc>(context)
+                  .add(const OnCalificarAUsuario(0));
+              Navigator.of(context, rootNavigator: true).pop(context);
+              if (aux == servicio.pasajeros.length) {
+                mostrarShowDialogCargando(
+                    context: context,
+                    titulo: 'Su servicio se esta finalizando...');
+                await Future.delayed(const Duration(seconds: 1));
+                Navigator.of(context, rootNavigator: true).pop(context);
+
+                mostrarShowDialogCargando(
+                    context: context,
+                    titulo: 'Servicio finalizado, Muchas gracias');
+                Navigator.of(context, rootNavigator: true).pop(context);
+                await Future.delayed(const Duration(seconds: 1));
+
+                Navigator.of(context).pop(context);
+              }
+            } else {
+              mostrarShowDialogInformativo(
+                  context: context,
+                  titulo: "Debe de calificar al usuario",
+                  contenido:
+                      "Para poder finalizar el servicio debe de calificar el usuario.");
+            }
+          }));
+    }
+
+    return calificaciones;
+  }
+
   /// Contiene la logica para poder eliminar el servicio
   Widget _botonEliminar() {
     return
@@ -322,9 +447,8 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
           context: context,
           titulo: '¿Desea eliminar el servicio?',
           contenido: 'El servicio se eliminará de forma permanente.',
-          paginaRetorno: 'inicio',
           icono: Icons.delete_forever_outlined,
-          funtion: () async {
+          funtionContinuar: () async {
             final servicioBloc = BlocProvider.of<ServicioBloc>(context);
 
             servicioBloc.buscarYactualizarServicioDelUsuario(servicio);
