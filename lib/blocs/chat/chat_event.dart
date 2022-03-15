@@ -8,6 +8,6 @@ abstract class ChatEvent extends Equatable {
 }
 
 class OnCargarChat extends ChatEvent {
-  final List<Mensaje>? conversacion;
+  final List<Mensaje> conversacion;
   const OnCargarChat(this.conversacion);
 }

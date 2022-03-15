@@ -26,23 +26,24 @@ class Servicio {
   List<Feature>? _historialDestino;
   List<PasajeroElement>? _pasajeros;
   String? _uid;
+  String? _nombreConductor;
 
-  Servicio({
-    String? pEstado,
-    String? pNombreOrigen,
-    String? pNombreDestino,
-    String? pPolylineRuta,
-    String? pFechayhora,
-    String? pIdVehiculo,
-    int? pCantidadCupos,
-    String? pAuxilioEconomico,
-    String? pDistancia,
-    String? pDuracion,
-    List<Feature>? pHistorialOrigen,
-    List<Feature>? pHistorialDestino,
-    String? pUid,
-    List<PasajeroElement>? pPasajeros,
-  }) {
+  Servicio(
+      {String? pEstado,
+      String? pNombreOrigen,
+      String? pNombreDestino,
+      String? pPolylineRuta,
+      String? pFechayhora,
+      String? pIdVehiculo,
+      int? pCantidadCupos,
+      String? pAuxilioEconomico,
+      String? pDistancia,
+      String? pDuracion,
+      List<Feature>? pHistorialOrigen,
+      List<Feature>? pHistorialDestino,
+      String? pUid,
+      List<PasajeroElement>? pPasajeros,
+      String? pNombreConductor}) {
     estado = pEstado;
     nombreOrigen = pNombreOrigen;
     nombreDestino = pNombreDestino;
@@ -56,6 +57,7 @@ class Servicio {
     historialOrigen = pHistorialOrigen;
     historialDestino = pHistorialDestino;
     uid = pUid;
+    nombreConductor = pNombreConductor;
     pasajeros = pPasajeros;
   }
 
@@ -72,6 +74,7 @@ class Servicio {
       pHistorialOrigen: json["historialOrigen"],
       pHistorialDestino: json["historialDestino"],
       pUid: json["uid"],
+      pNombreConductor: json["nombreConductor"],
       pPasajeros: List<PasajeroElement>.from(
           json["pasajeros"]!.map((x) => PasajeroElement.fromJson(x))));
 
@@ -88,6 +91,7 @@ class Servicio {
         "historialOrigen": historialOrigen,
         "historialDestino": historialDestino,
         "uid": uid,
+        "nombreConductor": nombreConductor
       };
 
   get estado => _estado;
@@ -172,5 +176,10 @@ class Servicio {
 
   set pasajeros(pPasajeros) {
     _pasajeros = pPasajeros;
+  }
+
+  get nombreConductor => _nombreConductor;
+  set nombreConductor(pNombreConductor) {
+    _nombreConductor = pNombreConductor;
   }
 }

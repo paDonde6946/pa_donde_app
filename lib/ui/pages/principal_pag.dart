@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pa_donde_app/blocs/blocs.dart';
 import 'package:pa_donde_app/ui/global_widgets/forms/agregar_servicio3_form.dart';
 import 'package:pa_donde_app/ui/helpers/helpers.dart';
@@ -467,10 +468,14 @@ class _PrincipalPagState extends State<PrincipalPag> {
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20),
                     child: IconButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          const _storage = FlutterSecureStorage();
+                          final token = await _storage.read(key: 'token');
                           SchedulerBinding.instance!.addPostFrameCallback((_) {
                             Navigator.of(context).push(navegarMapaFadeIn(
-                                context, ChatPag(servicio.uid)));
+                                context,
+                                ChatPag(servicio.uid, "",
+                                    servicio.nombreConductor, token)));
                           });
                         },
                         icon: const Icon(Icons.chat, size: 35)),

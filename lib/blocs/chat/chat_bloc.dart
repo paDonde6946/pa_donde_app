@@ -12,4 +12,14 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       emit(state.copyWith(conversacion: event.conversacion));
     });
   }
+
+  void agregarMensajeConversacion(Mensaje mensaje) {
+    final chat = [mensaje, ...state.conversacion];
+    add(OnCargarChat(chat));
+  }
+
+  void eliminarConversacion() {
+    List<Mensaje> chat = [];
+    add(OnCargarChat(chat));
+  }
 }

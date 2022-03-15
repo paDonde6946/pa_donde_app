@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
+import 'package:pa_donde_app/ui/helpers/helpers.dart';
+import 'package:pa_donde_app/ui/pages/chat_pag.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -256,7 +260,7 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
   Widget pasajeros() {
     List<Widget> pasejeros = [];
     for (PasajeroElement pasajero in servicio.pasajeros) {
-      pasejeros.add(_cardUsuarioPostulado(pasajero.pasajero!.nombre!, 2));
+      pasejeros.add(_cardUsuarioPostulado(pasajero.pasajero!, 2));
     }
 
     return Column(children: pasejeros);
@@ -283,7 +287,6 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
               } else {
                 final a =
                     await ServicioRServicio().iniciarServicio(servicio.uid);
-                print(a);
                 validar = true;
               }
               setState(() {});
@@ -351,7 +354,7 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
   }
 
   /// Es un contenedor general para mostrar la información de un usuario postulado
-  Widget _cardUsuarioPostulado(String nombre, int posicion) {
+  Widget _cardUsuarioPostulado(Pasajero pasajero, int posicion) {
     final size = MediaQuery.of(context).size;
 
     return Material(
@@ -373,12 +376,22 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
                 Container(
                   padding: const EdgeInsets.only(left: 30),
                   width: size.width * 0.6,
-                  child: Text(nombre),
+                  child: Text(pasajero.nombre!),
                 ),
               ],
             ),
             IconButton(
-                onPressed: () {},
+                onPressed: () async {
+                  const _storage = FlutterSecureStorage();
+                  final token = await _storage.read(key: 'token');
+
+                  SchedulerBinding.instance!.addPostFrameCallback((_) {
+                    Navigator.of(context).push(navegarMapaFadeIn(
+                        context,
+                        ChatPag(servicio.uid, pasajero.id, pasajero.nombre,
+                            token)));
+                  });
+                },
                 icon: Icon(Icons.chat_rounded, size: size.width * 0.06))
           ],
         ),

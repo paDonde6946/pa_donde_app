@@ -14,8 +14,13 @@ import 'package:pa_donde_app/ui/global_widgets/widgets/mensaje_chat_widget.dart'
 
 class ChatPag extends StatefulWidget {
   final String servicio;
+  final String? uidPasajero;
+  final String? nombre;
+  final String token;
 
-  ChatPag(this.servicio, {Key? key}) : super(key: key);
+  const ChatPag(this.servicio, this.uidPasajero, this.nombre, this.token,
+      {Key? key})
+      : super(key: key);
 
   @override
   _ChatPagState createState() => _ChatPagState();
@@ -33,36 +38,19 @@ class _ChatPagState extends State<ChatPag> with TickerProviderStateMixin {
   late Usuario usuario;
 
   @override
+  // ignore: must_call_super
   void initState() {
     usuario = BlocProvider.of<UsuarioBloc>(context).state.usuario;
-    servicioSocket =
-        SocketServicio(uidServicio: widget.servicio, context: context);
-    servicioSocket.connect();
-
-    // this.servicioSocket = Provider.of<SocketServicio>(context, listen: false);
-    // this.servicioSocket.socket.on('recibirMensaje', _escucharMensaje);
-    // super.initState();
-
-    // _cargarHistorial(this.servicioAutenticacion.usuarioServiciosActual.uid);
+    servicioSocket = SocketServicio(
+        datosMensaje: Mensaje(
+            para: widget.uidPasajero,
+            de: usuario.uid,
+            servicio: widget.servicio),
+        context: context,
+        token: widget.token);
+    servicioSocket.socket
+        .on('recibirMensaje', (data) => {servicioSocket.recivirMensaje(data)});
   }
-
-  // void _escucharMensaje(dynamic payload) {
-  //   print(payload);
-  //   MensajeChatWidget message = new MensajeChatWidget(
-  //     texto: payload['mensaje'],
-  //     mio: false,
-  //     animationController: AnimationController(
-  //         vsync: this, duration: Duration(milliseconds: 300)),
-  //   );
-
-  //   if (this.mounted) {
-  //     setState(() {
-  //       _mensajes.insert(0, message);
-  //     });
-  //   }
-
-  //   message.animationController.forward();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -79,15 +67,15 @@ class _ChatPagState extends State<ChatPag> with TickerProviderStateMixin {
           Flexible(
             child: BlocBuilder<ChatBloc, ChatState>(
               builder: (context, state) {
-                if (state.conversacion == null) {
+                if (state.conversacion == []) {
                   return Container();
                 } else {
-                  return conversacion(state.conversacion!);
+                  return conversacion(state.conversacion);
                 }
               },
             ),
           ),
-          Divider(
+          const Divider(
             height: 1,
           ),
           Container(
@@ -137,7 +125,7 @@ class _ChatPagState extends State<ChatPag> with TickerProviderStateMixin {
               children: [
                 CircleAvatar(
                   child: Text(
-                    "J",
+                    widget.nombre!.split('')[0],
                     style: TextStyle(
                       fontSize: size.width * 0.045,
                       color: Theme.of(context).primaryColor,
@@ -148,7 +136,7 @@ class _ChatPagState extends State<ChatPag> with TickerProviderStateMixin {
                 ),
                 const SizedBox(height: 0.5),
                 Text(
-                  'Juan ',
+                  widget.nombre!,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: size.width * 0.045,
@@ -229,7 +217,8 @@ class _ChatPagState extends State<ChatPag> with TickerProviderStateMixin {
 
     Mensaje mensaje = Mensaje(
         de: usuario.uid, para: "", mensaje: texto, servicio: widget.servicio);
-    BlocProvider.of<ChatBloc>(context).state.conversacion?.add(mensaje);
+    BlocProvider.of<ChatBloc>(context).agregarMensajeConversacion(mensaje);
+    // .state.conversacion?.add(mensaje);
 
     servicioSocket.enviarMensaje(texto);
   }
@@ -249,7 +238,7 @@ class _ChatPagState extends State<ChatPag> with TickerProviderStateMixin {
 
     return ListView(
       children: chat,
-      physics: BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       reverse: true,
     );
   }
@@ -259,7 +248,7 @@ class _ChatPagState extends State<ChatPag> with TickerProviderStateMixin {
     for (MensajeChatWidget message in _mensajes) {
       message.animationController.dispose();
     }
-
+    servicioSocket.disconnect();
     super.dispose();
   }
 }
