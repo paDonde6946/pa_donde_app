@@ -5,13 +5,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
-<<<<<<< HEAD
 import 'package:pa_donde_app/ui/helpers/helpers.dart';
 import 'package:pa_donde_app/ui/pages/chat_pag.dart';
-=======
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/calificar_show.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/informativo_show.dart';
->>>>>>> 91e88cf9d52db3b9931a92d275bceb60bc058333
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -292,13 +289,7 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
               if (validar) {
                 _detenerServicio();
               } else {
-<<<<<<< HEAD
-                final a =
-                    await ServicioRServicio().iniciarServicio(servicio.uid);
-                validar = true;
-=======
                 _activarServicio();
->>>>>>> 91e88cf9d52db3b9931a92d275bceb60bc058333
               }
               setState(() {});
             },
