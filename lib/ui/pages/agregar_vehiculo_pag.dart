@@ -20,7 +20,7 @@ class _AgregarVehiculoState extends State<AgregarVehiculo> {
     );
   }
 
-  /// Encabezado de la pagina de registro del usuario (AppBar Modificado)
+  /// Encabezado de la pagina de registro del vehiculo
   PreferredSizeWidget appBar(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return AppBar(

@@ -10,11 +10,6 @@ import 'package:pa_donde_app/data/response/busqueda_response.dart';
 import 'package:pa_donde_app/ui/global_widgets/views/mapa_view.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-//------------------IMPORTACIONES LOCALES------------------------------
-// import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
-// import 'package:provider/provider.dart';
-//---------------------------------------------------------------------
-
 class DetalleHistorialServicioPag extends StatefulWidget {
   const DetalleHistorialServicioPag({Key? key}) : super(key: key);
 
@@ -35,6 +30,7 @@ class _DetalleHistorialServicioPagState
     setState(() {});
     return Scaffold(appBar: appBar(), body: body());
   }
+
 
   Widget body() {
     final placa = _validarVehiculoServicio(servicio.idVehiculo);
@@ -58,7 +54,10 @@ class _DetalleHistorialServicioPagState
     );
   }
 
+// Appbar de detalle historial
   PreferredSizeWidget appBar() {
+    final size = MediaQuery.of(context).size;
+
     return AppBar(
         centerTitle: true,
         foregroundColor: Colors.black,
@@ -69,6 +68,7 @@ class _DetalleHistorialServicioPagState
         ));
   }
 
+// Estilo de titulos en la card del historial
   Text tituloDelServicio({titulo}) {
     return Text(titulo,
         style: TextStyle(
@@ -77,6 +77,7 @@ class _DetalleHistorialServicioPagState
             color: Theme.of(context).primaryColor));
   }
 
+// Estilo de subtitulo en la card del historial
   Widget subTitulosDelServicio({subtitulo}) {
     return Text(subtitulo,
         textAlign: TextAlign.start,
@@ -85,10 +86,12 @@ class _DetalleHistorialServicioPagState
             color: Theme.of(context).primaryColor));
   }
 
+// Estilo de texto usado en la card de historial
   Widget textoDelServicio({texto}) {
     return Text(texto);
   }
 
+// Metodo que valida y retorna la placa del vehiculo
   String _validarVehiculoServicio(String uid) {
     final vehiculos =
         BlocProvider.of<PreserviciosBloc>(context).state.vehiculos;
@@ -101,6 +104,7 @@ class _DetalleHistorialServicioPagState
     return '';
   }
 
+// Metodo que retorna el valor del servicio
   String _validarPrecioServicio(String auxilio) {
     final auxilioEconomico =
         BlocProvider.of<PreserviciosBloc>(context).state.precios;
@@ -114,6 +118,7 @@ class _DetalleHistorialServicioPagState
     return '';
   }
 
+// Card donde se muestra toda la información del historial
   Widget cardDeServicio(
       {String? titulo,
       String? origen,
@@ -212,6 +217,7 @@ class _DetalleHistorialServicioPagState
     );
   }
 
+// Contenedor del mapa el cual trae la ruta realizada en el servicio
   Widget _mostrarMapa() {
     final size = MediaQuery.of(context).size;
     final mapaBloc = BlocProvider.of<MapsBloc>(context);
