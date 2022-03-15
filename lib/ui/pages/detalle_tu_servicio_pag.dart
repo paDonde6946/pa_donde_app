@@ -357,12 +357,12 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
       funtionContinuar: () async {
         Navigator.of(context, rootNavigator: true).pop(context);
         mostrarShowDialogCargando(context: context, titulo: 'Cargando...');
-        final servicioValidar = true;
-        // await ServicioRServicio().finalizarServicio(servicio.uid);
+        final servicioValidar =
+            await ServicioRServicio().finalizarServicio(servicio.uid);
         Navigator.of(context, rootNavigator: true).pop(context);
 
         if (servicioValidar) {
-          // validar = true;
+          validar = true;
           setState(() {});
 
           calificacionesPasajeros();
