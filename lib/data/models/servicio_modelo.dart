@@ -12,7 +12,7 @@ Servicio servicioFromJson(String str) => Servicio.fromJson(json.decode(str));
 String servicioToJson(Servicio data) => json.encode(data.toJson());
 
 class Servicio {
-  String? _estado;
+  int? _estado;
   String? _nombreOrigen;
   String? _nombreDestino;
   String? _polylineRuta;
@@ -29,7 +29,7 @@ class Servicio {
   String? _nombreConductor;
 
   Servicio(
-      {String? pEstado,
+      {int? pEstado,
       String? pNombreOrigen,
       String? pNombreDestino,
       String? pPolylineRuta,
@@ -62,6 +62,7 @@ class Servicio {
   }
 
   factory Servicio.fromJson(Map<String, dynamic> json) => Servicio(
+      pEstado: json['estado'],
       pNombreOrigen: json["nombreOrigen"],
       pNombreDestino: json["nombreDestino"],
       pPolylineRuta: json["polylineRuta"],
