@@ -1,20 +1,24 @@
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:pa_donde_app/blocs/blocs.dart';
-import 'package:pa_donde_app/ui/global_widgets/forms/agregar_servicio3_form.dart';
-import 'package:pa_donde_app/ui/helpers/helpers.dart';
-import 'package:pa_donde_app/ui/pages/chat_pag.dart';
-import 'package:pa_donde_app/ui/global_widgets/show_dialogs/confirmacion_show.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'detalle_servicio_pag.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/confirmacion_show.dart';
+
 import 'package:pa_donde_app/ui/pages/detalle_postulado_servicio_pag.dart';
 import 'package:pa_donde_app/ui/pages/detalle_tu_servicio_pag.dart';
+import 'package:pa_donde_app/ui/pages/chat_pag.dart';
+
 import 'package:pa_donde_app/data/models/servicio_modelo.dart';
+
+import 'package:pa_donde_app/blocs/blocs.dart';
+
+import 'package:pa_donde_app/ui/helpers/helpers.dart';
 //---------------------------------------------------------------------
 
 class PrincipalPag extends StatefulWidget {
@@ -93,6 +97,12 @@ class _PrincipalPagState extends State<PrincipalPag> {
         // add your code here.
       });
     }
+  }
+
+  void validarCalificarConductor() {
+    final usuario = BlocProvider.of<UsuarioBloc>(context).state.usuario;
+
+    if (usuario.ultimoServicioCalificar != null) {}
   }
 
   /// Valida si el panel esta expandido totalmente para cambiar los border redondos

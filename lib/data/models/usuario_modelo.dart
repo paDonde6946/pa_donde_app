@@ -21,6 +21,7 @@ class Usuario with ChangeNotifier {
     int? pCalificacionConductor,
     List<Feature>? pHistorialOrigen,
     List<Feature>? pHistorialDestino,
+    String? pUltimoServicioCalificar,
   }) {
     correo = pCorreo;
     tipoUsuario = pTipoUsuario;
@@ -34,6 +35,7 @@ class Usuario with ChangeNotifier {
     calificacionConductor = pCalificacionConductor;
     historialOrigen = pHistorialOrigen;
     historialDestino = pHistorialDestino;
+    ultimoServicioCalificar = pUltimoServicioCalificar;
   }
 
   /// ATRIBUTOS DE LA CLASE
@@ -49,28 +51,29 @@ class Usuario with ChangeNotifier {
   int? _calificacionConductor;
   List<Feature>? _historialOrigen;
   List<Feature>? _historialDestino;
+  String? _ultimoServicioCalificar;
 
   /// Constructor para transformar de un Mapa dinamico a json
   factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
-        pCorreo: json["correo"],
-        pTipoUsuario: json["tipoUsuario"],
-        pNombre: json["nombre"],
-        pApellido: json["apellido"],
-        pCelular: json["celular"],
-        pConstrasenia: json["contrasenia"],
-        pCambioContrasenia: json["cambio_contrasenia"],
-        pUid: json["uid"],
-        pCalificacionUsuario: json["calificacionUsuario"],
-        pCalificacionConductor: json["calificacionConductor"],
-        pHistorialDestino: json["historialDestino"] != null
-            ? List<Feature>.from(
-                json["historialDestino"].map((x) => Feature.fromJson(x)))
-            : [],
-        pHistorialOrigen: json["historialDestino"] != null
-            ? List<Feature>.from(
-                json["historialOrigen"]?.map((x) => Feature.fromJson(x)))
-            : [],
-      );
+      pCorreo: json["correo"],
+      pTipoUsuario: json["tipoUsuario"],
+      pNombre: json["nombre"],
+      pApellido: json["apellido"],
+      pCelular: json["celular"],
+      pConstrasenia: json["contrasenia"],
+      pCambioContrasenia: json["cambio_contrasenia"],
+      pUid: json["uid"],
+      pCalificacionUsuario: json["calificacionUsuario"],
+      pCalificacionConductor: json["calificacionConductor"],
+      pHistorialDestino: json["historialDestino"] != null
+          ? List<Feature>.from(
+              json["historialDestino"].map((x) => Feature.fromJson(x)))
+          : [],
+      pHistorialOrigen: json["historialDestino"] != null
+          ? List<Feature>.from(
+              json["historialOrigen"]?.map((x) => Feature.fromJson(x)))
+          : [],
+      pUltimoServicioCalificar: json["ultimoServicioSinCalificar"]);
 
   Map<String, dynamic> toJson() => {
         "correo": correo,
@@ -181,5 +184,11 @@ class Usuario with ChangeNotifier {
 
   set historialDestino(value) {
     _historialDestino = value;
+  }
+
+  get ultimoServicioCalificar => _ultimoServicioCalificar;
+
+  set ultimoServicioCalificar(value) {
+    _ultimoServicioCalificar = value;
   }
 }
