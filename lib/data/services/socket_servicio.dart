@@ -29,7 +29,7 @@ class SocketServicio {
       required this.context,
       required this.token}) {
     // Dart client
-    _socket = IO.io('http://192.168.1.9:3001', {
+    _socket = IO.io('http://192.168.71.1:3001', {
       'transports': ['websocket'],
       'autoConnect': true,
       'forceNew': true,
