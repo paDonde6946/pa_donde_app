@@ -1,4 +1,4 @@
-package com.example.pa_donde_app
+package com.pa_donde.pa_donde_app
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -7,12 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:897024247302:android:61e6364515f57e59632587",
+        "mobilesdk_app_id": "1:897024247302:android:9eb3477121e65512632587",
         "android_client_info": {
-          "package_name": "com.padonde.padondeapp"
+          "package_name": "com.pa_donde.pa_donde_app"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "897024247302-s06q9nuuj64j1d52lhmte0r21gbljmak.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pa_donde.pa_donde_app",
+            "certificate_hash": "562ca8732dac2d30f7560bc28a80acd475c7b2f5"
+          }
+        },
         {
           "client_id": "897024247302-vaf9ftfj6neun8liijp9qs6osd56aell.apps.googleusercontent.com",
           "client_type": 3
