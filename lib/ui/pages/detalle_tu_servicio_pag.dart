@@ -393,31 +393,31 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
     for (var pasajero in servicio.pasajeros) {
       aux = aux + 1;
       calificaciones.add(mostrarShowDialogCalificar(
-          context: context,
-          titulo: 'Calificación',
-          contenido: 'Califica al usuario ${pasajero.pasajero!.nombre!}',
-          icono: Icons.emoji_transportation_outlined,
-          funtionContinuar: () async {
-            final calificacion = BlocProvider.of<ServicioBloc>(context)
-                .state
-                .calificacionAUsurio;
-            if (calificacion != 0) {
-              ServicioRServicio().calificarUsuario(
-                  servicio.uid, pasajero.pasajero!.id, calificacion.toString());
-              BlocProvider.of<ServicioBloc>(context)
-                  .add(const OnCalificarAUsuario(0));
-              Navigator.of(context, rootNavigator: true).pop(context);
-              if (aux == servicio.pasajeros.length) {
-                _finalizandoServicio();
-              }
-            } else {
-              mostrarShowDialogInformativo(
-                  context: context,
-                  titulo: "Debe de calificar al usuario",
-                  contenido:
-                      "Para poder finalizar el servicio debe de calificar el usuario.");
+        context: context,
+        titulo: 'Calificación',
+        contenido: 'Califica al usuario ${pasajero.pasajero!.nombre!}',
+        icono: Icons.emoji_transportation_outlined,
+        funtionContinuar: () async {
+          final calificacion =
+              BlocProvider.of<ServicioBloc>(context).state.calificacionAUsurio;
+          if (calificacion != 0) {
+            ServicioRServicio().calificarUsuario(
+                servicio.uid, pasajero.pasajero!.id, calificacion.toString());
+            BlocProvider.of<ServicioBloc>(context)
+                .add(const OnCalificarAUsuario(0));
+            Navigator.of(context, rootNavigator: true).pop(context);
+            if (aux == servicio.pasajeros.length) {
+              _finalizandoServicio();
             }
-          }));
+          } else {
+            mostrarShowDialogInformativo(
+                context: context,
+                titulo: "Debe de calificar al usuario",
+                contenido:
+                    "Para poder finalizar el servicio debe de calificar el usuario.");
+          }
+        },
+      ));
     }
     if (servicio.pasajeros.length == 0) {
       _finalizandoServicio();

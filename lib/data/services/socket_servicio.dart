@@ -15,6 +15,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketServicio {
   late IO.Socket _socket;
+  // ignore: unused_field
   final _storage = const FlutterSecureStorage();
 
   IO.Socket get socket => _socket;
