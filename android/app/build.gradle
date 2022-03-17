@@ -45,7 +45,7 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.pa_donde.pa_donde_app"
-        minSdkVersion 20
+        minSdkVersion 28
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -66,6 +66,6 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation platform("com.google.firebase:firebase-bom:29.2.0")
-    // implementation "com.google.firebase:firebase-analytics-ktx"
+    implementation platform('com.google.firebase:firebase-bom:29.1.0')
+    implementation "com.google.firebase:firebase-analytics"
 }
