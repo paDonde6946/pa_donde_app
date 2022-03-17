@@ -5,10 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:pa_donde_app/blocs/blocs.dart';
 import 'package:pa_donde_app/blocs/chat/chat_bloc.dart';
 import 'package:pa_donde_app/data/models/mensaje_modelo.dart';
-import 'package:pa_donde_app/data/models/usuario_modelo.dart';
 // ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -17,6 +15,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketServicio {
   late IO.Socket _socket;
+  // ignore: unused_field
   final _storage = const FlutterSecureStorage();
 
   IO.Socket get socket => _socket;
@@ -31,7 +30,8 @@ class SocketServicio {
       required this.context,
       required this.token}) {
     // Dart client
-    _socket = IO.io('http://192.168.1.9:3001', {
+    // _socket = IO.io('http://192.168.1.9:3001', {
+    _socket = IO.io('http://192.168.71.1:3001', {
       'transports': ['websocket'],
       'autoConnect': true,
       'forceNew': true,

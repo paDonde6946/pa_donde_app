@@ -1,20 +1,27 @@
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:pa_donde_app/blocs/blocs.dart';
-import 'package:pa_donde_app/ui/global_widgets/forms/agregar_servicio3_form.dart';
-import 'package:pa_donde_app/ui/helpers/helpers.dart';
-import 'package:pa_donde_app/ui/pages/chat_pag.dart';
-import 'package:pa_donde_app/ui/global_widgets/show_dialogs/confirmacion_show.dart';
+import 'package:pa_donde_app/data/services/servicios_servicio.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/calificar_show.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/informativo_show.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'detalle_servicio_pag.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/confirmacion_show.dart';
+
 import 'package:pa_donde_app/ui/pages/detalle_postulado_servicio_pag.dart';
 import 'package:pa_donde_app/ui/pages/detalle_tu_servicio_pag.dart';
+import 'package:pa_donde_app/ui/pages/chat_pag.dart';
+
 import 'package:pa_donde_app/data/models/servicio_modelo.dart';
+
+import 'package:pa_donde_app/blocs/blocs.dart';
+
+import 'package:pa_donde_app/ui/helpers/helpers.dart';
 //---------------------------------------------------------------------
 
 class PrincipalPag extends StatefulWidget {
@@ -35,6 +42,7 @@ class _PrincipalPagState extends State<PrincipalPag> {
 
   @override
   Widget build(BuildContext context) {
+    validarCalificarConductor();
     validarCambioContrasenia();
 
     return Scaffold(appBar: appBar(), body: body());
@@ -91,6 +99,38 @@ class _PrincipalPagState extends State<PrincipalPag> {
                 "Hemos notado que has cambiado tu contraseña. Para mayor seguridad cambia la contraseña por una personal.",
             paginaRetorno: 'editarPerfil');
         // add your code here.
+      });
+    }
+  }
+
+  void validarCalificarConductor() {
+    final usuario = BlocProvider.of<UsuarioBloc>(context).state.usuario;
+
+    if (usuario.ultimoServicioCalificar != null) {
+      SchedulerBinding.instance!.addPostFrameCallback((_) {
+        mostrarShowDialogCalificar(
+            context: context,
+            titulo: 'Califica tu último servicio',
+            contenido: "Califica al conductor en tu último servicio tomado",
+            icono: Icons.thumb_up_alt_outlined,
+            funtionContinuar: () {
+              final calificacion = BlocProvider.of<ServicioBloc>(context)
+                  .state
+                  .calificacionAUsurio;
+              if (calificacion != 0) {
+                ServicioRServicio().calificarConductor(
+                    usuario.ultimoServicioCalificar, calificacion.toString());
+                BlocProvider.of<ServicioBloc>(context)
+                    .add(const OnCalificarAUsuario(0));
+                Navigator.of(context, rootNavigator: true).pop(context);
+              } else {
+                mostrarShowDialogInformativo(
+                    context: context,
+                    titulo: "Debe de calificar al usuario",
+                    contenido:
+                        "Para poder finalizar el servicio debe de calificar el usuario.");
+              }
+            });
       });
     }
   }
