@@ -56,6 +56,7 @@ class _RutaPagState extends State<RutaPag> {
 
   @override
   Widget build(BuildContext context) {
+    final preServicio = BlocProvider.of<PreserviciosBloc>(context);
     return Scaffold(
       body: BlocBuilder<LocalizacionBloc, LocalizacionState>(
         builder: (context, localizacionState) {
@@ -71,11 +72,18 @@ class _RutaPagState extends State<RutaPag> {
                 polylines.removeWhere((key, value) => key == 'miRuta');
               }
 
+              // if (preServicio.servicio != null) {
+              //   BlocProvider.of<BusquedaBloc>(context)
+              //       .add(OnDesactivarMarcadorManual());
+              // }
+
               return Stack(
                 children: [
                   MapaView(
                     initialLocalizacion: localizacionState.ultimaLocalizacion!,
-                    polylines: polylines.values.toSet(),
+                    polylines: preServicio.servicio != null
+                        ? polylines.values.toSet()
+                        : <Polyline>{},
                     markers: mapaState.markers.values.toSet(),
                   ),
                   SafeArea(
