@@ -39,11 +39,20 @@ class _PerfilPagState extends State<PerfilPag> {
         BlocProvider.of<UsuarioBloc>(context).state.usuario;
 
     return Scaffold(
+      // appBar: appBar(),
       body: ListView(children: [
         Stack(
           children: [fondo(), informacion(usuarioServicio)],
         ),
       ]),
+    );
+  }
+
+  /// AppBar personalizado que se muestra en la parte superior de la pantalla
+  PreferredSizeWidget appBar() {
+    return AppBar(
+      elevation: 0,
+      backgroundColor: Theme.of(context).primaryColor,
     );
   }
 

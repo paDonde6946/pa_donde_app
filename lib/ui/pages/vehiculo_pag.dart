@@ -32,35 +32,41 @@ class _VehiculoPagState extends State<VehiculoPag> {
     final size = MediaQuery.of(context).size;
     getVehiculos();
     return Scaffold(
-      body: SafeArea(
-        child: ListView(children: [
-          panelSuperior(),
-          (cargar)
-              ? Cargando(
-                  size: size,
-                )
-              : Column(
-                  children: [
-                    Table(children: funcionPrueba()),
-                    const SizedBox(height: 20),
-                    Container(
-                      width: size.width * 1,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: size.width * 0.2),
-                      child: BtnAnaranja(
-                        function: () {
-                          SchedulerBinding.instance!.addPostFrameCallback((_) {
-                            Navigator.of(context).push(navegarMapaFadeIn(
-                                context, const AgregarVehiculo()));
-                          });
-                        },
-                        titulo: "Agregar Vehículo",
-                      ),
-                    )
-                  ],
-                )
-        ]),
-      ),
+      appBar: appBar(),
+      body: ListView(children: [
+        panelSuperior(),
+        (cargar)
+            ? Cargando(
+                size: size,
+              )
+            : Column(
+                children: [
+                  Table(children: funcionPrueba()),
+                  const SizedBox(height: 20),
+                  Container(
+                    width: size.width * 1,
+                    padding: EdgeInsets.symmetric(horizontal: size.width * 0.2),
+                    child: BtnAnaranja(
+                      function: () {
+                        SchedulerBinding.instance!.addPostFrameCallback((_) {
+                          Navigator.of(context).push(navegarMapaFadeIn(
+                              context, const AgregarVehiculo()));
+                        });
+                      },
+                      titulo: "Agregar Vehículo",
+                    ),
+                  )
+                ],
+              )
+      ]),
+    );
+  }
+
+  /// AppBar personalizado que se muestra en la parte superior de la pantalla
+  PreferredSizeWidget appBar() {
+    return AppBar(
+      elevation: 0,
+      backgroundColor: Theme.of(context).primaryColor,
     );
   }
 

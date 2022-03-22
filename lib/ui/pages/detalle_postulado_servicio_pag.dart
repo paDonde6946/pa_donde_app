@@ -117,7 +117,7 @@ class _DetallePostuladoServicioState extends State<DetallePostuladoServicio> {
                     subTitulosDelServicio(subtitulo: "Placa"),
                     textoDelServicio(texto: placa),
                     const SizedBox(height: 6),
-                    subTitulosDelServicio(subtitulo: "Valor Servicio"),
+                    subTitulosDelServicio(subtitulo: "Valor servicio"),
                     textoDelServicio(texto: precio),
                     const SizedBox(height: 6),
                     subTitulosDelServicio(subtitulo: "Hora"),
