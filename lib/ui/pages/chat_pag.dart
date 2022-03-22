@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+//------------------IMPORTACIONES LOCALES------------------------------
+import 'package:pa_donde_app/ui/global_widgets/widgets/mensaje_chat_widget.dart';
+
 import 'package:pa_donde_app/blocs/chat/chat_bloc.dart';
 import 'package:pa_donde_app/blocs/usuario/usuario_bloc.dart';
+
 import 'package:pa_donde_app/data/models/mensaje_modelo.dart';
 import 'package:pa_donde_app/data/models/usuario_modelo.dart';
 import 'package:pa_donde_app/data/services/chat_servicio.dart';
 import 'package:pa_donde_app/data/services/socket_servicio.dart';
-
-//------------------IMPORTACIONES LOCALES------------------------------
-import 'package:pa_donde_app/ui/global_widgets/widgets/mensaje_chat_widget.dart';
 
 //---------------------------------------------------------------------
 

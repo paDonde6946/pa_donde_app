@@ -1,11 +1,9 @@
-// To parse this JSON data, do
-//
-//     final servicio = servicioFromJson(jsonString);
-
 import 'dart:convert';
 
-import 'package:pa_donde_app/data/models/pasajeros_modelo.dart';
+//------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/response/busqueda_response.dart';
+import 'package:pa_donde_app/data/response/pasejeros_response.dart';
+//---------------------------------------------------------------------
 
 Servicio servicioFromJson(String str) => Servicio.fromJson(json.decode(str));
 
@@ -77,7 +75,7 @@ class Servicio {
       pUid: json["uid"],
       pNombreConductor: json["nombreConductor"],
       pPasajeros: List<PasajeroElement>.from(
-          json["pasajeros"]!.map((x) => PasajeroElement.fromJson(x))));
+          json["pasajeros"].map((x) => PasajeroElement.fromJson(x))));
 
   Map<String, dynamic> toJson() => {
         "nombreOrigen": nombreOrigen,

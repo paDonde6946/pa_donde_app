@@ -83,7 +83,8 @@ class Usuario with ChangeNotifier {
         "contrasenia": contrasenia,
         "cambio_contrasenia": cambioContrasenia,
         "calificacionUsuario": calificacionUsuario,
-        "calificacionConductor": calificacionConductor
+        "calificacionConductor": calificacionConductor,
+        "ultimoServicioSinCalificar": ultimoServicioCalificar
       };
 
   // MÉTODOS GET AND SET DE LOS ATRIBUTOS

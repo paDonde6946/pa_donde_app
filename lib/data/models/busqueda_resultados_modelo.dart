@@ -18,7 +18,4 @@ class BusquedaResultado {
     this.nombreDestino,
     this.descripcion,
   });
-
-  
-
 }

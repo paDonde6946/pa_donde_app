@@ -4,7 +4,9 @@ import 'dart:io';
 
 import 'package:test/test.dart';
 
+//------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/models/usuario_modelo.dart';
+//---------------------------------------------------------------------
 
 void main() {
   /// USUARIO MODELO PRUEBAS UNITARIAS - DE JSON A MODELO
@@ -24,6 +26,9 @@ void main() {
     expect(usuario.celular, 3004503102);
     expect(usuario.cambioContrasenia, 1);
     expect(usuario.uid, "1cbe1bdb7392188991");
+    expect(usuario.calificacionUsuario, 2.0);
+    expect(usuario.calificacionConductor, 3.4);
+    expect(usuario.ultimoServicioCalificar, null);
   });
 
   /// USUARIO MODELO PRUEBAS UNITARIAS - DE MODELO A JSON
@@ -32,9 +37,13 @@ void main() {
     usuarioTest.nombre = "Felipe";
     usuarioTest.apellido = "Martinez";
     usuarioTest.celular = 123455;
+
     usuarioTest.correo = "felipe@unbosque.edu.co";
     usuarioTest.contrasenia = "asdfwa43";
     usuarioTest.cambioContrasenia = 0;
+    usuarioTest.calificacionUsuario = 2.0;
+    usuarioTest.calificacionConductor = 3.4;
+    usuarioTest.ultimoServicioCalificar = null;
 
     /// Función a probar (fromJson)
     final usuario = usuarioTest.toJson();
@@ -47,6 +56,9 @@ void main() {
       "celular": 123455,
       "contrasenia": "asdfwa43",
       "cambio_contrasenia": 0,
+      "calificacionConductor": 3.4,
+      "calificacionUsuario": 2.0,
+      "ultimoServicioSinCalificar": null,
     };
 
     expect(usuario, jsonUsuario);
