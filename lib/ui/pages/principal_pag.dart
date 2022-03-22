@@ -1,23 +1,25 @@
 // ignore: import_of_legacy_library_into_null_safe
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pa_donde_app/data/services/servicios_servicio.dart';
-import 'package:pa_donde_app/ui/global_widgets/show_dialogs/calificar_show.dart';
-import 'package:pa_donde_app/ui/global_widgets/show_dialogs/informativo_show.dart';
+
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'detalle_servicio_pag.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/confirmacion_show.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/calificar_show.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/informativo_show.dart';
 
 import 'package:pa_donde_app/ui/pages/detalle_postulado_servicio_pag.dart';
 import 'package:pa_donde_app/ui/pages/detalle_tu_servicio_pag.dart';
 import 'package:pa_donde_app/ui/pages/chat_pag.dart';
 
 import 'package:pa_donde_app/data/models/servicio_modelo.dart';
+import 'package:pa_donde_app/data/services/servicios_servicio.dart';
 
 import 'package:pa_donde_app/blocs/blocs.dart';
 
@@ -38,6 +40,9 @@ class _PrincipalPagState extends State<PrincipalPag> {
   }
 
   PageController controller = PageController();
+  PageController controllerServicioDelUsuario = PageController();
+  PageController controllerServicioPostulados = PageController();
+
   int page = 0;
 
   @override
@@ -206,17 +211,22 @@ class _PrincipalPagState extends State<PrincipalPag> {
               "Servicios postulados",
               style: TextStyle(fontSize: size.width * 0.045),
             )),
-        SizedBox(
-          height: size.height * 0.17,
-          child: PageView(
-            onPageChanged: (i) {
-              page = i;
-            },
-            controller: controller,
-            children: [
-              listadoServiciosPostulados(),
-            ],
-          ),
+        Stack(
+          children: [
+            SizedBox(
+              height: size.height * 0.17,
+              child: PageView(
+                onPageChanged: (i) {
+                  page = i;
+                },
+                controller: controller,
+                children: [
+                  listadoServiciosPostulados(),
+                ],
+              ),
+            ),
+            pasarPagina(controllerServicioPostulados)
+          ],
         )
       ],
     );
@@ -237,12 +247,52 @@ class _PrincipalPagState extends State<PrincipalPag> {
               "Tus servicios",
               style: TextStyle(fontSize: size.width * 0.045),
             )),
-        SizedBox(
-          width: double.infinity,
-          height: size.height * 0.15,
-          child: listadoServiciosDelUsuario(),
+        Stack(
+          children: [
+            SizedBox(
+              width: double.infinity,
+              height: size.height * 0.15,
+              child: listadoServiciosDelUsuario(),
+            ),
+            pasarPagina(controllerServicioDelUsuario),
+          ],
         ),
       ],
+    );
+  }
+
+  Widget pasarPagina(PageController controller) {
+    final size = MediaQuery.of(context).size;
+
+    return Positioned(
+      width: size.width,
+      top: 40,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          IconButton(
+              onPressed: () {
+                int pagina = controller.page!.toInt() - 1;
+                controller.animateToPage(
+                  pagina < 0 ? 0 : pagina,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.linear,
+                );
+              },
+              icon: const Icon(Icons.arrow_back_ios_outlined)),
+          IconButton(
+              onPressed: () {
+                int pagina = controller.page!.toInt() + 1;
+                controller.animateToPage(
+                  pagina < 0 ? 0 : pagina,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.linear,
+                );
+              },
+              icon: const Icon(Icons.arrow_forward_ios_outlined)),
+        ],
+      ),
     );
   }
 
@@ -252,6 +302,7 @@ class _PrincipalPagState extends State<PrincipalPag> {
         BlocProvider.of<ServicioBloc>(context).state.serviciosDelUsuario;
     setState(() {});
     return PageView.builder(
+      controller: controllerServicioDelUsuario,
       itemCount: servicios.length,
       itemBuilder: (context, index) {
         return cardTuServicio(servicios[index]);
@@ -265,6 +316,7 @@ class _PrincipalPagState extends State<PrincipalPag> {
         BlocProvider.of<ServicioBloc>(context).state.serviciosPostulados;
 
     return PageView.builder(
+      controller: controllerServicioPostulados,
       itemCount: servicios.length,
       itemBuilder: (context, index) {
         return cardSerPostulados(servicios[index]);
