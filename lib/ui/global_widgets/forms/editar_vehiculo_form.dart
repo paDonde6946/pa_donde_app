@@ -108,14 +108,14 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
       return;
     }
     mostrarShowDialogCargando(
-        context: context, titulo: "Estamos editando tu vehiculo");
+        context: context, titulo: "Estamos editando tu vehículo");
 
     var vehiculoServicio = VehiculoServicio();
     var respuesta = await vehiculoServicio.editarServicio(vehiculo: vehiculo);
     Navigator.of(context).pop();
     mostrarShowDialogConfirmar(
         context: context,
-        titulo: "CONFIRMACION",
+        titulo: "CONFIRMACIÓN",
         contenido: respuesta["msg"],
         paginaRetorno: 'inicio');
   }
@@ -189,7 +189,7 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
   Widget _crearPlaca(Vehiculo vehiculo) {
     return TextFormField(
       initialValue: vehiculo.placa,
-      decoration: inputDecoration('Placa', 'Placa del vehiculo', context,
+      decoration: inputDecoration('Placa', 'Placa del vehículo', context,
           Theme.of(context).primaryColor, null, size.height * 0.03),
       onSaved: (value) => vehiculo.placa = value,
       onChanged: (value) => vehiculo.placa = value,
@@ -202,7 +202,7 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
   Widget _crearColor(Vehiculo vehiculo) {
     return TextFormField(
       initialValue: vehiculo.color,
-      decoration: inputDecoration('Color', 'Color del vehiculo', context,
+      decoration: inputDecoration('Color', 'Color del vehículo', context,
           Theme.of(context).primaryColor, null, size.height * 0.03),
       onSaved: (value) => vehiculo.color = value,
       onChanged: (value) => vehiculo.color = value,
@@ -216,7 +216,7 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
     return TextFormField(
       initialValue: vehiculo.marca,
       keyboardType: TextInputType.text,
-      decoration: inputDecoration('Marca', 'Marca del vehiculo', context,
+      decoration: inputDecoration('Marca', 'Marca del vehículo', context,
           Theme.of(context).primaryColor, null, size.height * 0.03),
       onSaved: (value) => vehiculo.marca = value,
       onChanged: (value) => vehiculo.marca = value,
@@ -230,7 +230,7 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
       scrollPadding: const EdgeInsets.all(1),
       onSaved: (value) => vehiculo.modelo = value,
       onChanged: (value) => vehiculo.modelo = value,
-      decoration: inputDecoration('Modelo', 'Modelo del vehiculo', context,
+      decoration: inputDecoration('Modelo', 'Modelo del vehículo', context,
           Theme.of(context).primaryColor, null, size.height * 0.03),
       validator: (value) =>
           (value!.isEmpty) ? 'El modelo ingresado no es valido' : null,
@@ -244,7 +244,7 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
       keyboardType: TextInputType.number,
       scrollPadding: const EdgeInsets.all(1),
       onChanged: (value) => conContrasenia = value,
-      decoration: inputDecoration('Año', 'Año del vehiculo', context,
+      decoration: inputDecoration('Año', 'Año del vehículo', context,
           Theme.of(context).primaryColor, null, size.height * 0.03),
       validator: (value) => (value!.isEmpty) ? 'El digito no es valido' : null,
     );
@@ -277,7 +277,7 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
         color: Colors.black87,
         onPressed: () async {
           mostrarShowDialogCargando(
-              context: context, titulo: "Estamos eliminando tu vehiculo");
+              context: context, titulo: "Estamos eliminando tu vehículo");
           var vehiculoServicio = VehiculoServicio();
           var respuesta =
               await vehiculoServicio.eliminarVehiculo(vehiculo: vehiculo);
@@ -287,7 +287,7 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
           Navigator.of(context).pop();
           mostrarShowDialogConfirmar(
               context: context,
-              titulo: "CONFIRMACION",
+              titulo: "CONFIRMACIÓN",
               contenido: respuesta["msg"],
               paginaRetorno: 'inicio');
         },

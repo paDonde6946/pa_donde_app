@@ -288,6 +288,6 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
   Widget _crearBotonRegistro(Vehiculo vehiculo) {
     return BtnAnaranja(
         function: () => _validarFormulario(vehiculo),
-        titulo: 'Guardar Vehiculo');
+        titulo: 'Guardar Vehículo');
   }
 }

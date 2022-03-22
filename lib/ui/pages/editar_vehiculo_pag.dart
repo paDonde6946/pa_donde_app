@@ -21,28 +21,6 @@ class EditarVehiculo extends StatelessWidget {
     );
   }
 
-  /// Encabezado de la pagina de registro del usuario (AppBar Modificado)
-  // Widget _crearAppBar() {
-  //   final size = MediaQuery.of(context).size;
-  //   return Container(
-  //     height: 80,
-  //     color: Theme.of(context).primaryColor,
-  //     child: Row(
-  //       mainAxisAlignment: MainAxisAlignment.center,
-  //       children: [
-  //         Icon(
-  //           Icons.directions_bike,
-  //           size: size.width * 0.2,
-  //         ),
-  //         Text(
-  //           "Editar Vehículo",
-  //           style: TextStyle(fontSize: size.width * 0.045),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
   /// Encabezado de la pagina
   PreferredSizeWidget appBar(BuildContext context) {
     final size = MediaQuery.of(context).size;

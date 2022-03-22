@@ -55,8 +55,8 @@ class _AgregarServicioParte2State extends State<AgregarServicioParte2> {
               } else {
                 mostrarShowDialogInformativo(
                     context: context,
-                    titulo: 'Vehiculo',
-                    contenido: 'Debe de seleccionar un vehiculo');
+                    titulo: 'Vehículo',
+                    contenido: 'Debe de seleccionar un vehículo');
               }
             },
             icon: const Icon(Icons.arrow_forward_ios_rounded)),
