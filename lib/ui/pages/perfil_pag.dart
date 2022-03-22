@@ -85,7 +85,7 @@ class _PerfilPagState extends State<PerfilPag> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             BtnAnaranja(
-              titulo: "Editar Perfil",
+              titulo: "Editar perfil",
               function: () {
                 SchedulerBinding.instance!.addPostFrameCallback((_) {
                   Navigator.of(context).push(navegarMapaFadeIn(
@@ -97,7 +97,7 @@ class _PerfilPagState extends State<PerfilPag> {
               },
             ),
             BtnAnaranja(
-              titulo: "Editar Contraseña",
+              titulo: "Editar contraseña",
               function: () {
                 SchedulerBinding.instance!.addPostFrameCallback((_) {
                   Navigator.of(context).push(
@@ -108,15 +108,15 @@ class _PerfilPagState extends State<PerfilPag> {
           ],
         ),
         const SizedBox(height: 10),
-        informacionTextoTitulo("CORREO", Icons.mail),
+        informacionTextoTitulo("Correo", Icons.mail),
         const SizedBox(height: 10),
         informacionTextoSubTitulo(usuarioServicio.correo),
         const SizedBox(height: 10),
-        informacionTextoTitulo("CELULAR", Icons.phone),
+        informacionTextoTitulo("Celular", Icons.phone),
         const SizedBox(height: 10),
         informacionTextoSubTitulo(usuarioServicio.celular.toString()),
         const SizedBox(height: 10),
-        informacionTextoTitulo("PUNTUACIÓN", Icons.star),
+        informacionTextoTitulo("Puntuación", Icons.star),
         const SizedBox(height: 10),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -171,8 +171,8 @@ class _PerfilPagState extends State<PerfilPag> {
 
               mostrarShowDialogConfirmar(
                   context: context,
-                  titulo: "CONFIRMACION",
-                  contenido: 'Usted ha cerrado sesion correctamente',
+                  titulo: "CONFIRMACIÓN",
+                  contenido: 'Usted ha cerrado sesión correctamente',
                   paginaRetorno: 'login');
               // Navigator.push(
               //     context,

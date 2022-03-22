@@ -60,7 +60,6 @@ class SocketServicio {
   }
 
   void recivirMensaje(mensaje) {
-    print("Holaaaaaaaaa");
     ChatBloc chatBloc = BlocProvider.of<ChatBloc>(context);
     Mensaje mensajeRecivido = Mensaje.fromJson(mensaje);
     chatBloc.agregarMensajeConversacion(mensajeRecivido);

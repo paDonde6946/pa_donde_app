@@ -17,8 +17,8 @@ class Usuario with ChangeNotifier {
     String? pConstrasenia,
     int? pCambioContrasenia,
     String? pUid,
-    int? pCalificacionUsuario,
-    int? pCalificacionConductor,
+    double? pCalificacionUsuario,
+    double? pCalificacionConductor,
     List<Feature>? pHistorialOrigen,
     List<Feature>? pHistorialDestino,
     String? pUltimoServicioCalificar,
@@ -47,8 +47,8 @@ class Usuario with ChangeNotifier {
   String? _contrasenia;
   int? _cambioContrasenia;
   String? _uid;
-  int? _calificacionUsuario;
-  int? _calificacionConductor;
+  double? _calificacionUsuario;
+  double? _calificacionConductor;
   List<Feature>? _historialOrigen;
   List<Feature>? _historialDestino;
   String? _ultimoServicioCalificar;
@@ -63,8 +63,8 @@ class Usuario with ChangeNotifier {
       pConstrasenia: json["contrasenia"],
       pCambioContrasenia: json["cambio_contrasenia"],
       pUid: json["uid"],
-      pCalificacionUsuario: json["calificacionUsuario"],
-      pCalificacionConductor: json["calificacionConductor"],
+      pCalificacionUsuario: json["calificacionUsuario"].toDouble(),
+      pCalificacionConductor: json["calificacionConductor"].toDouble(),
       pHistorialDestino: json["historialDestino"] != null
           ? List<Feature>.from(
               json["historialDestino"].map((x) => Feature.fromJson(x)))

@@ -53,7 +53,7 @@ flutter pub get
 
   Debe de asegurarse de estar corriendo el emulador de Android y haberlo seleccionado en el IDE. En el siguiente link puede encontrar más información. [Link documentación de la ejecución de proyecto en flutter (click aqui)](https://esflutter.dev/docs/development/tools/vs-code) 
 
-  Para que el proyecto funcione correctamente debe asegurarse que antes de ejecutar el proyecto de flutter, el backend debe de estar corriendo dado que el aplicativo tiene manejo de sesiones y apenas inicia valida con el backend si el usuario ya estaba logueado en el dispositivo o no y si no recibe respuesta del backend el aplicativo no pasara de la pantalla inicial.
+  Para que el proyecto funcione correctamente debe asegurarse que antes de ejecutar el proyecto de flutter, el backend debe de estar corriendo dado que el aplicativo tiene manejo de sesiones y apenas inicia válida con el backend si el usuario ya estaba logueado en el dispositivo o no y si no recibe respuesta del backend el aplicativo no pasara de la pantalla inicial.
 
 ## FUNCIONAMIENTO
 

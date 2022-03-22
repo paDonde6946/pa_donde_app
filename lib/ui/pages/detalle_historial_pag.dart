@@ -31,7 +31,6 @@ class _DetalleHistorialServicioPagState
     return Scaffold(appBar: appBar(), body: body());
   }
 
-
   Widget body() {
     final placa = _validarVehiculoServicio(servicio.idVehiculo);
     final auxilio = _validarPrecioServicio(servicio.auxilioEconomico);
@@ -62,9 +61,10 @@ class _DetalleHistorialServicioPagState
         centerTitle: true,
         foregroundColor: Colors.black,
         backgroundColor: Theme.of(context).primaryColor,
-        title: const Text(
+        title: Text(
           "PaDonde",
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: size.width * 0.055, fontWeight: FontWeight.bold),
         ));
   }
 
@@ -136,22 +136,25 @@ class _DetalleHistorialServicioPagState
           color: const Color.fromRGBO(238, 246, 232, 1),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          margin: EdgeInsets.all(size.width*0.02),
+          margin: EdgeInsets.all(size.width * 0.02),
           elevation: 3,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: EdgeInsets.only(right: size.width*0.04, left: size.width*0.04, top: size.width*0.03),
+                padding: EdgeInsets.only(
+                    right: size.width * 0.04,
+                    left: size.width * 0.04,
+                    top: size.width * 0.03),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     tituloDelServicio(titulo: titulo),
                     Row(children: [
-                       Icon(Icons.access_time_outlined, size: size.width*0.05),
-                       SizedBox(
-                         width: size.width*0.01,
-                       ),
+                      Icon(Icons.access_time_outlined, size: size.width * 0.05),
+                      SizedBox(
+                        width: size.width * 0.01,
+                      ),
                       textoDelServicio(texto: fecha.toString())
                     ]),
                   ],
@@ -160,25 +163,26 @@ class _DetalleHistorialServicioPagState
               Row(
                 children: [
                   Container(
-                    padding: EdgeInsets.only(left: size.width*0.07, top: size.height*0.02),
+                    padding: EdgeInsets.only(
+                        left: size.width * 0.07, top: size.height * 0.02),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Container(
-                          padding: EdgeInsets.only(bottom: size.height*0.02),
+                          padding: EdgeInsets.only(bottom: size.height * 0.02),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               subTitulosDelServicio(subtitulo: "Origen"),
                               textoDelServicio(texto: origen),
                               SizedBox(
-                                height: size.height*0.01,
+                                height: size.height * 0.01,
                               ),
                               subTitulosDelServicio(subtitulo: "Destino"),
                               textoDelServicio(texto: destino),
                               SizedBox(
-                                height: size.height*0.01,
+                                height: size.height * 0.01,
                               ),
                               subTitulosDelServicio(subtitulo: "Conductor"),
                               textoDelServicio(texto: nombreConductor),
@@ -196,12 +200,12 @@ class _DetalleHistorialServicioPagState
                         subTitulosDelServicio(subtitulo: "Cupos Disponibles"),
                         textoDelServicio(texto: cuposDisponibles),
                         SizedBox(
-                          height: size.height*0.01,
+                          height: size.height * 0.01,
                         ),
                         subTitulosDelServicio(subtitulo: "Valor Servicio"),
                         textoDelServicio(texto: valorServicio),
                         SizedBox(
-                          height: size.height*0.01,
+                          height: size.height * 0.01,
                         ),
                         subTitulosDelServicio(subtitulo: "Placa"),
                         textoDelServicio(texto: placa),

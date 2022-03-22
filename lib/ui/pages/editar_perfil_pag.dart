@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:pa_donde_app/ui/global_widgets/forms/editar_perfil_form.dart';
 
 class EditarPerfilPag extends StatefulWidget {
-  
   final Function? callbackFunction;
-  
-  const EditarPerfilPag({Key? key, required this.callbackFunction}) : super(key: key);
+
+  const EditarPerfilPag({Key? key, required this.callbackFunction})
+      : super(key: key);
 
   @override
   // ignore: no_logic_in_create_state
-  _EditarPerfilPagState createState() => _EditarPerfilPagState(callbackFunction);
+  _EditarPerfilPagState createState() =>
+      // ignore: no_logic_in_create_state
+      _EditarPerfilPagState(callbackFunction);
 }
 
 class _EditarPerfilPagState extends State<EditarPerfilPag> {
@@ -79,9 +81,9 @@ class _EditarPerfilPagState extends State<EditarPerfilPag> {
         foregroundColor: Colors.black,
         backgroundColor: Theme.of(context).primaryColor,
         title: Text(
-          "Editar Perfil",
+          "Editar perfil",
           style: TextStyle(
-              fontSize: size.width * 0.045, fontWeight: FontWeight.bold),
+              fontSize: size.width * 0.055, fontWeight: FontWeight.bold),
         ));
   }
 
@@ -98,7 +100,7 @@ class _EditarPerfilPagState extends State<EditarPerfilPag> {
             size: size.height * 0.1,
           ),
           Text(
-            "Editar Perfil",
+            "Editar perfil",
             style: TextStyle(fontSize: size.width * 0.06),
           ),
         ],

@@ -63,6 +63,18 @@ class ServicioBloc extends Bloc<ServicioEvent, ServicioState> {
     add(OnActualizarServiciosDelUsuario(state.serviciosDelUsuario));
   }
 
+  void buscarYcambiarServicioDelUsuario(Servicio servicio) {
+    int aux = 0;
+    for (var ser in state.serviciosDelUsuario) {
+      if (ser == servicio) {
+        state.serviciosDelUsuario[aux] = servicio;
+      }
+      aux = aux + 1;
+    }
+
+    add(OnActualizarServiciosDelUsuario(state.serviciosDelUsuario));
+  }
+
   void buscarYactualizarServicioGenerales(Servicio servicio) {
     state.serviciosGenerales.remove(servicio);
     add(OnActualizarServiciosGenerales(state.serviciosGenerales));

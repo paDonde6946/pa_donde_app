@@ -103,8 +103,8 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
     if (!RegExpLocales.expresionPlacaCarro.hasMatch(vehiculo.placa)) {
       mostrarShowDialogInformativo(
           context: context,
-          titulo: 'Placa Invalida',
-          contenido: "No es una placa valida");
+          titulo: 'Placa Inválida',
+          contenido: "No es una placa válida");
       return;
     }
     mostrarShowDialogCargando(

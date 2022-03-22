@@ -120,6 +120,9 @@ class _PrincipalPagState extends State<PrincipalPag> {
               if (calificacion != 0) {
                 ServicioRServicio().calificarConductor(
                     usuario.ultimoServicioCalificar, calificacion.toString());
+                usuario.ultimoServicioCalificar = null;
+                BlocProvider.of<UsuarioBloc>(context)
+                    .add(OnActualizarUsuario(usuario));
                 BlocProvider.of<ServicioBloc>(context)
                     .add(const OnCalificarAUsuario(0));
                 Navigator.of(context, rootNavigator: true).pop(context);
@@ -200,7 +203,7 @@ class _PrincipalPagState extends State<PrincipalPag> {
         Container(
             margin: const EdgeInsets.only(left: 30, top: 10),
             child: Text(
-              "Servicios Postulados",
+              "Servicios postulados",
               style: TextStyle(fontSize: size.width * 0.045),
             )),
         SizedBox(

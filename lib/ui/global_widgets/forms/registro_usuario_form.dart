@@ -126,7 +126,7 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
       style: styleInput,
       controller: inputControllerNombre,
       decoration: input_redondo.inputDecorationRedondo(
-          'Nombre', 'Ingresa tu nombre', context, Colors.white),
+          'Nombre', 'Ingrese su nombre', context, Colors.white),
       onSaved: (value) => usuario.nombre = value,
       onChanged: (value) => usuario.nombre = value,
       validator: (value) =>
@@ -140,7 +140,7 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
       style: styleInput,
       controller: inputControllerApellido,
       decoration: input_redondo.inputDecorationRedondo(
-          'Apellido', 'Ingresa tu apellido', context, Colors.white),
+          'Apellido', 'Ingrese su apellido', context, Colors.white),
       onSaved: (value) => usuario.apellido = value,
       onChanged: (value) => usuario.apellido = value,
       validator: (value) =>
@@ -157,7 +157,7 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
       onChanged: (value) => usuario.celular = int.parse(value),
       keyboardType: TextInputType.number,
       decoration: input_redondo.inputDecorationRedondo('Número de celular',
-          'Ingresa tu número celular', context, Colors.white),
+          'Ingrese su número celular', context, Colors.white),
       validator: (value) => (validaciones_generales.isNumber(value!))
           ? null
           : 'Solo se perminten números',
@@ -171,7 +171,7 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
       controller: inputControllerCorreo,
       keyboardType: TextInputType.emailAddress,
       decoration: input_redondo.inputDecorationRedondo(
-          'Correo institucional', 'Ingresa tu correo', context, Colors.white),
+          'Correo institucional', 'Ingrese su correo', context, Colors.white),
       onSaved: (value) => usuario.correo = value,
       onChanged: (value) => usuario.correo = value,
       validator: (value) => (validaciones_generales.validarEmail(value) ||
@@ -191,7 +191,7 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
       onSaved: (value) => usuario.contrasenia = value,
       onChanged: (value) => usuario.contrasenia = value,
       decoration: input_redondo.inputDecorationRedondo(
-          'Contraseña', 'Ingresa tu contraseña', context, Colors.white),
+          'Contraseña', 'Ingrese su contraseña', context, Colors.white),
       validator: (value) =>
           (value!.isEmpty) ? 'El correo ingresado no es valido' : null,
     );
@@ -206,7 +206,7 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
       obscureText: true,
       onChanged: (value) => conContrasenia = value,
       decoration: input_redondo.inputDecorationRedondo('Confirmar Contraseña',
-          'Ingresa tu contraseña', context, Colors.white),
+          'Ingrese su contraseña', context, Colors.white),
       validator: (value) =>
           (value!.isEmpty) ? 'El correo ingresado no es valido' : null,
     );

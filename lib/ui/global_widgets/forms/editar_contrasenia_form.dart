@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:pa_donde_app/data/services/usuario_servicio.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 import 'package:pa_donde_app/ui/global_widgets/inputs/input_form.dart';
-import 'package:pa_donde_app/ui/global_widgets/inputs/input_form_elevado.dart';
 import 'package:pa_donde_app/ui/global_widgets/text/formulario_texto.dart';
+
+import 'package:pa_donde_app/data/services/usuario_servicio.dart';
 
 import 'package:pa_donde_app/ui/utils/snack_bars.dart';
 //---------------------------------------------------------------------
@@ -38,11 +38,9 @@ class _FormEditarContraseniaState extends State<FormEditarContrasenia> {
         padding: EdgeInsets.symmetric(horizontal: size.width * 0.11),
         child: Column(
           children: [
-            _nombreLabel(
-                _crearContrasenia(context), 'Contraseña'),
+            _nombreLabel(_crearContrasenia(context), 'Contraseña'),
             SizedBox(height: size.height * 0.01),
-            _nombreLabel(
-                _crearConContrasenia(), 'Repetir Contraseña'),
+            _nombreLabel(_crearConContrasenia(), 'Repetir contraseña'),
             SizedBox(height: size.height * 0.04),
             _crearBtnInicioSesion(),
           ],
@@ -103,8 +101,8 @@ class _FormEditarContraseniaState extends State<FormEditarContrasenia> {
       scrollPadding: const EdgeInsets.all(1),
       obscureText: true,
       onChanged: (value) => inputControllerContrasenia.text = value,
-      decoration:
-          inputDecoration('', 'Nueva contraseña', context, Theme.of(context).primaryColor, null, 0),
+      decoration: inputDecoration('', 'Nueva contraseña', context,
+          Theme.of(context).primaryColor, null, 0),
       validator: (value) =>
           (value!.isEmpty) ? 'El correo ingresado no es valido' : null,
     );
@@ -117,8 +115,8 @@ class _FormEditarContraseniaState extends State<FormEditarContrasenia> {
       scrollPadding: const EdgeInsets.all(1),
       obscureText: true,
       onChanged: (value) => inputControllerConContrasenia.text = value,
-      decoration: inputDecoration(
-          '', 'Repetir nueva contraseña', context, Theme.of(context).primaryColor, null, 0),
+      decoration: inputDecoration('', 'Repetir nueva contraseña', context,
+          Theme.of(context).primaryColor, null, 0),
       validator: (value) =>
           (value!.isEmpty) ? 'El correo ingresado no es valido' : null,
     );
@@ -128,7 +126,9 @@ class _FormEditarContraseniaState extends State<FormEditarContrasenia> {
   Widget _crearBtnInicioSesion() {
     return Center(
       child: BtnAnaranja(
-          function: () => validarContrasenia(), titulo: 'Editar Contraseña'),
+          tamanioLetra: 17,
+          function: () => validarContrasenia(),
+          titulo: 'Editar contraseña'),
     );
   }
 
@@ -149,6 +149,7 @@ class _FormEditarContraseniaState extends State<FormEditarContrasenia> {
     final response = await usuarioServicio
         .cambiarContrasenia(inputControllerContrasenia.text.trim());
 
+    // ignore: unnecessary_null_comparison
     if (response == null) {
       customShapeSnackBar(context: context, titulo: 'Información invalida');
     } else {

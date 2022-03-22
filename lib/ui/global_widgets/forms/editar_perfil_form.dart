@@ -68,7 +68,7 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
             SizedBox(height: size.height * 0.01),
             _nombreLabel(_crearApellido(), 'Apellidos'),
             SizedBox(height: size.height * 0.01),
-            _nombreLabel(_crearEmail(), 'Correo Institucional'),
+            _nombreLabel(_crearEmail(), 'Correo institucional'),
             SizedBox(height: size.height * 0.01),
             _nombreLabel(_crearNumCelular(), 'Número de teléfono'),
             SizedBox(height: size.height * 0.04),
@@ -104,6 +104,7 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
     // Validar informacion con el backend
     UsuarioServicio usuarioServicio = UsuarioServicio();
     final response = await usuarioServicio.editarPerfil(usuario);
+    // ignore: unnecessary_null_comparison
     if (response == null) {
       customShapeSnackBar(context: context, titulo: 'Información invalida');
     } else {
@@ -168,7 +169,7 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
         onSaved: (value) => usuario.celular = int.parse(value!),
         onChanged: (value) => inputControllerTelefono.text = value,
         keyboardType: TextInputType.number,
-        decoration: inputDecoration('', 'Ingresa tu número celular', context,
+        decoration: inputDecoration('', 'Ingrese su número celular', context,
             Theme.of(context).primaryColor, null, 0),
         validator: (value) => (validaciones_generales.isNumber(value!))
             ? null
@@ -186,7 +187,7 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
       style: styleInput,
       initialValue: usuario.correo,
       keyboardType: TextInputType.emailAddress,
-      decoration: inputDecoration('', 'Ingresa tu correo', context,
+      decoration: inputDecoration('', 'Ingrese su correo', context,
           Theme.of(context).primaryColor, null, 0),
       validator: (value) =>
           (validarEmail(value)) ? 'El correo ingresado no es valido' : null,

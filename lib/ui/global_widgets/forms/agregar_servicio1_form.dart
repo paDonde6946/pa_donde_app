@@ -67,7 +67,7 @@ class _AgregarServicioParte1State extends State<AgregarServicioParte1> {
                 .controller!
                 .jumpToPage(0),
             icon: const Icon(Icons.arrow_back_ios_sharp)),
-        const Text("Regitro del servicio"),
+        const Text("Registro del servicio"),
         IconButton(
             onPressed: validarCampos,
             icon: const Icon(Icons.arrow_forward_ios_rounded)),
@@ -84,7 +84,8 @@ class _AgregarServicioParte1State extends State<AgregarServicioParte1> {
       cupos = servicioBloc.cantidadCupos;
       inputCupos.value =
           TextEditingValue(text: servicioBloc.cantidadCupos.toString());
-      fecha2 = servicioBloc.fechayhora.toString().split(" ")[0];
+      fecha2 = servicioBloc.fechayhora.toString().split("T")[0];
+      hora2 = servicioBloc.fechayhora.toString().split("T")[1].split(".")[0];
     }
   }
 

@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pa_donde_app/data/models/usuario_modelo.dart';
-import 'package:pa_donde_app/ui/pages/inicio_pag.dart';
 import 'package:provider/provider.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
@@ -15,6 +12,8 @@ import 'package:pa_donde_app/data/services/servicios_servicio.dart';
 import 'package:pa_donde_app/data/services/vehiculo_servicio.dart';
 
 import 'package:pa_donde_app/blocs/blocs.dart';
+
+import 'package:pa_donde_app/data/models/usuario_modelo.dart';
 
 import 'package:pa_donde_app/ui/utils/snack_bars.dart';
 import 'package:pa_donde_app/ui/utils/validaciones_generales.dart';

@@ -117,7 +117,7 @@ class _DetalleServicioPagState extends State<DetalleServicioPag> {
                     subTitulosDelServicio(subtitulo: "Placa"),
                     textoDelServicio(texto: placa),
                     const SizedBox(height: 6),
-                    subTitulosDelServicio(subtitulo: "Valor Servicio"),
+                    subTitulosDelServicio(subtitulo: "Valor servicio"),
                     textoDelServicio(texto: precio),
                     const SizedBox(height: 6),
                     subTitulosDelServicio(subtitulo: "Hora"),
@@ -223,8 +223,8 @@ class _DetalleServicioPagState extends State<DetalleServicioPag> {
         mapaBloc.dibujarRutaPolyline(context, destino);
         return SlidingUpPanel(
           margin: const EdgeInsets.all(15),
-          maxHeight: size.height * 0.485,
-          minHeight: size.height * 0.485,
+          maxHeight: size.height * 0.45,
+          minHeight: size.height * 0.45,
           parallaxEnabled: true,
           parallaxOffset: .5,
           panelBuilder: (sc) =>

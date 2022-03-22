@@ -28,30 +28,9 @@ class _EditarContraseniaPagState extends State<EditarContraseniaPag> {
         foregroundColor: Colors.black,
         backgroundColor: Theme.of(context).primaryColor,
         title: Text(
-          "Editar Contraseña",
+          "Editar contraseña",
           style: TextStyle(
-              fontSize: size.width * 0.045, fontWeight: FontWeight.bold),
+              fontSize: size.width * 0.055, fontWeight: FontWeight.bold),
         ));
-  }
-
-  /// Panel superior verde (Titulo de la pagina)
-  Widget panelSuperior() {
-    final size = MediaQuery.of(context).size;
-    return Container(
-      color: Theme.of(context).primaryColor,
-      height: 120,
-      child: Column(
-        children: [
-          Icon(
-            Icons.directions_car_filled_outlined,
-            size: size.height * 0.1,
-          ),
-          Text(
-            "Editar Contraseña",
-            style: TextStyle(fontSize: size.width * 0.06),
-          ),
-        ],
-      ),
-    );
   }
 }

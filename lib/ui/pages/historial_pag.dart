@@ -1,18 +1,15 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:pa_donde_app/blocs/blocs.dart';
-import 'package:pa_donde_app/data/models/servicio_modelo.dart';
-import 'package:pa_donde_app/data/services/servicios_servicio.dart';
-import 'package:pa_donde_app/ui/global_widgets/widgets/cargando_widget.dart';
-
-import 'detalle_historial_pag.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
-// import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
-// import 'package:provider/provider.dart';
+import 'package:pa_donde_app/blocs/blocs.dart';
+
+import 'package:pa_donde_app/data/models/servicio_modelo.dart';
+import 'package:pa_donde_app/data/services/servicios_servicio.dart';
+
+import 'package:pa_donde_app/ui/global_widgets/widgets/cargando_widget.dart';
+import 'package:pa_donde_app/ui/pages/detalle_historial_pag.dart';
 //---------------------------------------------------------------------
 
 class HistorialPag extends StatefulWidget {
@@ -23,7 +20,6 @@ class HistorialPag extends StatefulWidget {
 }
 
 class _HistorialPagState extends State<HistorialPag> {
-  // List<Servicio> servicio = [];
   List<Servicio>? usuarioHistorial = [];
   List<Servicio>? conductorHistorial = [];
   @override
@@ -39,13 +35,16 @@ class _HistorialPagState extends State<HistorialPag> {
   }
 
   PreferredSizeWidget appBar() {
+    final size = MediaQuery.of(context).size;
+
     return AppBar(
         centerTitle: true,
         foregroundColor: Colors.black,
         backgroundColor: Theme.of(context).primaryColor,
-        title: const Text(
+        title: Text(
           "Historial",
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: size.width * 0.055, fontWeight: FontWeight.bold),
         ));
   }
 
@@ -103,9 +102,7 @@ class _HistorialPagState extends State<HistorialPag> {
       length: 2,
       child: Column(
         children: <Widget>[
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           TabBar(
               unselectedLabelColor: Theme.of(context).primaryColorLight,
               indicatorSize: TabBarIndicatorSize.label,
@@ -114,13 +111,13 @@ class _HistorialPagState extends State<HistorialPag> {
                   color: Theme.of(context).primaryColorLight),
               // ignore: prefer_const_literals_to_create_immutables
               tabs: [
-                Tab(
+                const Tab(
                   child: Align(
                     alignment: Alignment.center,
                     child: Text("Usuario"),
                   ),
                 ),
-                Tab(
+                const Tab(
                   child: Align(
                     alignment: Alignment.center,
                     child: Text("Conductor"),
@@ -128,7 +125,7 @@ class _HistorialPagState extends State<HistorialPag> {
                 ),
               ]),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.71,
+            height: MediaQuery.of(context).size.height * 0.69,
             child: TabBarView(children: <Widget>[
               panelHistorialUsuario(),
               panelHistorialConductor()
@@ -140,7 +137,6 @@ class _HistorialPagState extends State<HistorialPag> {
   }
 
   Widget panelHistorialUsuario() {
-
     if (usuarioHistorial!.isNotEmpty) {
       for (var i = 0; i < usuarioHistorial!.length; i++) {
         return ListView.builder(
@@ -151,7 +147,7 @@ class _HistorialPagState extends State<HistorialPag> {
         );
       }
     }
-    return Text("No posee servicios como usuario");
+    return const Text("No posee servicios como usuario");
   }
 
   Widget panelHistorialConductor() {
@@ -165,7 +161,7 @@ class _HistorialPagState extends State<HistorialPag> {
         );
       }
     }
-    return Text("No posee servicios como conductor");
+    return const Text("No posee servicios como conductor");
   }
 
   Widget cardDeServicioUsuario(Servicio servicio) {

@@ -83,8 +83,8 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
           .hasMatch(inputControllerPlaca.text)) {
         mostrarShowDialogInformativo(
             context: context,
-            titulo: 'Placa Invalida',
-            contenido: "La placa no es valida para ser una placa de carro.");
+            titulo: 'Placa Inválida',
+            contenido: "La placa no es válida para ser una placa de carro.");
         return;
       }
     } else {
@@ -92,8 +92,8 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
           .hasMatch(inputControllerPlaca.text)) {
         mostrarShowDialogInformativo(
             context: context,
-            titulo: 'Placa Invalida',
-            contenido: "La placa no es valida para ser una placa de moto.");
+            titulo: 'Placa Inválida',
+            contenido: "La placa no es válida para ser una placa de moto.");
         return;
       }
     }
@@ -108,7 +108,7 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
     }
 
     mostrarShowDialogCargando(
-        context: context, titulo: "Estamos guardando tu vehiculo");
+        context: context, titulo: "Estamos guardando tu vehículo");
     var vehiculoServicio = VehiculoServicio();
     var respuesta = await vehiculoServicio.agregarVehiculo(vehiculo: vehiculo);
     var nuevosVehiculos = await vehiculoServicio.getVehiculos();
@@ -117,7 +117,7 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
     Navigator.of(context).pop();
     mostrarShowDialogConfirmar(
         context: context,
-        titulo: "CONFIRMACION",
+        titulo: "CONFIRMACIÓN",
         contenido: respuesta["msg"],
         paginaRetorno: 'inicio');
   }
@@ -216,7 +216,7 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
   Widget _crearPlaca(Vehiculo vehiculo) {
     return TextFormField(
       controller: inputControllerPlaca,
-      decoration: inputDecoration('Placa', 'Placa del vehiculo', context,
+      decoration: inputDecoration('Placa', 'Placa del vehículo', context,
           Theme.of(context).primaryColor, null, size.height * 0.025),
       onSaved: (value) => vehiculo.placa = value,
       onChanged: (value) => vehiculo.placa = value,
@@ -229,7 +229,7 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
   Widget _crearColor(Vehiculo vehiculo) {
     return TextFormField(
       controller: inputControllerColor,
-      decoration: inputDecoration('Color', 'Color del vehiculo', context,
+      decoration: inputDecoration('Color', 'Color del vehículo', context,
           Theme.of(context).primaryColor, null, size.height * 0.025),
       onSaved: (value) => vehiculo.color = value,
       onChanged: (value) => vehiculo.color = value,
@@ -243,7 +243,7 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
     return TextFormField(
       controller: inputControllerMarca,
       keyboardType: TextInputType.text,
-      decoration: inputDecoration('Marca', 'Marca del vehiculo', context,
+      decoration: inputDecoration('Marca', 'Marca del vehículo', context,
           Theme.of(context).primaryColor, null, size.height * 0.025),
       onSaved: (value) => vehiculo.marca = value,
       onChanged: (value) => vehiculo.marca = value,
@@ -260,7 +260,7 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
       onSaved: (value) => vehiculo.modelo = value,
       onChanged: (value) => vehiculo.modelo = value,
       keyboardType: TextInputType.text,
-      decoration: inputDecoration('Modelo', 'Modelo del vehiculo', context,
+      decoration: inputDecoration('Modelo', 'Modelo del vehículo', context,
           Theme.of(context).primaryColor, null, size.height * 0.025),
       validator: (value) =>
           (value!.isEmpty) ? 'Es Obligatorio este campo' : null,
@@ -275,7 +275,7 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
       onSaved: (value) => vehiculo.anio = value,
       onChanged: (value) => vehiculo.anio = value,
       keyboardType: TextInputType.number,
-      decoration: inputDecoration('Año', 'Año del vehiculo', context,
+      decoration: inputDecoration('Año', 'Año del vehículo', context,
           Theme.of(context).primaryColor, null, size.height * 0.025),
       validator: (value) =>
           (value!.isEmpty) ? 'Es Obligatorio este campo' : null,

@@ -43,7 +43,7 @@ class _AgregarServicioParte2State extends State<AgregarServicioParte2> {
               servicioBloc.controller!.jumpToPage(1);
             },
             icon: const Icon(Icons.arrow_back_ios_sharp)),
-        const Text("Seleccione su automovil"),
+        const Text("Seleccione su automóvil"),
         IconButton(
             onPressed: () {
               final servicioBloc = BlocProvider.of<PreserviciosBloc>(context);

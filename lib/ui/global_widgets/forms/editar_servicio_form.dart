@@ -114,7 +114,7 @@ class _EditarServicioFormState extends State<EditarServicioForm> {
             context: context,
             titulo: 'Cupos',
             contenido:
-                "La cantidad de cupos no es valida. Debe de ingresar un valor entre 1 y 5");
+                "La cantidad de cupos no es válida. Debe de ingresar un valor entre 1 y 5");
       } else {
         if (diferenciaHoras > 24 && fecha2 != '' && hora2 != '') {
           mostrarShowDialogInformativo(

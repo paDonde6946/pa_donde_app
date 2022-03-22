@@ -6,7 +6,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
-import 'package:pa_donde_app/global/enums/estado_servicio_enum.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -28,6 +27,8 @@ import 'package:pa_donde_app/ui/helpers/helpers.dart';
 import 'package:pa_donde_app/ui/pages/chat_pag.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/calificar_show.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/informativo_show.dart';
+
+import 'package:pa_donde_app/global/enums/estado_servicio_enum.dart';
 
 import 'package:pa_donde_app/ui/pages/editar_servicio_pag.dart';
 
@@ -156,7 +157,7 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
                     subTitulosDelServicio(subtitulo: "Placa"),
                     textoDelServicio(texto: placa),
                     const SizedBox(height: 6),
-                    subTitulosDelServicio(subtitulo: "Valor Servicio"),
+                    subTitulosDelServicio(subtitulo: "Valor servicio"),
                     textoDelServicio(texto: precio),
                     const SizedBox(height: 6),
                     subTitulosDelServicio(subtitulo: "Hora"),
@@ -334,6 +335,9 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
         final servicioValidar =
             await ServicioRServicio().iniciarServicio(servicio.uid);
         Navigator.of(context, rootNavigator: true).pop(context);
+        servicio.estado = EstadoServicio.camino;
+        BlocProvider.of<ServicioBloc>(context)
+            .buscarYcambiarServicioDelUsuario(servicio);
 
         if (servicioValidar) {
           validar = true;

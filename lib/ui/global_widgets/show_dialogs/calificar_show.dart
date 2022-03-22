@@ -45,7 +45,6 @@ mostrarShowDialogCalificar({
                   color: Colors.amber,
                 ),
                 onRatingUpdate: (rating) {
-                  print(rating.toInt());
                   BlocProvider.of<ServicioBloc>(context)
                       .add(OnCalificarAUsuario(rating.toInt()));
                 },

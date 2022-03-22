@@ -32,9 +32,9 @@ class RecuperarContraseniaPag extends StatelessWidget {
         foregroundColor: Colors.black,
         backgroundColor: Colors.white,
         title: Text(
-          "RECUPERAR CONTRASEÑA",
+          "Recuperar contraseña",
           style: TextStyle(
-              fontSize: size.width * 0.045, fontWeight: FontWeight.bold),
+              fontSize: size.width * 0.05, fontWeight: FontWeight.bold),
         ));
   }
 
