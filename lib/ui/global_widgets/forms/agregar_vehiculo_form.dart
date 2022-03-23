@@ -14,6 +14,7 @@ import 'package:pa_donde_app/ui/global_widgets/inputs/input_form.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/confirmacion_show.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/informativo_show.dart';
+import 'package:pa_donde_app/ui/utils/snack_bars.dart';
 //---------------------------------------------------------------------
 
 class FormAgregarVehiulo extends StatefulWidget {
@@ -111,15 +112,23 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
         context: context, titulo: "Estamos guardando tu vehículo");
     var vehiculoServicio = VehiculoServicio();
     var respuesta = await vehiculoServicio.agregarVehiculo(vehiculo: vehiculo);
-    var nuevosVehiculos = await vehiculoServicio.getVehiculos();
-    BlocProvider.of<PreserviciosBloc>(context)
-        .add(OnAgregarVehiculo(nuevosVehiculos));
-    Navigator.of(context).pop();
-    mostrarShowDialogConfirmar(
-        context: context,
-        titulo: "CONFIRMACIÓN",
-        contenido: respuesta["msg"],
-        paginaRetorno: 'inicio');
+    Navigator.of(context, rootNavigator: true).pop(context);
+
+    if (respuesta["ok"] == false) {
+      customShapeSnackBar(
+          context: context,
+          titulo: "No se pudo agregar el vehículo. ${respuesta['msg']}");
+    } else {
+      var nuevosVehiculos = await vehiculoServicio.getVehiculos();
+      BlocProvider.of<PreserviciosBloc>(context)
+          .add(OnAgregarVehiculo(nuevosVehiculos));
+
+      mostrarShowDialogConfirmar(
+          context: context,
+          titulo: "CONFIRMACIÓN",
+          contenido: respuesta["msg"],
+          paginaRetorno: 'inicio');
+    }
   }
 
   /*____________________________________________________________*/
@@ -217,7 +226,7 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
     return TextFormField(
       controller: inputControllerPlaca,
       decoration: inputDecoration('Placa', 'Placa del vehículo', context,
-          Theme.of(context).primaryColor, null, size.height * 0.025),
+          Theme.of(context).primaryColor, null, size.height * 0.023),
       onSaved: (value) => vehiculo.placa = value,
       onChanged: (value) => vehiculo.placa = value,
       validator: (value) =>
@@ -230,7 +239,7 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
     return TextFormField(
       controller: inputControllerColor,
       decoration: inputDecoration('Color', 'Color del vehículo', context,
-          Theme.of(context).primaryColor, null, size.height * 0.025),
+          Theme.of(context).primaryColor, null, size.height * 0.023),
       onSaved: (value) => vehiculo.color = value,
       onChanged: (value) => vehiculo.color = value,
       validator: (value) =>
@@ -244,7 +253,7 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
       controller: inputControllerMarca,
       keyboardType: TextInputType.text,
       decoration: inputDecoration('Marca', 'Marca del vehículo', context,
-          Theme.of(context).primaryColor, null, size.height * 0.025),
+          Theme.of(context).primaryColor, null, size.height * 0.023),
       onSaved: (value) => vehiculo.marca = value,
       onChanged: (value) => vehiculo.marca = value,
       validator: (value) =>
@@ -261,7 +270,7 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
       onChanged: (value) => vehiculo.modelo = value,
       keyboardType: TextInputType.text,
       decoration: inputDecoration('Modelo', 'Modelo del vehículo', context,
-          Theme.of(context).primaryColor, null, size.height * 0.025),
+          Theme.of(context).primaryColor, null, size.height * 0.023),
       validator: (value) =>
           (value!.isEmpty) ? 'Es Obligatorio este campo' : null,
     );
@@ -276,7 +285,7 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
       onChanged: (value) => vehiculo.anio = value,
       keyboardType: TextInputType.number,
       decoration: inputDecoration('Año', 'Año del vehículo', context,
-          Theme.of(context).primaryColor, null, size.height * 0.025),
+          Theme.of(context).primaryColor, null, size.height * 0.023),
       validator: (value) =>
           (value!.isEmpty) ? 'Es Obligatorio este campo' : null,
     );
@@ -288,6 +297,6 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
   Widget _crearBotonRegistro(Vehiculo vehiculo) {
     return BtnAnaranja(
         function: () => _validarFormulario(vehiculo),
-        titulo: 'Guardar Vehículo');
+        titulo: 'Guardar vehículo');
   }
 }

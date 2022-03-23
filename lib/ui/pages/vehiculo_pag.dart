@@ -34,7 +34,7 @@ class _VehiculoPagState extends State<VehiculoPag> {
     return Scaffold(
       appBar: appBar(),
       body: ListView(children: [
-        panelSuperior(),
+        // panelSuperior(),
         (cargar)
             ? Cargando(
                 size: size,
@@ -64,8 +64,27 @@ class _VehiculoPagState extends State<VehiculoPag> {
 
   /// AppBar personalizado que se muestra en la parte superior de la pantalla
   PreferredSizeWidget appBar() {
+    final size = MediaQuery.of(context).size;
+
     return AppBar(
+      toolbarHeight: 90,
       elevation: 0,
+      centerTitle: true,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image(
+              image: const AssetImage("img/icons/carro_icon.png"),
+              width: size.width * 0.25),
+          Text(
+            "Mis vehículos",
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: size.width * 0.06,
+                fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
       backgroundColor: Theme.of(context).primaryColor,
     );
   }
@@ -75,17 +94,13 @@ class _VehiculoPagState extends State<VehiculoPag> {
     final size = MediaQuery.of(context).size;
     return Container(
       color: Theme.of(context).primaryColor,
-      height: 120,
+      height: 100,
       child: Column(
         children: [
-          Icon(
-            Icons.directions_car_filled_outlined,
-            size: size.height * 0.1,
-          ),
-          Text(
-            "Mis Vehiculos",
-            style: TextStyle(fontSize: size.width * 0.06),
-          ),
+          // Icon(
+          //   Icons.directions_car_filled_outlined,
+          //   size: size.height * 0.1,
+          // ),
         ],
       ),
     );

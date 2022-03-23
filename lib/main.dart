@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:pa_donde_app/blocs/chat/chat_bloc.dart';
-import 'package:pa_donde_app/blocs/servicios/servicio_bloc.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:provider/provider.dart'
@@ -22,10 +21,12 @@ void main() {
     providers: [
       BlocProvider(create: (context) => UsuarioBloc()),
       BlocProvider(create: (context) => GpsBloc()),
-      BlocProvider(create: (context) => LocalizacionBloc()),
       BlocProvider(create: (context) => PreserviciosBloc()),
       BlocProvider(create: (context) => PaginasBloc()),
       BlocProvider(create: (context) => ServicioBloc()),
+      BlocProvider(
+          create: (context) =>
+              LocalizacionBloc(gpsBloc: BlocProvider.of<GpsBloc>(context))),
       BlocProvider(
           create: (context) => MapsBloc(
               localizacionBloc: BlocProvider.of<LocalizacionBloc>(context))),

@@ -168,11 +168,6 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
               ),
             ],
           ),
-          // Container(
-          //   margin: const EdgeInsets.only(bottom: 7),
-          //   width: size.width * 0.6,
-          //   child: _botonesEditarYEliminar(),
-          // ),
         ],
       ),
     );

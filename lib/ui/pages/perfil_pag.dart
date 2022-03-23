@@ -39,7 +39,7 @@ class _PerfilPagState extends State<PerfilPag> {
         BlocProvider.of<UsuarioBloc>(context).state.usuario;
 
     return Scaffold(
-      // appBar: appBar(),
+      appBar: appBar(),
       body: ListView(children: [
         Stack(
           children: [fondo(), informacion(usuarioServicio)],
@@ -52,6 +52,7 @@ class _PerfilPagState extends State<PerfilPag> {
   PreferredSizeWidget appBar() {
     return AppBar(
       elevation: 0,
+      title: encabezado(),
       backgroundColor: Theme.of(context).primaryColor,
     );
   }
@@ -77,8 +78,8 @@ class _PerfilPagState extends State<PerfilPag> {
 
     return Column(
       children: [
-        const SizedBox(height: 10),
-        encabezado(),
+        // const SizedBox(height: 10),
+        // encabezado(),
         const SizedBox(height: 20),
         contenedorImagen(),
         const SizedBox(height: 10),
@@ -169,7 +170,8 @@ class _PerfilPagState extends State<PerfilPag> {
                   MaterialPageRoute(
                       builder: (context) => const HistorialPag()));
             },
-            icon: Icon(Icons.watch_later_outlined, size: size.width * 0.075)),
+            icon: Icon(Icons.watch_later_outlined,
+                color: Colors.black, size: size.width * 0.075)),
         IconButton(
             onPressed: () async {
               mostrarShowDialogCargando(
@@ -189,7 +191,8 @@ class _PerfilPagState extends State<PerfilPag> {
               //         builder: (context) => const InicioSesionPag()));
               AutenticacionServicio.eliminarToken();
             },
-            icon: Icon(Icons.login, size: size.width * 0.075)),
+            icon: Icon(Icons.login,
+                color: Colors.black, size: size.width * 0.075)),
       ],
     );
   }
@@ -220,10 +223,10 @@ class _PerfilPagState extends State<PerfilPag> {
           color: Colors.white,
           boxShadow: const <BoxShadow>[
             BoxShadow(
-              blurRadius: 40.0,
+              blurRadius: 5.0,
               color: Colors.black26,
-              offset: Offset(30.0, 5.0),
-              spreadRadius: 20.0,
+              offset: Offset(0, 10),
+              spreadRadius: 1.0,
             ),
           ]),
       child: ClipRRect(

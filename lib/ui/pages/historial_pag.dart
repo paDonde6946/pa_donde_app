@@ -138,30 +138,46 @@ class _HistorialPagState extends State<HistorialPag> {
 
   Widget panelHistorialUsuario() {
     if (usuarioHistorial!.isNotEmpty) {
-      for (var i = 0; i < usuarioHistorial!.length; i++) {
-        return ListView.builder(
-          shrinkWrap: true,
-          itemCount: usuarioHistorial!.length,
-          itemBuilder: (context, i) =>
-              cardDeServicioConductor(usuarioHistorial![i]),
-        );
-      }
+      return ListView.builder(
+        shrinkWrap: true,
+        itemCount: usuarioHistorial!.length,
+        itemBuilder: (context, i) =>
+            cardDeServicioConductor(usuarioHistorial![i]),
+      );
     }
-    return const Text("No posee servicios como usuario");
+    return sinServicios("No posee servicios como usuario");
   }
 
   Widget panelHistorialConductor() {
     if (conductorHistorial!.isNotEmpty) {
-      for (var i = 0; i < conductorHistorial!.length; i++) {
-        return ListView.builder(
-          shrinkWrap: true,
-          itemCount: conductorHistorial!.length,
-          itemBuilder: (context, i) =>
-              cardDeServicioConductor(conductorHistorial![i]),
-        );
-      }
+      return ListView.builder(
+        shrinkWrap: true,
+        itemCount: conductorHistorial!.length,
+        itemBuilder: (context, i) =>
+            cardDeServicioConductor(conductorHistorial![i]),
+      );
     }
-    return const Text("No posee servicios como conductor");
+    return sinServicios("No posee servicios como conductor");
+  }
+
+  Widget sinServicios(String nombre) {
+    final size = MediaQuery.of(context).size;
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image(
+            height: size.height * 0.23,
+            image: const AssetImage('img/logo/logo_PaDonde.png')),
+        const SizedBox(
+          height: 40,
+        ),
+        Text(
+          nombre,
+          style: TextStyle(fontSize: size.width * 0.045),
+        ),
+      ],
+    );
   }
 
   Widget cardDeServicioUsuario(Servicio servicio) {
