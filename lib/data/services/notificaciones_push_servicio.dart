@@ -1,11 +1,12 @@
 // import 'dart:async';
 // import 'dart:io';
 
-// import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 // import 'package:flutter/cupertino.dart';
 // import 'package:provider/provider.dart';
 
-// class ServicioPushNotificacion {
+class ServicioPushNotificacion {
 //   FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
 //   final _mensajesStreamControl = StreamController<String>.broadcast();
@@ -29,7 +30,7 @@
 //     }
 //   }
 
-//   initNotifications(BuildContext pContext) async {
+  initNotifications(BuildContext pContext) async {
 //     this.context = pContext;
 //     await _firebaseMessaging.requestNotificationPermissions();
 //     final token = await _firebaseMessaging.getToken();
@@ -42,7 +43,7 @@
 //       onLaunch: Platform.isIOS ? null : onLaunch,
 //       onResume: Platform.isIOS ? null : onResume,
 //     );
-//   }
+  }
 
 //   Future<dynamic> onMessage(Map<String, dynamic> menssage) async {
 //     print(
@@ -90,4 +91,4 @@
 //   dispose() {
 //     _mensajesStreamControl?.close();
 //   }
-// }
+}

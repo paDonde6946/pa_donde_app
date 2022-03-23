@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pa_donde_app/data/services/notificaciones_push_servicio.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -47,6 +48,7 @@ class _PrincipalPagState extends State<PrincipalPag> {
 
   @override
   Widget build(BuildContext context) {
+    ServicioPushNotificacion ejem = ServicioPushNotificacion();
     validarCalificarConductor();
     validarCambioContrasenia();
 
