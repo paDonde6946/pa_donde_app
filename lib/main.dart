@@ -5,13 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pa_donde_app/blocs/chat/chat_bloc.dart';
-<<<<<<< HEAD
 import 'package:pa_donde_app/blocs/servicios/servicio_bloc.dart';
 import 'package:pa_donde_app/data/services/notificaciones_push_servicio.dart';
 import 'package:pa_donde_app/ui/helpers/helpers.dart';
 import 'package:pa_donde_app/ui/pages/chat_pag.dart';
-=======
->>>>>>> 56aa580578d4347eb2ae6362245e74010086b8c6
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:provider/provider.dart'
