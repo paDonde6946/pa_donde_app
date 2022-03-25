@@ -28,7 +28,7 @@ class _AgregarVehiculoState extends State<AgregarVehiculo> {
         foregroundColor: Colors.black,
         backgroundColor: Theme.of(context).primaryColor,
         title: Text(
-          "Agregar Vehículo",
+          "Agregar vehículo",
           style: TextStyle(
               fontSize: size.width * 0.055, fontWeight: FontWeight.bold),
         ));

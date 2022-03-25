@@ -16,6 +16,7 @@ import 'package:pa_donde_app/ui/global_widgets/inputs/input_form.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/confirmacion_show.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/informativo_show.dart';
+import 'package:pa_donde_app/ui/utils/snack_bars.dart';
 //---------------------------------------------------------------------
 
 // ignore: must_be_immutable
@@ -112,12 +113,23 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
 
     var vehiculoServicio = VehiculoServicio();
     var respuesta = await vehiculoServicio.editarServicio(vehiculo: vehiculo);
-    Navigator.of(context).pop();
-    mostrarShowDialogConfirmar(
-        context: context,
-        titulo: "CONFIRMACIÓN",
-        contenido: respuesta["msg"],
-        paginaRetorno: 'inicio');
+    Navigator.of(context, rootNavigator: true).pop(context);
+
+    if (respuesta["ok"] == false) {
+      customShapeSnackBar(
+          context: context,
+          titulo: "No se pudo editar el vehículo. ${respuesta['msg']}");
+    } else {
+      var nuevosVehiculos = await vehiculoServicio.getVehiculos();
+      BlocProvider.of<PreserviciosBloc>(context)
+          .add(OnAgregarVehiculo(nuevosVehiculos));
+
+      mostrarShowDialogConfirmar(
+          context: context,
+          titulo: "CONFIRMACIÓN",
+          contenido: respuesta["msg"],
+          paginaRetorno: 'inicio');
+    }
   }
 
   /*____________________________________________________________*/
@@ -166,7 +178,7 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
       child: Container(
         child: (_vehiculo!.tipoVehiculo != TipoVehiculo.carro)
             ? Icon(Icons.motorcycle_rounded, size: size.width * 0.24)
-            : SvgPicture.asset("img/icons/carro_icon.svg"),
+            : const Image(image: AssetImage("img/icons/carro_icon.png")),
         height: size.height * 0.14,
         width: size.width * 0.4,
         decoration: BoxDecoration(
@@ -278,18 +290,27 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
         onPressed: () async {
           mostrarShowDialogCargando(
               context: context, titulo: "Estamos eliminando tu vehículo");
+
           var vehiculoServicio = VehiculoServicio();
           var respuesta =
               await vehiculoServicio.eliminarVehiculo(vehiculo: vehiculo);
-          var nuevosVehiculos = await vehiculoServicio.getVehiculos();
-          BlocProvider.of<PreserviciosBloc>(context)
-              .add(OnAgregarVehiculo(nuevosVehiculos));
-          Navigator.of(context).pop();
-          mostrarShowDialogConfirmar(
-              context: context,
-              titulo: "CONFIRMACIÓN",
-              contenido: respuesta["msg"],
-              paginaRetorno: 'inicio');
+          Navigator.of(context, rootNavigator: true).pop(context);
+
+          if (respuesta["ok"] == false) {
+            customShapeSnackBar(
+                context: context,
+                titulo: "No se pudo agregar el vehículo. ${respuesta['msg']}");
+          } else {
+            var nuevosVehiculos = await vehiculoServicio.getVehiculos();
+            BlocProvider.of<PreserviciosBloc>(context)
+                .add(OnAgregarVehiculo(nuevosVehiculos));
+
+            mostrarShowDialogConfirmar(
+                context: context,
+                titulo: "CONFIRMACIÓN",
+                contenido: respuesta["msg"],
+                paginaRetorno: 'inicio');
+          }
         },
       ),
     );

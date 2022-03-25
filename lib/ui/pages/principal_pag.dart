@@ -1,5 +1,4 @@
 // ignore: import_of_legacy_library_into_null_safe
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -40,9 +39,8 @@ class _PrincipalPagState extends State<PrincipalPag> {
     setState(() {});
   }
 
-  PageController controller = PageController();
-  PageController controllerServicioDelUsuario = PageController();
-  PageController controllerServicioPostulados = PageController();
+  PageController controller = PageController(viewportFraction: 0.9);
+  PageController controllerPos = PageController(viewportFraction: 0.9);
 
   int page = 0;
 
@@ -214,22 +212,10 @@ class _PrincipalPagState extends State<PrincipalPag> {
               "Servicios postulados",
               style: TextStyle(fontSize: size.width * 0.045),
             )),
-        Stack(
-          children: [
-            SizedBox(
-              height: size.height * 0.17,
-              child: PageView(
-                onPageChanged: (i) {
-                  page = i;
-                },
-                controller: controller,
-                children: [
-                  listadoServiciosPostulados(),
-                ],
-              ),
-            ),
-            pasarPagina(controllerServicioPostulados)
-          ],
+        SizedBox(
+          width: double.infinity,
+          height: size.height * 0.17,
+          child: listadoServiciosPostulados(),
         )
       ],
     );
@@ -250,52 +236,12 @@ class _PrincipalPagState extends State<PrincipalPag> {
               "Tus servicios",
               style: TextStyle(fontSize: size.width * 0.045),
             )),
-        Stack(
-          children: [
-            SizedBox(
-              width: double.infinity,
-              height: size.height * 0.15,
-              child: listadoServiciosDelUsuario(),
-            ),
-            pasarPagina(controllerServicioDelUsuario),
-          ],
+        SizedBox(
+          width: double.infinity,
+          height: size.height * 0.15,
+          child: listadoServiciosDelUsuario(),
         ),
       ],
-    );
-  }
-
-  Widget pasarPagina(PageController controller) {
-    final size = MediaQuery.of(context).size;
-
-    return Positioned(
-      width: size.width,
-      top: 40,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          IconButton(
-              onPressed: () {
-                int pagina = controller.page!.toInt() - 1;
-                controller.animateToPage(
-                  pagina < 0 ? 0 : pagina,
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.linear,
-                );
-              },
-              icon: const Icon(Icons.arrow_back_ios_outlined)),
-          IconButton(
-              onPressed: () {
-                int pagina = controller.page!.toInt() + 1;
-                controller.animateToPage(
-                  pagina < 0 ? 0 : pagina,
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.linear,
-                );
-              },
-              icon: const Icon(Icons.arrow_forward_ios_outlined)),
-        ],
-      ),
     );
   }
 
@@ -305,7 +251,7 @@ class _PrincipalPagState extends State<PrincipalPag> {
         BlocProvider.of<ServicioBloc>(context).state.serviciosDelUsuario;
     setState(() {});
     return PageView.builder(
-      controller: controllerServicioDelUsuario,
+      controller: controller,
       itemCount: servicios.length,
       itemBuilder: (context, index) {
         return cardTuServicio(servicios[index]);
@@ -319,7 +265,7 @@ class _PrincipalPagState extends State<PrincipalPag> {
         BlocProvider.of<ServicioBloc>(context).state.serviciosPostulados;
 
     return PageView.builder(
-      controller: controllerServicioPostulados,
+      controller: controllerPos,
       itemCount: servicios.length,
       itemBuilder: (context, index) {
         return cardSerPostulados(servicios[index]);
@@ -331,12 +277,33 @@ class _PrincipalPagState extends State<PrincipalPag> {
   Widget listadoServiciosGenerales() {
     final servicios =
         BlocProvider.of<ServicioBloc>(context).state.serviciosGenerales;
+    if (servicios.isNotEmpty) {
+      return ListView.builder(
+        itemCount: servicios.length,
+        itemBuilder: (context, index) {
+          return cardDeServicio(servicios[index]);
+        },
+      );
+    }
+    return sinServicios("No existen servicios generales en el momento");
+  }
 
-    return ListView.builder(
-      itemCount: servicios.length,
-      itemBuilder: (context, index) {
-        return cardDeServicio(servicios[index]);
-      },
+  Widget sinServicios(String nombre) {
+    final size = MediaQuery.of(context).size;
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(height: 30),
+        Image(
+            height: size.height * 0.15,
+            image: const AssetImage('img/logo/logo_PaDonde.png')),
+        const SizedBox(height: 20),
+        Text(
+          nombre,
+          style: TextStyle(fontSize: size.width * 0.04),
+        ),
+      ],
     );
   }
 
@@ -358,7 +325,7 @@ class _PrincipalPagState extends State<PrincipalPag> {
         );
       },
       child: Container(
-        margin: const EdgeInsets.all(15),
+        margin: const EdgeInsets.only(top: 15, bottom: 15, right: 20),
         child: Material(
           borderRadius: BorderRadius.circular(20),
           color: Theme.of(context).backgroundColor,
@@ -517,8 +484,7 @@ class _PrincipalPagState extends State<PrincipalPag> {
         );
       },
       child: Container(
-        width: 300,
-        margin: const EdgeInsets.all(15),
+        margin: const EdgeInsets.only(top: 15, bottom: 15, right: 20),
         child: Material(
           borderRadius: BorderRadius.circular(20),
           color: Theme.of(context).backgroundColor,

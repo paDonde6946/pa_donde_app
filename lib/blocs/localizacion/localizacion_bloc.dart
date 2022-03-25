@@ -4,14 +4,16 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' show LatLng;
+import 'package:pa_donde_app/blocs/blocs.dart';
 
 part 'localizacion_event.dart';
 part 'localizacion_state.dart';
 
 class LocalizacionBloc extends Bloc<LocalizacionEvent, LocalizacionState> {
   StreamSubscription? posicionStream;
+  final GpsBloc gpsBloc;
 
-  LocalizacionBloc() : super(const LocalizacionState()) {
+  LocalizacionBloc({required this.gpsBloc}) : super(const LocalizacionState()) {
     /// Evento para comenzar a seguir usuario
     on<OnComenzarSeguirUsuario>(
         (event, emit) => {emit(state.copyWith(seguirUsuario: true))});
@@ -33,10 +35,14 @@ class LocalizacionBloc extends Bloc<LocalizacionEvent, LocalizacionState> {
   }
 
   Future getPosicioActual() async {
-    final posicion = await Geolocator.getCurrentPosition();
+    try {
+      final posicion = await Geolocator.getCurrentPosition();
 
-    add(OnNuevaLocalizacionUsuarioEvent(
-        LatLng(posicion.latitude, posicion.longitude)));
+      add(OnNuevaLocalizacionUsuarioEvent(
+          LatLng(posicion.latitude, posicion.longitude)));
+    } catch (e) {
+      gpsBloc.preguntarGpsAcceso();
+    }
   }
 
   void comenzarSeguirUsuario() {

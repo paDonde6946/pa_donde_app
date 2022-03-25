@@ -57,6 +57,9 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
     /// Variable que nos permite guardar la información de cada uno de los registros
     usuario =
         Provider.of<AutenticacionServicio>(context).usuarioServiciosActual;
+
+    inputControllerTelefono.text = usuario.celular.toString();
+
     return Form(
       key: keyForm,
       child: Container(
@@ -166,7 +169,7 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
     return TextFormField(
         style: styleInput,
         initialValue: usuario.celular.toString(),
-        onSaved: (value) => usuario.celular = int.parse(value!),
+        onSaved: (value) => inputControllerTelefono.text = value!,
         onChanged: (value) => inputControllerTelefono.text = value,
         keyboardType: TextInputType.number,
         decoration: inputDecoration('', 'Ingrese su número celular', context,
