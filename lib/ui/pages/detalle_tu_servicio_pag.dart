@@ -522,8 +522,11 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
                   SchedulerBinding.instance!.addPostFrameCallback((_) {
                     Navigator.of(context).push(navegarMapaFadeIn(
                         context,
-                        ChatPag(servicio.uid, pasajero.id, pasajero.nombre,
-                            token)));
+                        ChatPag(
+                            servicio: servicio.uid,
+                            para: pasajero.id,
+                            nombre: pasajero.nombre,
+                            token: token)));
                   });
                 },
                 icon: Icon(Icons.chat_rounded, size: size.width * 0.06))

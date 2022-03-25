@@ -85,10 +85,10 @@ dependencies:
   socket_io_client: ^1.0.2
 
   #Notificaiones push
-  firebase_messaging: 
-
+  firebase_messaging: ^11.2.1
   
-  # Dependencia para las estrellas (Calificar)
+  firebase_core: ^1.10.6
+
   flutter_rating_bar: ^4.0.0
 
 dependency_overrides:

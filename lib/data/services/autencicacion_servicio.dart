@@ -21,10 +21,12 @@ class AutenticacionServicio with ChangeNotifier {
   final _storage = const FlutterSecureStorage();
 
   /// Realiza el proceso de login y de verificacion con el backend
-  Future<Usuario?> login(String correo, String contrasenia) async {
+  Future<Usuario?> login(
+      String correo, String contrasenia, String tokenMensaje) async {
     autenticando = true;
 
-    String path = "/app/login/usuario/${correo.trim()}/$contrasenia";
+    String path =
+        "/app/login/usuario/${correo.trim()}/$contrasenia/$tokenMensaje";
 
     final uri = Uri.http(EntornoVariable.host, path);
     final headers = {HttpHeaders.contentTypeHeader: 'application/json'};

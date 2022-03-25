@@ -15,14 +15,13 @@ import 'package:pa_donde_app/data/services/socket_servicio.dart';
 //---------------------------------------------------------------------
 
 class ChatPag extends StatefulWidget {
-  final String servicio;
-  final String? uidPasajero;
-  final String? nombre;
-  final String token;
+  String? servicio;
+  String? para;
+  String? nombre;
+  String? token;
 
-  const ChatPag(this.servicio, this.uidPasajero, this.nombre, this.token,
-      {Key? key})
-      : super(key: key);
+  // ignore: use_key_in_widget_constructors
+  ChatPag({this.servicio, this.para, this.nombre, this.token});
 
   @override
   _ChatPagState createState() => _ChatPagState();
@@ -41,22 +40,29 @@ class _ChatPagState extends State<ChatPag> with TickerProviderStateMixin {
 
   @override
   // ignore: must_call_super
-  void initState() {
-    usuario = BlocProvider.of<UsuarioBloc>(context).state.usuario;
-    servicioSocket = SocketServicio(
-        datosMensaje: Mensaje(
-            para: widget.uidPasajero,
-            de: usuario.uid,
-            servicio: widget.servicio),
-        context: context,
-        token: widget.token);
-    servicioSocket.socket
-        .on('recibirMensaje', (data) => {servicioSocket.recivirMensaje(data)});
-  }
+  void initState() {}
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final argumentos =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+
+    if (argumentos != null) {
+      widget.servicio = argumentos['servicio'];
+      widget.para = argumentos['para'];
+      widget.nombre = argumentos['nombre'];
+      widget.token = argumentos['token'];
+    }
+
+    usuario = BlocProvider.of<UsuarioBloc>(context).state.usuario;
+    servicioSocket = SocketServicio(
+        datosMensaje: Mensaje(
+            para: widget.para, de: usuario.uid, servicio: widget.servicio),
+        context: context,
+        token: widget.token!);
+    servicioSocket.socket
+        .on('recibirMensaje', (data) => {servicioSocket.recivirMensaje(data)});
 
     return Scaffold(
       appBar: PreferredSize(

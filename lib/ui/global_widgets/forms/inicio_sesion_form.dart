@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pa_donde_app/data/services/notificaciones_push_servicio.dart';
 import 'package:provider/provider.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
@@ -74,9 +75,14 @@ class _FormInicioSesionState extends State<FormInicioSesion> {
         Provider.of<AutenticacionServicio>(context, listen: false);
 
     autenticacionServicio.autenticando = true;
+    ServicioPushNotificacion servicioNotificaciones =
+        ServicioPushNotificacion();
+    String tokenMensajes =
+        await servicioNotificaciones.initNotifications(context);
     final response = await autenticacionServicio.login(
         inputControllerCorreo.text.trim(),
-        inputControllerContrasenia.text.trim());
+        inputControllerContrasenia.text.trim(),
+        tokenMensajes);
     if (response == null) {
       customShapeSnackBar(context: context, titulo: 'Información invalida');
     } else {

@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pa_donde_app/blocs/chat/chat_bloc.dart';
 import 'package:pa_donde_app/blocs/servicios/servicio_bloc.dart';
+import 'package:pa_donde_app/data/services/notificaciones_push_servicio.dart';
+import 'package:pa_donde_app/ui/helpers/helpers.dart';
+import 'package:pa_donde_app/ui/pages/chat_pag.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:provider/provider.dart'
@@ -47,6 +51,30 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  @override
+  void initState() {
+    super.initState();
+    ServicioPushNotificacion.mensajeStream.listen((data) async {
+      final accion = int.parse(data['accion']);
+
+      if (accion == 0) {
+        const _storage = FlutterSecureStorage();
+        final token = await _storage.read(key: 'token');
+
+        navigatorKey.currentState?.push(navegarMapaFadeIn(
+            context,
+            ChatPag(
+                servicio: data["servicio"],
+                para: data["para"],
+                nombre: data["nombre"],
+                token: token)));
+      } else if (accion == 1) {
+      } else if (accion == 2) {}
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -65,6 +93,7 @@ class _MyAppState extends State<MyApp> {
             secondaryHeaderColor: const Color.fromRGBO(255, 212, 175, 1)),
         initialRoute: 'validarInicioSesion',
         routes: generarRutas(),
+        navigatorKey: navigatorKey,
         localizationsDelegates: const [
           // ... app-specific localization delegate[s] here
           GlobalMaterialLocalizations.delegate,

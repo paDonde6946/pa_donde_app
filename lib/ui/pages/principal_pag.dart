@@ -49,6 +49,7 @@ class _PrincipalPagState extends State<PrincipalPag> {
   @override
   Widget build(BuildContext context) {
     ServicioPushNotificacion ejem = ServicioPushNotificacion();
+    ejem.initNotifications(context);
     validarCalificarConductor();
     validarCambioContrasenia();
 
@@ -571,8 +572,11 @@ class _PrincipalPagState extends State<PrincipalPag> {
                           SchedulerBinding.instance!.addPostFrameCallback((_) {
                             Navigator.of(context).push(navegarMapaFadeIn(
                                 context,
-                                ChatPag(servicio.uid, "",
-                                    servicio.nombreConductor, token)));
+                                ChatPag(
+                                    servicio: servicio.uid,
+                                    para: "",
+                                    nombre: servicio.nombreConductor,
+                                    token: token)));
                           });
                         },
                         icon: const Icon(Icons.chat, size: 35)),
