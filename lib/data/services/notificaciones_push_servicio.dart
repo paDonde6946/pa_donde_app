@@ -1,90 +1,84 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:pa_donde_app/ui/helpers/helpers.dart';
 import 'package:pa_donde_app/ui/pages/chat_pag.dart';
-// import 'package:flutter/cupertino.dart';
-// import 'package:provider/provider.dart';
 
 class ServicioPushNotificacion {
-  static StreamController<dynamic> _mensajeStream =
+  static final StreamController<dynamic> _mensajeStream =
       StreamController.broadcast();
   static Stream<dynamic> get mensajeStream => _mensajeStream.stream;
   late BuildContext context;
+  final GlobalKey<NavigatorState>? navigatorKey;
 
+  ServicioPushNotificacion({required this.context, this.navigatorKey}) {}
   static Future<dynamic> onBackgroundMessage(RemoteMessage mensaje) async {
-    print("woooooooooooooow");
     Map<String, dynamic> message = mensaje.data;
     print(
         '===================================== onMensaje ====================================');
+    print(message);
     _mensajeStream.sink.add(mensaje.data);
   }
 
-  Future<String> initNotifications(BuildContext pContext) async {
+  Future<String> initNotifications() async {
     await Firebase.initializeApp();
     FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
-    this.context = pContext;
     String? token = await firebaseMessaging.getToken();
-    print('===== Token FIRE BASE ====');
-    print(token);
     FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
     FirebaseMessaging.onMessage.listen(onLaunch);
     return token!;
   }
 
-//   Future<dynamic> onMessage(Map<String, dynamic> menssage) async {
-//     print(
-//         '===================================== onMensaje ====================================');
-//     print(menssage['data']);
-
-//     final argumento = menssage['data']['para'];
-//     _mensajesStreamControl.sink.add(argumento);
-//   }
-
   Future<dynamic> onLaunch(RemoteMessage mensaje) async {
     print('=============================== ON LAUNCH ========================');
-    print('Message data: ${mensaje.data}');
+    print(mensaje.data);
 
-    // await validador(message.data);
+    _showNotificationWithSound(
+        mensaje.notification!.title, mensaje.notification!.body, mensaje.data);
 
-    _mensajeStream.sink.add(mensaje.data);
-
-    if (mensaje.notification != null) {
-      print('Message also contained a notification: ${mensaje.notification}');
-    }
+    // _mensajeStream.sink.add(mensaje.data);
   }
 
-//   Future<dynamic> onResume(Map<String, dynamic> menssage) async {
-//     print(
-//         '===================================== onResume ====================================');
-//     print(menssage['data']);
+  Future _showNotificationWithSound(titulo, mensaje, data) async {
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
-//     final argumento = menssage['data']['para'];
-//     _mensajesStreamControl.sink.add(argumento);
-//   }
+    var initializationSettingsAndroid =
+        const AndroidInitializationSettings('app_icon');
+    var initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: accion);
+    var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
+        'your channel id', 'your channel name',
+        importance: Importance.max, priority: Priority.high);
+    var platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      titulo,
+      mensaje,
+      platformChannelSpecifics,
+      payload: jsonEncode(data),
+    );
+  }
 
-  validador(data) async {
-    /**
-     * 0 = Chat
-     * 1 = Aceptacion Servicio
-     * 2 = Nuevo postulado
-     */
-
-    final accion = data['accion'];
-    if (accion == 0) {
-      const _storage = FlutterSecureStorage();
-      final token = await _storage.read(key: 'token');
-
-      // Navigator.pushReplacement(
-      //     context,
-      // PageRouteBuilder(
-      // pageBuilder: (context, __, ___) => ChatPag(
-      //     data['servicio'], data['para'], data['nombre'], token),
-      // transitionDuration: const Duration(milliseconds: 10)));
-    } else if (accion == 1) {
-    } else if (accion == 2) {}
+  accion(dynamic data) async {
+    const _storage = FlutterSecureStorage();
+    final token = await _storage.read(key: 'token');
+    data = jsonDecode(data);
+    navigatorKey!.currentState?.push(navegarMapaFadeIn(
+        context,
+        ChatPag(
+            servicio: data["servicio"],
+            para: data["para"],
+            nombre: data["nombre"],
+            token: token)));
   }
 
   dispose() {

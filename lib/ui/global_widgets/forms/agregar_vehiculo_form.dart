@@ -176,9 +176,11 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
       elevation: 10,
       borderRadius: BorderRadius.all(Radius.circular(redondo)),
       child: Container(
-        child: Icon(Icons.drive_eta_outlined, size: size.width * 0.24),
+        child: const Image(image: AssetImage("img/icons/carro_icon.png")),
         height: size.height * 0.13,
         width: size.width * 0.4,
+        padding: EdgeInsets.symmetric(
+            horizontal: size.height * 0.03, vertical: size.height * 0.02),
         decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
@@ -202,9 +204,11 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
       elevation: 10,
       borderRadius: BorderRadius.all(Radius.circular(redondo)),
       child: Container(
-        child: Icon(Icons.motorcycle_rounded, size: size.width * 0.24),
+        child: const Image(image: AssetImage("img/icons/moto_icon.png")),
         height: size.height * 0.13,
         width: size.width * 0.4,
+        padding: EdgeInsets.symmetric(
+            horizontal: size.height * 0.03, vertical: size.height * 0.02),
         decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(

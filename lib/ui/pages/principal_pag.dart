@@ -46,8 +46,6 @@ class _PrincipalPagState extends State<PrincipalPag> {
 
   @override
   Widget build(BuildContext context) {
-    ServicioPushNotificacion ejem = ServicioPushNotificacion();
-    ejem.initNotifications(context);
     validarCalificarConductor();
     validarCambioContrasenia();
 

@@ -5,7 +5,7 @@ import 'package:pa_donde_app/ui/global_widgets/widgets/card_background_widget.da
 //---------------------------------------------------------------------
 
 class CardVehiculo extends StatelessWidget {
-  final IconData? icon;
+  final String? icon;
   final Color color;
   final String marca;
   final bool validar;
@@ -27,10 +27,9 @@ class CardVehiculo extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            icon,
-            size: 55,
-            color: Colors.black,
+          Image(
+            image: AssetImage(icon!),
+            width: 75,
           ),
           const SizedBox(height: 10),
           Text(

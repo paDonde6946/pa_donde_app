@@ -40,21 +40,7 @@ class _ChatPagState extends State<ChatPag> with TickerProviderStateMixin {
 
   @override
   // ignore: must_call_super
-  void initState() {}
-
-  @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final argumentos =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-
-    if (argumentos != null) {
-      widget.servicio = argumentos['servicio'];
-      widget.para = argumentos['para'];
-      widget.nombre = argumentos['nombre'];
-      widget.token = argumentos['token'];
-    }
-
+  void initState() {
     usuario = BlocProvider.of<UsuarioBloc>(context).state.usuario;
     servicioSocket = SocketServicio(
         datosMensaje: Mensaje(
@@ -63,6 +49,11 @@ class _ChatPagState extends State<ChatPag> with TickerProviderStateMixin {
         token: widget.token!);
     servicioSocket.socket
         .on('recibirMensaje', (data) => {servicioSocket.recivirMensaje(data)});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: PreferredSize(

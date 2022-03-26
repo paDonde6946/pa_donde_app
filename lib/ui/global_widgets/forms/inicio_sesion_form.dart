@@ -76,9 +76,8 @@ class _FormInicioSesionState extends State<FormInicioSesion> {
 
     autenticacionServicio.autenticando = true;
     ServicioPushNotificacion servicioNotificaciones =
-        ServicioPushNotificacion();
-    String tokenMensajes =
-        await servicioNotificaciones.initNotifications(context);
+        ServicioPushNotificacion(context: context);
+    String tokenMensajes = await servicioNotificaciones.initNotifications();
     final response = await autenticacionServicio.login(
         inputControllerCorreo.text.trim(),
         inputControllerContrasenia.text.trim(),

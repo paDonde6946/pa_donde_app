@@ -74,7 +74,7 @@ class _VehiculoPagState extends State<VehiculoPag> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image(
-              image: const AssetImage("img/icons/carro_icon.png"),
+              image: const AssetImage("img/icons/camioneta_icon.png"),
               width: size.width * 0.25),
           Text(
             "Mis vehículos",
@@ -125,8 +125,8 @@ class _VehiculoPagState extends State<VehiculoPag> {
         },
         child: CardVehiculo(
             icon: (vehiculos[i].tipoVehiculo == TipoVehiculo.carro)
-                ? Icons.car_rental
-                : Icons.motorcycle_rounded,
+                ? "img/icons/carro_icon.png"
+                : "img/icons/moto_icon.png",
             color: Colors.black,
             placa: vehiculos[i].placa,
             marca: vehiculos[i].marca,

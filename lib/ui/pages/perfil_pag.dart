@@ -198,19 +198,13 @@ class _PerfilPagState extends State<PerfilPag> {
   }
 
   Widget imagen() {
-    return const Center(
-      child: SizedBox(
-        height: 200,
-        width: 200,
-        child: FadeInImage(
-          image: NetworkImage(
-              'https://media.istockphoto.com/vectors/people-icon-logo-isolated-on-white-background-vector-id1183215612?k=20&m=1183215612&s=170667a&w=0&h=GcHhIXJBau012RiKnc4LjvJC9PDzdELjtPqjdfW3QKk='),
-          placeholder: AssetImage('img/gif/cargando.gif'),
-          fadeInDuration: Duration(milliseconds: 200),
-          height: 300.0,
-          fit: BoxFit.cover,
-        ),
-      ),
+    final size = MediaQuery.of(context).size;
+
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: size.width * 0.02),
+      height: 200,
+      width: 200,
+      child: const Image(image: AssetImage("img/icons/usuario_icon.png")),
     );
   }
 

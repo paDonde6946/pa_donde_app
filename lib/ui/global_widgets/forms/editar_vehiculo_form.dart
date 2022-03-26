@@ -176,8 +176,10 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
       elevation: 10,
       borderRadius: BorderRadius.all(Radius.circular(redondo)),
       child: Container(
+        padding: EdgeInsets.symmetric(
+            horizontal: size.height * 0.03, vertical: size.height * 0.02),
         child: (_vehiculo!.tipoVehiculo != TipoVehiculo.carro)
-            ? Icon(Icons.motorcycle_rounded, size: size.width * 0.24)
+            ? const Image(image: AssetImage("img/icons/moto_icon.png"))
             : const Image(image: AssetImage("img/icons/carro_icon.png")),
         height: size.height * 0.14,
         width: size.width * 0.4,
