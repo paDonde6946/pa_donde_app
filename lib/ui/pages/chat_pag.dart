@@ -14,6 +14,7 @@ import 'package:pa_donde_app/data/services/socket_servicio.dart';
 
 //---------------------------------------------------------------------
 
+// ignore: must_be_immutable
 class ChatPag extends StatefulWidget {
   String? servicio;
   String? para;

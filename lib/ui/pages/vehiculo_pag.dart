@@ -89,23 +89,6 @@ class _VehiculoPagState extends State<VehiculoPag> {
     );
   }
 
-  /// Panel superior verde (Titulo de la pagina)
-  Widget panelSuperior() {
-    final size = MediaQuery.of(context).size;
-    return Container(
-      color: Theme.of(context).primaryColor,
-      height: 100,
-      child: Column(
-        children: [
-          // Icon(
-          //   Icons.directions_car_filled_outlined,
-          //   size: size.height * 0.1,
-          // ),
-        ],
-      ),
-    );
-  }
-
   /// Construcción de cada TableRow con sus dos parejas de cards de Vehiculos.
   List<TableRow> funcionPrueba() {
     int count = 0;

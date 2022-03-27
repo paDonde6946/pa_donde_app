@@ -2,16 +2,14 @@ import 'package:flutter/material.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pa_donde_app/blocs/chat/chat_bloc.dart';
 import 'package:pa_donde_app/blocs/servicios/servicio_bloc.dart';
 import 'package:pa_donde_app/data/services/notificaciones_push_servicio.dart';
-import 'package:pa_donde_app/data/services/servicios_servicio.dart';
 import 'package:pa_donde_app/ui/helpers/helpers.dart';
 import 'package:pa_donde_app/ui/pages/chat_pag.dart';
-import 'package:pa_donde_app/ui/pages/detalle_tu_servicio_pag.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:provider/provider.dart'
@@ -71,7 +69,7 @@ class _MyAppState extends State<MyApp> {
      * 3 = Cuando se postula
      */
     ServicioPushNotificacion.mensajeStream.listen((data) async {
-      final accion = int.parse(data['accion']);
+      // final accion = int.parse(data['accion']);
       const _storage = FlutterSecureStorage();
       final token = await _storage.read(key: 'token');
       navigatorKey.currentState?.push(navegarMapaFadeIn(
