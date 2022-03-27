@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
 import 'package:intl/intl.dart';
+import 'package:pa_donde_app/ui/helpers/helpers.dart';
+import 'package:pa_donde_app/ui/pages/chat_pag.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
@@ -144,7 +147,18 @@ class _DetallePostuladoServicioState extends State<DetallePostuladoServicio> {
           child: _botonCancelarPostulacion(),
         ),
         BtnNaranjaIcon(
-          function: () {},
+          function: () async {
+            const _storage = FlutterSecureStorage();
+            final token = await _storage.read(key: 'token');
+
+            Navigator.of(context).push(navegarMapaFadeIn(
+                context,
+                ChatPag(
+                    servicio: servicio.uid,
+                    para: "",
+                    nombre: servicio.nombreConductor,
+                    token: token)));
+          },
           titulo: const Icon(
             Icons.chat,
             color: Colors.white,

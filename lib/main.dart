@@ -81,35 +81,6 @@ class _MyAppState extends State<MyApp> {
               para: data["para"],
               nombre: data["nombre"],
               token: token)));
-      if (accion == 0) {
-      } else if (accion == 1) {
-      } else if (accion == 2) {
-      } else if (accion == 3) {
-        String uidServicio = data["servicio"];
-        var serviciosDelUsuario =
-            await ServicioRServicio().darServiciosCreadosPorUsuario();
-
-        BlocProvider.of<ServicioBloc>(context)
-            .add(OnActualizarServiciosDelUsuario(serviciosDelUsuario));
-
-        serviciosDelUsuario =
-            BlocProvider.of<ServicioBloc>(context).state.serviciosDelUsuario;
-
-        for (var servicio in serviciosDelUsuario) {
-          if (servicio.uid == uidServicio) {
-            BlocProvider.of<ServicioBloc>(context)
-                .add(OnServicioSeleccionado(servicio));
-            break;
-          }
-        }
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  const DetalleTuServicio(callbackFunction: null)),
-        );
-      }
     });
   }
 
