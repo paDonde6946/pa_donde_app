@@ -1,18 +1,29 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pa_donde_app/blocs/blocs.dart';
+import 'package:http/http.dart' as http;
+
+import 'package:mime_type/mime_type.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/models/vehiculo_modelo.dart';
+import 'package:pa_donde_app/global/entorno_variable_global.dart';
 import 'package:pa_donde_app/global/enums/tipo_vehiculo_enum.dart';
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/calificar_show.dart';
 import 'package:pa_donde_app/ui/global_widgets/widgets/card_vehiculo_widget.dart';
 import 'package:pa_donde_app/ui/global_widgets/widgets/cargando_widget.dart';
 import 'package:pa_donde_app/ui/helpers/helpers.dart';
 import 'package:pa_donde_app/ui/pages/agregar_vehiculo_pag.dart';
 import 'package:pa_donde_app/ui/pages/editar_vehiculo_pag.dart';
 import 'package:pa_donde_app/data/services/vehiculo_servicio.dart';
+
 //---------------------------------------------------------------------
 
 class VehiculoPag extends StatefulWidget {
@@ -26,6 +37,7 @@ class _VehiculoPagState extends State<VehiculoPag> {
   List<Vehiculo> vehiculos = [];
   var vehiculoServicio = VehiculoServicio();
   bool cargar = false;
+  var imageFile;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +71,115 @@ class _VehiculoPagState extends State<VehiculoPag> {
                 ],
               )
       ]),
+      floatingActionButton:
+          FloatingActionButton(onPressed: () => _showSelectionDialog(context)),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
+  }
+
+  _showSelectionDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: const Text(
+                "De donde quiere seleccionar la foto?",
+                textAlign: TextAlign.center,
+              ),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    GestureDetector(
+                      child: Row(
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const [
+                          Icon(Icons.collections),
+                          SizedBox(width: 20),
+                          Text("Galeria"),
+                        ],
+                      ),
+                      onTap: () {
+                        _openGallery(context);
+                      },
+                    ),
+                    const Padding(padding: EdgeInsets.all(8.0)),
+                    GestureDetector(
+                      child: Row(
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const [
+                          Icon(Icons.camera_alt_outlined),
+                          SizedBox(width: 20),
+                          Text("Camara"),
+                        ],
+                      ),
+                      onTap: () {
+                        _openCamera(context);
+                      },
+                    )
+                  ],
+                ),
+              ));
+        });
+  }
+
+  void _openGallery(BuildContext context) async {
+    var picture = await ImagePicker().pickImage(source: ImageSource.gallery);
+    setState(() {
+      imageFile = picture;
+      print(imageFile);
+    });
+    Navigator.of(context).pop();
+  }
+
+  void _openCamera(BuildContext context) async {
+    var picture = await ImagePicker().pickImage(source: ImageSource.camera);
+
+    imageFile = picture;
+
+    String fileName = imageFile.path.split("/").last;
+
+    // FormData formData = FormData.fromMap({
+    //   'file': await MultipartFile.fromFile(imageFile!.path, filename: fileName)
+    // });
+
+    // Dio dio = Dio();
+
+    // // URL para crear el prestador de servicios - conexion
+    // final url = Uri.http(EntornoVariable.host, '/cargarLicenciaConduccion');
+
+    // final response = await dio.post(
+    //     '${EntornoVariable.host}/cargarLicenciaConduccion',
+    //     data: formData);
+
+    // File file = File(imageFile.path);
+    // file.path;
+    // print(imageFile);
+
+    /// Create storage que permite almacenar el token en el dispositivo fisico
+    final _storage = const FlutterSecureStorage();
+
+    String? token = await _storage.read(key: 'token');
+
+    final url = Uri.http(EntornoVariable.host, "/app/cargarLicenciaConduccion");
+
+    // final mimeType = mime(imageFile!.path).split('/').last; // image/jpeg
+
+    final imageUplodReques = http.MultipartRequest('POST', url);
+
+    final file = await http.MultipartFile.fromPath('file', imageFile.path);
+
+    imageUplodReques.fields['jwt'] = token;
+    imageUplodReques.fields['tipoDocumento'] = '1';
+
+    imageUplodReques.files.add(file);
+
+    final streamResponse = await imageUplodReques.send();
+
+    final resp = await http.Response.fromStream(streamResponse);
+
+    if (resp.statusCode != 200 && resp.statusCode != 201) {
+      return null;
+    }
   }
 
   /// AppBar personalizado que se muestra en la parte superior de la pantalla

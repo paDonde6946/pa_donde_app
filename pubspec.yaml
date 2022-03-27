@@ -92,6 +92,15 @@ dependencies:
   flutter_rating_bar: ^4.0.0
   flutter_local_notifications: ^9.4.0
 
+  path_provider: ^2.0.9
+
+  camera: ^0.9.4+17
+
+  image_picker: ^0.8.4+11
+
+  mime_type: ^1.0.0
+
+
 dependency_overrides:
   firebase_messaging_platform_interface: 3.1.6
   firebase_crashlytics_platform_interface: 3.1.13
