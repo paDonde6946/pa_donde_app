@@ -28,13 +28,13 @@ class ServicioPushNotificacion {
 
   ServicioPushNotificacion({required this.context, this.navigatorKey});
 
-  Future<dynamic> onBackgroundMessage(RemoteMessage mensaje) async {
+  static Future<dynamic> onBackgroundMessage(RemoteMessage mensaje) async {
     // print(
     //     '===================================== onMensaje ====================================');
     // print(message);
     _mensajeStream.sink.add(mensaje.data);
-    _showNotificationWithSound(
-        mensaje.notification!.title, mensaje.notification!.body, mensaje.data);
+    // _showNotificationWithSound(
+    //     mensaje.notification!.title, mensaje.notification!.body, mensaje.data);
   }
 
   Future<String> initNotifications() async {
