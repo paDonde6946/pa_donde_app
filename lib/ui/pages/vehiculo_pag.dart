@@ -1,29 +1,29 @@
-import 'dart:io';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pa_donde_app/blocs/blocs.dart';
-import 'package:http/http.dart' as http;
-
-import 'package:mime_type/mime_type.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
-import 'package:pa_donde_app/data/models/vehiculo_modelo.dart';
-import 'package:pa_donde_app/global/entorno_variable_global.dart';
 import 'package:pa_donde_app/global/enums/tipo_vehiculo_enum.dart';
+
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
-import 'package:pa_donde_app/ui/global_widgets/show_dialogs/calificar_show.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/informativo_show.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/validacion_show.dart';
 import 'package:pa_donde_app/ui/global_widgets/widgets/card_vehiculo_widget.dart';
 import 'package:pa_donde_app/ui/global_widgets/widgets/cargando_widget.dart';
-import 'package:pa_donde_app/ui/helpers/helpers.dart';
+
 import 'package:pa_donde_app/ui/pages/agregar_vehiculo_pag.dart';
 import 'package:pa_donde_app/ui/pages/editar_vehiculo_pag.dart';
+
+import 'package:pa_donde_app/data/models/vehiculo_modelo.dart';
 import 'package:pa_donde_app/data/services/vehiculo_servicio.dart';
 
+import 'package:pa_donde_app/ui/helpers/helpers.dart';
+
+import 'package:pa_donde_app/ui/utils/snack_bars.dart';
+
+import 'package:pa_donde_app/data/models/usuario_modelo.dart';
 //---------------------------------------------------------------------
 
 class VehiculoPag extends StatefulWidget {
@@ -35,14 +35,20 @@ class VehiculoPag extends StatefulWidget {
 
 class _VehiculoPagState extends State<VehiculoPag> {
   List<Vehiculo> vehiculos = [];
+  Usuario usuario = Usuario();
   var vehiculoServicio = VehiculoServicio();
   bool cargar = false;
+  // ignore: prefer_typing_uninitialized_variables
   var imageFile;
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    getVehiculos();
+
+    /// Obtener informacion de usuario y vehiculos de la  BD
+    usuario = BlocProvider.of<UsuarioBloc>(context).state.usuario;
+    vehiculos = BlocProvider.of<PreserviciosBloc>(context).vehiculos!;
+
     return Scaffold(
       appBar: appBar(),
       body: ListView(children: [
@@ -53,27 +59,48 @@ class _VehiculoPagState extends State<VehiculoPag> {
               )
             : Column(
                 children: [
-                  Table(children: funcionPrueba()),
+                  vehiculos.isNotEmpty
+                      ? Table(children: funcionPrueba())
+                      : sinVehiculos('No tiene vehículos en este momento.'),
                   const SizedBox(height: 20),
                   Container(
                     width: size.width * 1,
-                    padding: EdgeInsets.symmetric(horizontal: size.width * 0.2),
-                    child: BtnAnaranja(
-                      function: () {
-                        SchedulerBinding.instance!.addPostFrameCallback((_) {
-                          Navigator.of(context).push(navegarMapaFadeIn(
-                              context, const AgregarVehiculo()));
-                        });
-                      },
-                      titulo: "Agregar Vehículo",
-                    ),
+                    padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
+                    child: usuario.licenciaConduccion == null
+                        ? agregarLicencia()
+                        : agregarVehiculo(),
                   )
                 ],
               )
       ]),
-      floatingActionButton:
-          FloatingActionButton(onPressed: () => _showSelectionDialog(context)),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+    );
+  }
+
+  Widget agregarVehiculo() {
+    return BtnAnaranja(
+      function: () {
+        SchedulerBinding.instance!.addPostFrameCallback((_) {
+          Navigator.of(context)
+              .push(navegarMapaFadeIn(context, const AgregarVehiculo()));
+        });
+      },
+      titulo: "Agregar Vehículo",
+    );
+  }
+
+  Widget agregarLicencia() {
+    return BtnAnaranja(
+      function: () => mostrarShowDialogValidar(
+          context: context,
+          titulo: 'Licencia de conducción',
+          contenido:
+              "Debe de subir su licencia de conducción para poder agregar un vehículo.",
+          funtionContinuar: () {
+            Navigator.of(context, rootNavigator: true).pop(context);
+            _showSelectionDialog(context);
+          },
+          icono: Icons.image_rounded),
+      titulo: "Agregar Licencia de Conducción",
     );
   }
 
@@ -83,7 +110,7 @@ class _VehiculoPagState extends State<VehiculoPag> {
         builder: (BuildContext context) {
           return AlertDialog(
               title: const Text(
-                "De donde quiere seleccionar la foto?",
+                "¿De dónde quiere seleccionar la foto?",
                 textAlign: TextAlign.center,
               ),
               content: SingleChildScrollView(
@@ -99,7 +126,7 @@ class _VehiculoPagState extends State<VehiculoPag> {
                         ],
                       ),
                       onTap: () {
-                        _openGallery(context);
+                        _abrirGaleria(context);
                       },
                     ),
                     const Padding(padding: EdgeInsets.all(8.0)),
@@ -113,7 +140,7 @@ class _VehiculoPagState extends State<VehiculoPag> {
                         ],
                       ),
                       onTap: () {
-                        _openCamera(context);
+                        _abrirCamara(context);
                       },
                     )
                   ],
@@ -122,63 +149,45 @@ class _VehiculoPagState extends State<VehiculoPag> {
         });
   }
 
-  void _openGallery(BuildContext context) async {
+  void _abrirGaleria(BuildContext context) async {
     var picture = await ImagePicker().pickImage(source: ImageSource.gallery);
     setState(() {
       imageFile = picture;
-      print(imageFile);
     });
-    Navigator.of(context).pop();
+    Navigator.of(context, rootNavigator: true).pop(context);
+
+    validarLicenciaConduccion();
   }
 
-  void _openCamera(BuildContext context) async {
+  void _abrirCamara(BuildContext context) async {
     var picture = await ImagePicker().pickImage(source: ImageSource.camera);
+    setState(() {
+      imageFile = picture;
+    });
+    Navigator.of(context, rootNavigator: true).pop(context);
 
-    imageFile = picture;
+    validarLicenciaConduccion();
+  }
 
-    String fileName = imageFile.path.split("/").last;
-
-    // FormData formData = FormData.fromMap({
-    //   'file': await MultipartFile.fromFile(imageFile!.path, filename: fileName)
-    // });
-
-    // Dio dio = Dio();
-
-    // // URL para crear el prestador de servicios - conexion
-    // final url = Uri.http(EntornoVariable.host, '/cargarLicenciaConduccion');
-
-    // final response = await dio.post(
-    //     '${EntornoVariable.host}/cargarLicenciaConduccion',
-    //     data: formData);
-
-    // File file = File(imageFile.path);
-    // file.path;
-    // print(imageFile);
-
-    /// Create storage que permite almacenar el token en el dispositivo fisico
-    final _storage = const FlutterSecureStorage();
-
-    String? token = await _storage.read(key: 'token');
-
-    final url = Uri.http(EntornoVariable.host, "/app/cargarLicenciaConduccion");
-
-    // final mimeType = mime(imageFile!.path).split('/').last; // image/jpeg
-
-    final imageUplodReques = http.MultipartRequest('POST', url);
-
-    final file = await http.MultipartFile.fromPath('file', imageFile.path);
-
-    imageUplodReques.fields['jwt'] = token;
-    imageUplodReques.fields['tipoDocumento'] = '1';
-
-    imageUplodReques.files.add(file);
-
-    final streamResponse = await imageUplodReques.send();
-
-    final resp = await http.Response.fromStream(streamResponse);
-
-    if (resp.statusCode != 200 && resp.statusCode != 201) {
-      return null;
+  validarLicenciaConduccion() async {
+    if (imageFile == null) {
+      customShapeSnackBar(
+          context: context, titulo: "No ha elegido ninguna imagen");
+    } else {
+      final cargue =
+          await VehiculoServicio().cargarLicenciaConduccion(imageFile);
+      // ignore: unnecessary_null_comparison
+      if (cargue != null) {
+        mostrarShowDialogInformativo(
+            context: context,
+            titulo: "Lincencia de conducción",
+            contenido: "La imagen seleccionada ha sido subida exitosamente");
+        usuario.licenciaConduccion = "";
+        setState(() {});
+      } else {
+        customShapeSnackBar(
+            context: context, titulo: "No se ha podido subir la imagen");
+      }
     }
   }
 
@@ -250,7 +259,24 @@ class _VehiculoPagState extends State<VehiculoPag> {
     return arreglo;
   }
 
-  getVehiculos() async {
-    vehiculos = BlocProvider.of<PreserviciosBloc>(context).vehiculos!;
+  /// Muestra una imagen cuando no tiene ningun vehiculo registrado
+  Widget sinVehiculos(String nombre) {
+    final size = MediaQuery.of(context).size;
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(height: 30),
+        Text(
+          nombre,
+          style: TextStyle(fontSize: size.width * 0.04),
+        ),
+        const SizedBox(height: 20),
+        Image(
+            height: size.height * 0.15,
+            image: const AssetImage('img/logo/logo_PaDonde.png')),
+        const SizedBox(height: 50),
+      ],
+    );
   }
 }

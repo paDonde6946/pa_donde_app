@@ -22,6 +22,7 @@ class Usuario with ChangeNotifier {
     List<Feature>? pHistorialOrigen,
     List<Feature>? pHistorialDestino,
     String? pUltimoServicioCalificar,
+    String? pLicenciaConduccion,
   }) {
     correo = pCorreo;
     tipoUsuario = pTipoUsuario;
@@ -36,6 +37,7 @@ class Usuario with ChangeNotifier {
     historialOrigen = pHistorialOrigen;
     historialDestino = pHistorialDestino;
     ultimoServicioCalificar = pUltimoServicioCalificar;
+    licenciaConduccion = pLicenciaConduccion;
   }
 
   /// ATRIBUTOS DE LA CLASE
@@ -52,6 +54,7 @@ class Usuario with ChangeNotifier {
   List<Feature>? _historialOrigen;
   List<Feature>? _historialDestino;
   String? _ultimoServicioCalificar;
+  String? _licenciaConduccion;
 
   /// Constructor para transformar de un Mapa dinamico a json
   factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
@@ -73,7 +76,8 @@ class Usuario with ChangeNotifier {
           ? List<Feature>.from(
               json["historialOrigen"]?.map((x) => Feature.fromJson(x)))
           : [],
-      pUltimoServicioCalificar: json["ultimoServicioSinCalificar"]);
+      pUltimoServicioCalificar: json["ultimoServicioSinCalificar"],
+      pLicenciaConduccion: json["fotoLicencia"]);
 
   Map<String, dynamic> toJson() => {
         "correo": correo,
@@ -161,14 +165,14 @@ class Usuario with ChangeNotifier {
     notifyListeners();
   }
 
-  get calificacionUsuario => _calificacionUsuario;
+  double get calificacionUsuario => _calificacionUsuario!;
 
   set calificacionUsuario(value) {
     _calificacionUsuario = value;
     notifyListeners();
   }
 
-  get calificacionConductor => _calificacionConductor;
+  double get calificacionConductor => _calificacionConductor!;
 
   set calificacionConductor(value) {
     _calificacionConductor = value;
@@ -191,5 +195,11 @@ class Usuario with ChangeNotifier {
 
   set ultimoServicioCalificar(value) {
     _ultimoServicioCalificar = value;
+  }
+
+  get licenciaConduccion => _licenciaConduccion;
+
+  set licenciaConduccion(value) {
+    _licenciaConduccion = value;
   }
 }

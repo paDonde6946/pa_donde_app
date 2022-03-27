@@ -106,4 +106,29 @@ class VehiculoServicio {
 
     return decodedData;
   }
+
+  Future cargarLicenciaConduccion(dynamic imageFile) async {
+    String? token = await _storage.read(key: 'token');
+
+    final url = Uri.http(EntornoVariable.host, "/app/cargarLicenciaConduccion");
+
+    var imageUplodReques = http.MultipartRequest('POST', url);
+
+    final file = await http.MultipartFile.fromPath('file', imageFile.path);
+
+    imageUplodReques.fields['tipoDocumento'] = '1';
+
+    imageUplodReques.files.add(file);
+
+    imageUplodReques.headers["x-token"] = token;
+
+    final streamResponse = await imageUplodReques.send();
+
+    final resp = await http.Response.fromStream(streamResponse);
+
+    if (resp.statusCode != 200 && resp.statusCode != 201) {
+      return null;
+    }
+    return true;
+  }
 }
