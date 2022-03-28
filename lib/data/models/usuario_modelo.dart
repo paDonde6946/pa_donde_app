@@ -13,6 +13,7 @@ class Usuario with ChangeNotifier {
     int? pTipoUsuario,
     String? pNombre,
     String? pApellido,
+    int? pCedula,
     int? pCelular,
     String? pConstrasenia,
     int? pCambioContrasenia,
@@ -28,6 +29,7 @@ class Usuario with ChangeNotifier {
     tipoUsuario = pTipoUsuario;
     nombre = pNombre;
     apellido = pApellido;
+    cedula = pCedula;
     celular = pCelular;
     contrasenia = pConstrasenia;
     cambioContrasenia = pCambioContrasenia;
@@ -43,6 +45,7 @@ class Usuario with ChangeNotifier {
   /// ATRIBUTOS DE LA CLASE
   String? _nombre;
   String? _apellido;
+  int? _cedula;
   int? _celular;
   String? _correo;
   int? _tipoUsuario;
@@ -62,6 +65,7 @@ class Usuario with ChangeNotifier {
       pTipoUsuario: json["tipoUsuario"],
       pNombre: json["nombre"],
       pApellido: json["apellido"],
+      pCedula: json["cedula"],
       pCelular: json["celular"],
       pConstrasenia: json["contrasenia"],
       pCambioContrasenia: json["cambio_contrasenia"],
@@ -83,6 +87,7 @@ class Usuario with ChangeNotifier {
         "correo": correo,
         "nombre": nombre,
         "apellido": apellido,
+        "cedula": cedula,
         "celular": celular,
         "contrasenia": contrasenia,
         "cambio_contrasenia": cambioContrasenia,
@@ -108,6 +113,15 @@ class Usuario with ChangeNotifier {
   /// Método que cambia el valor del apellido del usuario
   set apellido(value) {
     _apellido = value;
+    notifyListeners();
+  }
+
+  /// Método que retorna el valor de la cedula del usuario
+  get cedula => _cedula;
+
+  /// Método que cambia el valor del cedula del usuario
+  set cedula(value) {
+    _cedula = value;
     notifyListeners();
   }
 
@@ -165,14 +179,14 @@ class Usuario with ChangeNotifier {
     notifyListeners();
   }
 
-  double get calificacionUsuario => _calificacionUsuario!;
+  double get calificacionUsuario => _calificacionUsuario ?? 0;
 
   set calificacionUsuario(value) {
     _calificacionUsuario = value;
     notifyListeners();
   }
 
-  double get calificacionConductor => _calificacionConductor!;
+  double get calificacionConductor => _calificacionConductor ?? 0;
 
   set calificacionConductor(value) {
     _calificacionConductor = value;

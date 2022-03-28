@@ -10,6 +10,7 @@ import 'package:pa_donde_app/blocs/blocs.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/confirmacion_show.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/informativo_show.dart';
 import 'package:pa_donde_app/ui/pages/principal_pag.dart';
+import 'package:pa_donde_app/ui/utils/snack_bars.dart';
 //---------------------------------------------------------------------
 
 class AgregarServicioParte3 extends StatefulWidget {
@@ -63,20 +64,26 @@ class _AgregarServicioParte3State extends State<AgregarServicioParte3> {
 
                 servicioBloc.add(OnCrearServicio(servicioBloc.servicio!));
 
-                await ServicioRServicio().crearServicio(servicioBloc.servicio!);
+                final servicioEnvio = await ServicioRServicio()
+                    .crearServicio(servicioBloc.servicio!);
 
-                mostrarShowDialogConfirmar(
-                    context: context,
-                    titulo: "Servicio",
-                    contenido: "Su servicio ha sido creeado",
-                    paginaRetorno: 'validarInicioSesion');
+                if (servicioEnvio) {
+                  mostrarShowDialogConfirmar(
+                      context: context,
+                      titulo: "Servicio",
+                      contenido: "Su servicio ha sido creeado",
+                      paginaRetorno: 'validarInicioSesion');
 
-                servicioBloc.add(OnCrearServicio(Servicio()));
+                  servicioBloc.add(OnCrearServicio(Servicio()));
 
-                BlocProvider.of<PaginasBloc>(context)
-                    .add(const OnCambiarPaginaPrincipal(PrincipalPag(), 0));
+                  BlocProvider.of<PaginasBloc>(context)
+                      .add(const OnCambiarPaginaPrincipal(PrincipalPag(), 0));
 
-                setState(() {});
+                  setState(() {});
+                } else {
+                  customShapeSnackBar(
+                      context: context, titulo: "No se pudo crear el servicio");
+                }
               } else {
                 mostrarShowDialogInformativo(
                     context: context,

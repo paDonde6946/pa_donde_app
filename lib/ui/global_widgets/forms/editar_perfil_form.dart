@@ -55,8 +55,7 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
     final size = MediaQuery.of(context).size;
 
     /// Variable que nos permite guardar la información de cada uno de los registros
-    usuario =
-        Provider.of<AutenticacionServicio>(context).usuarioServiciosActual;
+    usuario = BlocProvider.of<UsuarioBloc>(context).state.usuario;
 
     inputControllerTelefono.text = usuario.celular.toString();
 

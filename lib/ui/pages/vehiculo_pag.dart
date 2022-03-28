@@ -47,7 +47,7 @@ class _VehiculoPagState extends State<VehiculoPag> {
 
     /// Obtener informacion de usuario y vehiculos de la  BD
     usuario = BlocProvider.of<UsuarioBloc>(context).state.usuario;
-    vehiculos = BlocProvider.of<PreserviciosBloc>(context).vehiculos!;
+    vehiculos = BlocProvider.of<PreserviciosBloc>(context).vehiculos ?? [];
 
     return Scaffold(
       appBar: appBar(),
