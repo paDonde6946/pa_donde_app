@@ -10,4 +10,9 @@ class RegExpLocales {
         caseSensitive: false,
         multiLine: false,
       );
+  static RegExp get expresionContrasenia => RegExp(
+        r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$",
+        caseSensitive: false,
+        multiLine: false,
+      );
 }
