@@ -168,9 +168,9 @@ class _PrincipalPagState extends State<PrincipalPag> {
     if (serviciosDelUsuario.isEmpty && serviciosPostulados.isEmpty) {
       return size.height * 0.8;
     } else if (serviciosDelUsuario.isEmpty || serviciosPostulados.isEmpty) {
-      return size.height * 0.59;
+      return size.height < 785 ? size.height * 0.55 : size.height * 0.59;
     } else {
-      return size.height * 0.39;
+      return size.height < 785 ? size.height * 0.35 : size.height * 0.39;
     }
   }
 

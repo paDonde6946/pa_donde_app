@@ -31,7 +31,7 @@ class EditarVehiculo extends StatelessWidget {
         title: Text(
           "Editar Vehículo",
           style: TextStyle(
-              fontSize: size.width * 0.045, fontWeight: FontWeight.bold),
+              fontSize: size.width * 0.05, fontWeight: FontWeight.bold),
         ));
   }
 }

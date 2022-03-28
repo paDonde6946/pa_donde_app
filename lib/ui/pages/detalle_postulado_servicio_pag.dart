@@ -54,7 +54,7 @@ class _DetallePostuladoServicioState extends State<DetallePostuladoServicio> {
 
     return Scaffold(
       appBar: appBar(),
-      body: Column(
+      body: ListView(
         children: [
           cardDeServicio(),
           _botonesChatYCancelar(),
@@ -66,13 +66,16 @@ class _DetallePostuladoServicioState extends State<DetallePostuladoServicio> {
 
   /// AppBar personalizado que se muestra en la parte superior de la pantalla
   PreferredSizeWidget appBar() {
+    final size = MediaQuery.of(context).size;
+
     return AppBar(
         centerTitle: true,
         foregroundColor: Colors.black,
         backgroundColor: Theme.of(context).primaryColor,
-        title: const Text(
+        title: Text(
           "Servicio Postulado",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: size.width * 0.05, fontWeight: FontWeight.bold),
         ));
   }
 

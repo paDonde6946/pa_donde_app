@@ -102,14 +102,17 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
 
   /// AppBar personalizado que se muestra en la parte superior de la pantalla
   PreferredSizeWidget appBar() {
+    final size = MediaQuery.of(context).size;
+
     callbackFunction;
     return AppBar(
         centerTitle: true,
         foregroundColor: Colors.black,
         backgroundColor: Theme.of(context).primaryColor,
-        title: const Text(
+        title: Text(
           "Tu servicio",
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: size.width * 0.05, fontWeight: FontWeight.bold),
         ));
   }
 

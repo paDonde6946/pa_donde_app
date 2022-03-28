@@ -30,7 +30,7 @@ class _EditarContraseniaPagState extends State<EditarContraseniaPag> {
         title: Text(
           "Editar contraseña",
           style: TextStyle(
-              fontSize: size.width * 0.055, fontWeight: FontWeight.bold),
+              fontSize: size.width * 0.05, fontWeight: FontWeight.bold),
         ));
   }
 }

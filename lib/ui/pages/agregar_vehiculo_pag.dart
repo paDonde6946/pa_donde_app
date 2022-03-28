@@ -30,7 +30,7 @@ class _AgregarVehiculoState extends State<AgregarVehiculo> {
         title: Text(
           "Agregar vehículo",
           style: TextStyle(
-              fontSize: size.width * 0.055, fontWeight: FontWeight.bold),
+              fontSize: size.width * 0.05, fontWeight: FontWeight.bold),
         ));
   }
 }

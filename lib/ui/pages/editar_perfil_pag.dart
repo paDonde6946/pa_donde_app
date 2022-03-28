@@ -36,16 +36,8 @@ class _EditarPerfilPagState extends State<EditarPerfilPag> {
   Widget imagen() {
     return const Center(
       child: SizedBox(
-        height: 150,
-        width: 150,
-        child: FadeInImage(
-          image: NetworkImage(
-              'https://media.istockphoto.com/vectors/people-icon-logo-isolated-on-white-background-vector-id1183215612?k=20&m=1183215612&s=170667a&w=0&h=GcHhIXJBau012RiKnc4LjvJC9PDzdELjtPqjdfW3QKk='),
-          placeholder: AssetImage('img/gif/cargando.gif'),
-          fadeInDuration: Duration(milliseconds: 200),
-          height: 300.0,
-          fit: BoxFit.cover,
-        ),
+        height: 135,
+        child: Image(image: AssetImage("img/icons/usuario_icon.png")),
       ),
     );
   }
@@ -61,8 +53,7 @@ class _EditarPerfilPagState extends State<EditarPerfilPag> {
               BoxShadow(
                 blurRadius: 40.0,
                 color: Colors.black26,
-                offset: Offset(30.0, 5.0),
-                spreadRadius: 20.0,
+                offset: Offset(5.0, 5.0),
               ),
             ]),
         child: ClipRRect(
@@ -83,7 +74,7 @@ class _EditarPerfilPagState extends State<EditarPerfilPag> {
         title: Text(
           "Editar perfil",
           style: TextStyle(
-              fontSize: size.width * 0.055, fontWeight: FontWeight.bold),
+              fontSize: size.width * 0.05, fontWeight: FontWeight.bold),
         ));
   }
 

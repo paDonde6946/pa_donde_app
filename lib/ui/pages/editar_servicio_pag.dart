@@ -45,7 +45,7 @@ class _EditarServicioPagState extends State<EditarServicioPag> {
                 blurRadius: 40.0,
                 color: Colors.black26,
                 offset: Offset(30.0, 5.0),
-                spreadRadius: 20.0,
+                spreadRadius: 5.0,
               ),
             ]),
         child: ClipRRect(
@@ -70,7 +70,7 @@ class _EditarServicioPagState extends State<EditarServicioPag> {
         title: Text(
           "Editar Servicio",
           style: TextStyle(
-              fontSize: size.width * 0.055, fontWeight: FontWeight.bold),
+              fontSize: size.width * 0.05, fontWeight: FontWeight.bold),
         ));
   }
 

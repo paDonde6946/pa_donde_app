@@ -90,7 +90,7 @@ class _PerfilPagState extends State<PerfilPag> {
               fontSize: size.width * 0.05,
               fontWeight: FontWeight.w600),
         ),
-        const SizedBox(height: 30),
+        const SizedBox(height: 10),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -121,6 +121,10 @@ class _PerfilPagState extends State<PerfilPag> {
         informacionTextoTitulo("Correo", Icons.mail),
         const SizedBox(height: 10),
         informacionTextoSubTitulo(usuarioServicio.correo),
+        const SizedBox(height: 10),
+        informacionTextoTitulo("Cédula", Icons.account_box_rounded),
+        const SizedBox(height: 10),
+        informacionTextoSubTitulo(usuarioServicio.cedula.toString()),
         const SizedBox(height: 10),
         informacionTextoTitulo("Celular", Icons.phone),
         const SizedBox(height: 10),
