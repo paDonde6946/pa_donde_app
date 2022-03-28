@@ -6,6 +6,7 @@ import 'package:pa_donde_app/data/models/usuario_modelo.dart';
 import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
 
 import 'package:pa_donde_app/data/services/usuario_servicio.dart';
+import 'package:pa_donde_app/global/regexp/regexp_locales.dart';
 
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 import 'package:pa_donde_app/ui/global_widgets/inputs/input_form_redondo.dart'
@@ -113,6 +114,16 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
     if (inputControllerContrasenia.text != inputControllerConContrasenia.text) {
       customShapeSnackBar(
           context: context, titulo: 'Las contraseñas no coinciden');
+      return;
+    }
+
+    // Verifica que la contraseña sea fiable
+    if (!RegExpLocales.expresionContrasenia
+        .hasMatch(inputControllerContrasenia.text)) {
+      customShapeSnackBar(
+          context: context,
+          titulo:
+              'Las contraseñas debe tener: \n     - Una minuscula \n     - Una mayuscula \n     - Un numero \n     - Un simbolo');
       return;
     }
 
