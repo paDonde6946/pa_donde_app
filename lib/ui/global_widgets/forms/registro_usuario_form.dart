@@ -59,9 +59,9 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
         child: Column(
           children: [
             const SizedBox(height: tamanioSeparador),
-            _crearApellido(usuario),
-            const SizedBox(height: tamanioSeparador),
             _crearNombre(usuario),
+            const SizedBox(height: tamanioSeparador),
+            _crearApellido(usuario),
             const SizedBox(height: tamanioSeparador),
             _crearCedula(usuario),
             const SizedBox(height: tamanioSeparador),
@@ -100,6 +100,15 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
       return;
     }
 
+    try {
+      usuario.celular = int.parse(inputControllerTelefono.value.text);
+    } catch (e) {
+      customShapeSnackBar(
+          context: context, titulo: 'Número del celular inválido');
+
+      return;
+    }
+
     // Verifica que las contraseñas coincidan
     if (inputControllerContrasenia.text != inputControllerConContrasenia.text) {
       customShapeSnackBar(
@@ -120,7 +129,6 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
     Navigator.pop(context);
 
     UsuarioServicio usuarioServicio = UsuarioServicio();
-    AutenticacionServicio autenticacionServicio = AutenticacionServicio();
     final response =
         await usuarioServicio.crearUsuarioServicio(usuario, context);
     // Si todo esta bien redirige a la siguiente página
@@ -132,9 +140,6 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
       mostrarShowDialogCargando(context: context, titulo: 'REGISTRO EXITO');
       await Future.delayed(const Duration(seconds: 1));
       Navigator.pop(context);
-
-      autenticacionServicio.usuarioServiciosActual =
-          BlocProvider.of<UsuarioBloc>(context).state.usuario;
 
       mostrarShowDialogConfirmar(
           context: context,
@@ -167,7 +172,7 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
   Widget _crearCedula(Usuario usuario) {
     return TextFormField(
       style: styleInput,
-      controller: inputControllerCedula,
+      // controller: inputControllerCedula,
       decoration: input_redondo.inputDecorationRedondo(
           'Cédula', 'Ingrese su cédula', context, Colors.white),
       onSaved: (value) => inputControllerCedula.text = value!,
@@ -195,9 +200,9 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
   Widget _crearNumCelular(Usuario usuario) {
     return TextFormField(
       style: styleInput,
-      controller: inputControllerTelefono,
-      onSaved: (value) => usuario.celular = int.parse(value!),
-      onChanged: (value) => usuario.celular = int.parse(value),
+      // controller: inputControllerTelefono,
+      onSaved: (value) => inputControllerTelefono.text = value!,
+      onChanged: (value) => inputControllerTelefono.text = value,
       keyboardType: TextInputType.number,
       decoration: input_redondo.inputDecorationRedondo('Número de celular',
           'Ingrese su número celular', context, Colors.white),

@@ -2,15 +2,12 @@ import 'dart:io';
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 //------------------IMPORTACIONES LOCALES------------------------------
-import 'package:pa_donde_app/blocs/usuario/usuario_bloc.dart';
-
 import 'package:pa_donde_app/data/models/usuario_modelo.dart';
 
 import 'package:pa_donde_app/global/entorno_variable_global.dart';
@@ -29,14 +26,9 @@ class UsuarioServicio {
     final jsonUser = usuarioToJson(usuario);
     final response = await http.put(url, headers: headers, body: jsonUser);
 
-    final decodedData = json.decode(response.body);
-
     if (response.statusCode != 200 && response.statusCode != 201) {
       return response.body;
     }
-
-    BlocProvider.of<UsuarioBloc>(context)
-        .add(OnActualizarUsuario(Usuario.fromJson(decodedData['usuario'])));
 
     return response.body;
   }

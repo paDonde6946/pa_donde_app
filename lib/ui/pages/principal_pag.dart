@@ -100,7 +100,7 @@ class _PrincipalPagState extends State<PrincipalPag> {
             titulo: "Cambio de Contraseña",
             contenido:
                 "Hemos notado que has cambiado tu contraseña. Para mayor seguridad cambia la contraseña por una personal.",
-            paginaRetorno: 'editarPerfil');
+            paginaRetorno: 'editarContrasenia');
         // add your code here.
       });
     }

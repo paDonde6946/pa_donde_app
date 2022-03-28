@@ -236,9 +236,7 @@ class _VehiculoPagState extends State<VehiculoPag> {
           // Navigator.pushNamed(context, 'editarVehiculo', arguments: vehiculos[i]);
         },
         child: CardVehiculo(
-            icon: (vehiculos[i].tipoVehiculo == TipoVehiculo.carro)
-                ? "img/icons/carro_icon.png"
-                : "img/icons/moto_icon.png",
+            icon: validarImagen(vehiculos[i]),
             color: Colors.black,
             placa: vehiculos[i].placa,
             marca: vehiculos[i].marca,
@@ -252,11 +250,26 @@ class _VehiculoPagState extends State<VehiculoPag> {
       }
     }
     if (arreglo2.isNotEmpty) {
-      arreglo2.add(const CardVehiculo(
-          color: Colors.black, placa: "", marca: "", validar: false));
+      arreglo2.add(CardVehiculo(
+          icon: Container(),
+          color: Colors.black,
+          placa: "",
+          marca: "",
+          validar: false));
       arreglo.add(TableRow(children: arreglo2));
     }
     return arreglo;
+  }
+
+  Widget validarImagen(vehiculo) {
+    final asset = (vehiculo.tipoVehiculo == TipoVehiculo.carro)
+        ? "img/icons/carro_icon.png"
+        : "img/icons/moto_icon.png";
+
+    return Image(
+      image: AssetImage(asset),
+      width: 75,
+    );
   }
 
   /// Muestra una imagen cuando no tiene ningun vehiculo registrado

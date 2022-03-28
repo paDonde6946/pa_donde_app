@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pa_donde_app/blocs/blocs.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
@@ -49,36 +51,6 @@ class _FormEditarContraseniaState extends State<FormEditarContrasenia> {
     );
   }
 
-  // /// Método auxiliar que  ayuda a validar todos los campos del registro
-  // void _validarFormulario() async {
-  //   // Verfica que todos los campos del formulario esten completos
-  //   if (!keyForm.currentState!.validate()) {
-  //     customShapeSnackBar(
-  //         context: context,
-  //         titulo: "Recuerda que todos los campos son obligatorios");
-  //     return;
-  //   }
-
-  //   mostrarShowDialogCargando(
-  //       context: context, titulo: 'Guardando Información');
-  //   await Future.delayed(const Duration(seconds: 1));
-  //   Navigator.pop(context);
-
-  //   // Validar informacion con el backend
-  //   AutenticacionServicio autenticacionServicio = AutenticacionServicio();
-  //   final response = await autenticacionServicio.login(
-  //       inputControllerCorreo.text.trim(),
-  //       inputControllerContrasenia.text.trim());
-
-  //   if (response == null) {
-  //     customShapeSnackBar(context: context, titulo: 'Información invalida');
-  //   } else {
-  //     // Si todo esta bien redirige a la siguiente página
-  //     keyForm.currentState!.save();
-  //     Navigator.pushNamed(context, 'inicio');
-  //   }
-  // }
-
   /*____________________________________________________________*/
   // CREACIÓN DE LOS CAMPOS DEL FORMULARIO
   /*____________________________________________________________*/
@@ -127,7 +99,7 @@ class _FormEditarContraseniaState extends State<FormEditarContrasenia> {
     return Center(
       child: BtnAnaranja(
           tamanioLetra: 17,
-          function: () => validarContrasenia(),
+          function: validarContrasenia,
           titulo: 'Editar contraseña'),
     );
   }
@@ -153,8 +125,9 @@ class _FormEditarContraseniaState extends State<FormEditarContrasenia> {
     if (response == null) {
       customShapeSnackBar(context: context, titulo: 'Información invalida');
     } else {
-      // Si todo esta bien redirige a la siguiente página
-      keyForm.currentState!.save();
+      final usuario = BlocProvider.of<UsuarioBloc>(context).state.usuario;
+      usuario.cambioContrasenia = 0;
+      BlocProvider.of<UsuarioBloc>(context).add(OnActualizarUsuario(usuario));
     }
   }
 }
