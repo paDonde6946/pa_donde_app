@@ -6,7 +6,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
-import 'package:pa_donde_app/data/response/pasejeros_response.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -34,6 +33,7 @@ import 'package:pa_donde_app/global/enums/estado_servicio_enum.dart';
 import 'package:pa_donde_app/ui/pages/editar_servicio_pag.dart';
 
 import 'package:pa_donde_app/data/response/busqueda_response.dart';
+import 'package:pa_donde_app/data/response/pasejeros_response.dart';
 
 import 'package:pa_donde_app/ui/utils/snack_bars.dart';
 

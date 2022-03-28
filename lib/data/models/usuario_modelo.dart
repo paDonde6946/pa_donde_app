@@ -13,6 +13,7 @@ class Usuario with ChangeNotifier {
     int? pTipoUsuario,
     String? pNombre,
     String? pApellido,
+    int? pCedula,
     int? pCelular,
     String? pConstrasenia,
     int? pCambioContrasenia,
@@ -22,11 +23,13 @@ class Usuario with ChangeNotifier {
     List<Feature>? pHistorialOrigen,
     List<Feature>? pHistorialDestino,
     String? pUltimoServicioCalificar,
+    String? pLicenciaConduccion,
   }) {
     correo = pCorreo;
     tipoUsuario = pTipoUsuario;
     nombre = pNombre;
     apellido = pApellido;
+    cedula = pCedula;
     celular = pCelular;
     contrasenia = pConstrasenia;
     cambioContrasenia = pCambioContrasenia;
@@ -36,11 +39,13 @@ class Usuario with ChangeNotifier {
     historialOrigen = pHistorialOrigen;
     historialDestino = pHistorialDestino;
     ultimoServicioCalificar = pUltimoServicioCalificar;
+    licenciaConduccion = pLicenciaConduccion;
   }
 
   /// ATRIBUTOS DE LA CLASE
   String? _nombre;
   String? _apellido;
+  int? _cedula;
   int? _celular;
   String? _correo;
   int? _tipoUsuario;
@@ -52,6 +57,7 @@ class Usuario with ChangeNotifier {
   List<Feature>? _historialOrigen;
   List<Feature>? _historialDestino;
   String? _ultimoServicioCalificar;
+  String? _licenciaConduccion;
 
   /// Constructor para transformar de un Mapa dinamico a json
   factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
@@ -59,6 +65,7 @@ class Usuario with ChangeNotifier {
       pTipoUsuario: json["tipoUsuario"],
       pNombre: json["nombre"],
       pApellido: json["apellido"],
+      pCedula: json["cedula"],
       pCelular: json["celular"],
       pConstrasenia: json["contrasenia"],
       pCambioContrasenia: json["cambio_contrasenia"],
@@ -73,12 +80,14 @@ class Usuario with ChangeNotifier {
           ? List<Feature>.from(
               json["historialOrigen"]?.map((x) => Feature.fromJson(x)))
           : [],
-      pUltimoServicioCalificar: json["ultimoServicioSinCalificar"]);
+      pUltimoServicioCalificar: json["ultimoServicioSinCalificar"],
+      pLicenciaConduccion: json["fotoLicencia"]);
 
   Map<String, dynamic> toJson() => {
         "correo": correo,
         "nombre": nombre,
         "apellido": apellido,
+        "cedula": cedula,
         "celular": celular,
         "contrasenia": contrasenia,
         "cambio_contrasenia": cambioContrasenia,
@@ -104,6 +113,15 @@ class Usuario with ChangeNotifier {
   /// Método que cambia el valor del apellido del usuario
   set apellido(value) {
     _apellido = value;
+    notifyListeners();
+  }
+
+  /// Método que retorna el valor de la cedula del usuario
+  get cedula => _cedula;
+
+  /// Método que cambia el valor del cedula del usuario
+  set cedula(value) {
+    _cedula = value;
     notifyListeners();
   }
 
@@ -161,14 +179,14 @@ class Usuario with ChangeNotifier {
     notifyListeners();
   }
 
-  get calificacionUsuario => _calificacionUsuario;
+  double get calificacionUsuario => _calificacionUsuario ?? 0;
 
   set calificacionUsuario(value) {
     _calificacionUsuario = value;
     notifyListeners();
   }
 
-  get calificacionConductor => _calificacionConductor;
+  double get calificacionConductor => _calificacionConductor ?? 0;
 
   set calificacionConductor(value) {
     _calificacionConductor = value;
@@ -191,5 +209,11 @@ class Usuario with ChangeNotifier {
 
   set ultimoServicioCalificar(value) {
     _ultimoServicioCalificar = value;
+  }
+
+  get licenciaConduccion => _licenciaConduccion;
+
+  set licenciaConduccion(value) {
+    _licenciaConduccion = value;
   }
 }

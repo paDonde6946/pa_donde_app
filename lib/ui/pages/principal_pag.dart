@@ -93,7 +93,7 @@ class _PrincipalPagState extends State<PrincipalPag> {
   void validarCambioContrasenia() {
     final usuario = BlocProvider.of<UsuarioBloc>(context).state.usuario;
 
-    if (usuario.cambioContrasenia == 0) {
+    if (usuario.cambioContrasenia == 1) {
       SchedulerBinding.instance!.addPostFrameCallback((_) {
         mostrarShowDialogConfirmar(
             context: context,

@@ -138,7 +138,7 @@ class _PerfilPagState extends State<PerfilPag> {
                 Container(
                     padding: const EdgeInsets.only(left: 30),
                     child: cuadroEstrella(
-                        usuarioServicio.calificacionUsuario.toString()))
+                        usuarioServicio.calificacionUsuario.toStringAsFixed(1)))
               ],
             ),
             Column(
@@ -147,8 +147,9 @@ class _PerfilPagState extends State<PerfilPag> {
                 const SizedBox(height: 5),
                 Container(
                     padding: const EdgeInsets.only(left: 30),
-                    child: cuadroEstrella(
-                        usuarioServicio.calificacionConductor.toString()))
+                    child: cuadroEstrella(usuarioServicio.calificacionConductor
+                        .toStringAsFixed(1)
+                        .toString()))
               ],
             ),
           ],
@@ -237,7 +238,6 @@ class _PerfilPagState extends State<PerfilPag> {
       margin: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         mainAxisSize: MainAxisSize.max,
-        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Icon(icono),
           const SizedBox(width: 10),

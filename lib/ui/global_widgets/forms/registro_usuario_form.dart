@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/models/usuario_modelo.dart';
@@ -11,6 +12,9 @@ import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 import 'package:pa_donde_app/ui/global_widgets/inputs/input_form_redondo.dart'
     as input_redondo;
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
+
+import 'package:pa_donde_app/blocs/usuario/usuario_bloc.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/confirmacion_show.dart';
 
 import 'package:pa_donde_app/ui/utils/snack_bars.dart';
 import 'package:pa_donde_app/ui/utils/validaciones_generales.dart'
@@ -38,6 +42,7 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
   TextEditingController inputControllerTelefono = TextEditingController();
   TextEditingController inputControllerConContrasenia = TextEditingController();
   TextEditingController inputControllerContrasenia = TextEditingController();
+  TextEditingController inputControllerCedula = TextEditingController();
 
   final styleInput = const TextStyle(height: 0.4);
 
@@ -58,6 +63,8 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
             _crearApellido(usuario),
             const SizedBox(height: tamanioSeparador),
             _crearNombre(usuario),
+            const SizedBox(height: tamanioSeparador),
+            _crearCedula(usuario),
             const SizedBox(height: tamanioSeparador),
             _crearNumCelular(usuario),
             const SizedBox(height: tamanioSeparador),
@@ -84,6 +91,16 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
           titulo: "Recuerda que todos los campos son obligatorios");
       return;
     }
+
+    try {
+      usuario.cedula = int.parse(inputControllerCedula.value.text);
+    } catch (e) {
+      customShapeSnackBar(
+          context: context, titulo: 'Número de la cédula inválido');
+
+      return;
+    }
+
     // Verifica que las contraseñas coincidan
     if (inputControllerContrasenia.text != inputControllerConContrasenia.text) {
       customShapeSnackBar(
@@ -115,16 +132,28 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
 
     UsuarioServicio usuarioServicio = UsuarioServicio();
     AutenticacionServicio autenticacionServicio = AutenticacionServicio();
-    final Usuario? response =
-        await usuarioServicio.crearUsuarioServicio(usuario);
+    final response =
+        await usuarioServicio.crearUsuarioServicio(usuario, context);
     // Si todo esta bien redirige a la siguiente página
     keyForm.currentState!.save();
 
-    mostrarShowDialogCargando(context: context, titulo: 'REGISTRO EXITO');
-    await Future.delayed(const Duration(seconds: 1));
-    Navigator.pop(context);
-    autenticacionServicio.usuarioServiciosActual = response!;
-    Navigator.pushReplacementNamed(context, 'inicio');
+    if (response[0] == false) {
+      customShapeSnackBar(context: context, titulo: "Error al registrarse");
+    } else {
+      mostrarShowDialogCargando(context: context, titulo: 'REGISTRO EXITO');
+      await Future.delayed(const Duration(seconds: 1));
+      Navigator.pop(context);
+
+      autenticacionServicio.usuarioServiciosActual =
+          BlocProvider.of<UsuarioBloc>(context).state.usuario;
+
+      mostrarShowDialogConfirmar(
+          context: context,
+          titulo: "Registro",
+          contenido:
+              "Para completar su registro verifique el correo que ingreso, para confirmar su registro",
+          paginaRetorno: 'validarInicioSesion');
+    }
   }
 
   /*____________________________________________________________*/
@@ -140,6 +169,20 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
           'Nombre', 'Ingrese su nombre', context, Colors.white),
       onSaved: (value) => usuario.nombre = value,
       onChanged: (value) => usuario.nombre = value,
+      validator: (value) =>
+          (value!.isEmpty) ? 'Es Obligatorio este campo' : null,
+    );
+  }
+
+  ///  Input - Campo del nombre
+  Widget _crearCedula(Usuario usuario) {
+    return TextFormField(
+      style: styleInput,
+      controller: inputControllerCedula,
+      decoration: input_redondo.inputDecorationRedondo(
+          'Cédula', 'Ingrese su cédula', context, Colors.white),
+      onSaved: (value) => inputControllerCedula.text = value!,
+      onChanged: (value) => inputControllerCedula.text = value,
       validator: (value) =>
           (value!.isEmpty) ? 'Es Obligatorio este campo' : null,
     );
