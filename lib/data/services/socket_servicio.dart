@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pa_donde_app/blocs/chat/chat_bloc.dart';
 import 'package:pa_donde_app/data/models/mensaje_modelo.dart';
+import 'package:pa_donde_app/global/entorno_variable_global.dart';
 // ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -30,8 +31,7 @@ class SocketServicio {
       required this.context,
       required this.token}) {
     // Dart client
-    // _socket = IO.io('http://192.168.13.1:3001', {
-    _socket = IO.io('http://192.168.71.1:3001', {
+    _socket = IO.io(EntornoVariable.socketURL, {
       'transports': ['websocket'],
       'autoConnect': true,
       'forceNew': true,
