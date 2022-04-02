@@ -385,6 +385,8 @@ class _PrincipalPagState extends State<PrincipalPag> {
   /// Es una card general para construir la información de los servicios generales
   Widget cardDeServicio(Servicio servicio) {
     final fecha = servicio.fechayhora.split("T");
+    final size = MediaQuery.of(context).size;
+
     return GestureDetector(
       onTap: () {
         BlocProvider.of<ServicioBloc>(context)
@@ -432,25 +434,24 @@ class _PrincipalPagState extends State<PrincipalPag> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           subTitulosDelServicio(subtitulo: "Origen"),
-                          textoDelServicio(texto: servicio.nombreOrigen),
+                          SizedBox(
+                              width: size.width * 0.55,
+                              child: textoDelServicio(
+                                  texto: servicio.nombreOrigen)),
                           const SizedBox(
                             height: 6,
                           ),
                           subTitulosDelServicio(subtitulo: "Destino"),
-                          textoDelServicio(texto: servicio.nombreDestino)
+                          SizedBox(
+                              width: size.width * 0.55,
+                              child: textoDelServicio(
+                                  texto: servicio.nombreDestino))
                         ],
                       ),
                     ),
                     Column(
                       children: [
-                        Container(
-                            child: subTitulosDelServicio(subtitulo: "Cupos"),
-                            padding: const EdgeInsets.only(right: 50)),
-                        Container(
-                          child:
-                              textoDelServicio(texto: servicio.cantidadCupos),
-                          padding: const EdgeInsets.only(bottom: 18, right: 80),
-                        ),
+                        auxCardCupos(servicio),
                         botonDelServicio("Ver mas", servicio),
                       ],
                     )
@@ -461,6 +462,23 @@ class _PrincipalPagState extends State<PrincipalPag> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget auxCardCupos(Servicio servicio) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          child: subTitulosDelServicio(subtitulo: "Cupos"),
+        ),
+        Container(
+          child: textoDelServicio(texto: servicio.cantidadCupos),
+          padding: const EdgeInsets.only(
+            bottom: 18,
+          ),
+        ),
+      ],
     );
   }
 
@@ -579,10 +597,11 @@ class _PrincipalPagState extends State<PrincipalPag> {
 
   ///
   Widget botonDelServicio(String nombreBoton, Servicio servicio) {
+    final size = MediaQuery.of(context).size;
+
     return Container(
-      height: 40,
-      width: 100,
-      // padding: EdgeInsets.only(bottom: ),
+      height: size.width * 0.1,
+      width: size.width * 0.25,
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.only(
             bottomRight: Radius.circular(10), topLeft: Radius.circular(10)),

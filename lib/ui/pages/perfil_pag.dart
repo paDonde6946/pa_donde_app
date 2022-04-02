@@ -78,8 +78,6 @@ class _PerfilPagState extends State<PerfilPag> {
 
     return Column(
       children: [
-        // const SizedBox(height: 10),
-        // encabezado(),
         const SizedBox(height: 20),
         contenedorImagen(),
         const SizedBox(height: 10),
@@ -91,32 +89,7 @@ class _PerfilPagState extends State<PerfilPag> {
               fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            BtnAnaranja(
-              titulo: "Editar perfil",
-              function: () {
-                SchedulerBinding.instance!.addPostFrameCallback((_) {
-                  Navigator.of(context).push(navegarMapaFadeIn(
-                      context,
-                      EditarPerfilPag(
-                        callbackFunction: callback,
-                      )));
-                });
-              },
-            ),
-            BtnAnaranja(
-              titulo: "Editar contraseña",
-              function: () {
-                SchedulerBinding.instance!.addPostFrameCallback((_) {
-                  Navigator.of(context).push(
-                      navegarMapaFadeIn(context, const EditarContraseniaPag()));
-                });
-              },
-            ),
-          ],
-        ),
+        botonesEditar(),
         const SizedBox(height: 10),
         informacionTextoTitulo("Correo", Icons.mail),
         const SizedBox(height: 10),
@@ -162,6 +135,39 @@ class _PerfilPagState extends State<PerfilPag> {
     );
   }
 
+  Widget botonesEditar() {
+    final size = MediaQuery.of(context).size;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        BtnAnaranja(
+          titulo: "Editar perfil",
+          tamanioLetra: size.width * 0.04,
+          function: () {
+            SchedulerBinding.instance!.addPostFrameCallback((_) {
+              Navigator.of(context).push(navegarMapaFadeIn(
+                  context,
+                  EditarPerfilPag(
+                    callbackFunction: callback,
+                  )));
+            });
+          },
+        ),
+        BtnAnaranja(
+          titulo: "Editar contraseña",
+          tamanioLetra: size.width * 0.04,
+          function: () {
+            SchedulerBinding.instance!.addPostFrameCallback((_) {
+              Navigator.of(context).push(
+                  navegarMapaFadeIn(context, const EditarContraseniaPag()));
+            });
+          },
+        ),
+      ],
+    );
+  }
+
   Widget encabezado() {
     final size = MediaQuery.of(context).size;
 
@@ -190,10 +196,7 @@ class _PerfilPagState extends State<PerfilPag> {
                   titulo: "CONFIRMACIÓN",
                   contenido: 'Usted ha cerrado sesión correctamente',
                   paginaRetorno: 'login');
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (context) => const InicioSesionPag()));
+
               AutenticacionServicio.eliminarToken();
             },
             icon: Icon(Icons.login,
