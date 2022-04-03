@@ -61,6 +61,7 @@ class _BuscadorBarraDestinoState extends State<BuscadorBarraDestino> {
           localizacionBloc.state.ultimaLocalizacion!, resultado.posicion!);
 
       await mapaBloc.dibujarRutaPolyline(context, destino);
+      mapaBloc.moverCamara(destino.puntos[destino.puntos.length - 1]);
       servicio.distancia = destino.distancia.toString();
       servicio.duracion = destino.duracion.toString();
       servicio.polylineRuta = preServicioBloc.state.servicio.polylineRuta;
@@ -92,13 +93,19 @@ class _BuscadorBarraDestinoState extends State<BuscadorBarraDestino> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                preServicioBloc.servicio?.nombreDestino ?? 'Destino',
-                style: TextStyle(
-                  color: preServicioBloc.state.servicio.nombreDestino != null
-                      ? Colors.black
-                      : Theme.of(context).primaryColor,
-                  fontSize: size.width * 0.04,
+              Expanded(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    preServicioBloc.servicio?.nombreDestino ?? 'Destino',
+                    style: TextStyle(
+                      color:
+                          preServicioBloc.state.servicio.nombreDestino != null
+                              ? Colors.black
+                              : Theme.of(context).primaryColor,
+                      fontSize: size.width * 0.04,
+                    ),
+                  ),
                 ),
               ),
               const Icon(Icons.location_on)

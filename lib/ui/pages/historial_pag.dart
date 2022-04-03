@@ -6,7 +6,9 @@ import 'package:intl/intl.dart';
 import 'package:pa_donde_app/blocs/blocs.dart';
 
 import 'package:pa_donde_app/data/models/servicio_modelo.dart';
+import 'package:pa_donde_app/data/models/vehiculo_modelo.dart';
 import 'package:pa_donde_app/data/services/servicios_servicio.dart';
+import 'package:pa_donde_app/global/enums/tipo_vehiculo_enum.dart';
 
 import 'package:pa_donde_app/ui/global_widgets/widgets/cargando_widget.dart';
 import 'package:pa_donde_app/ui/pages/detalle_historial_pag.dart';
@@ -199,7 +201,7 @@ class _HistorialPagState extends State<HistorialPag> {
             );
           },
           child: Card(
-            color: const Color.fromRGBO(238, 246, 232, 1),
+            color: Theme.of(context).backgroundColor,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             margin: const EdgeInsets.all(15),
@@ -207,14 +209,7 @@ class _HistorialPagState extends State<HistorialPag> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Column(
-                  children: [
-                    Container(
-                        padding: EdgeInsets.only(left: size.width * 0.02),
-                        child: cuadroEstrella('5.0')),
-                    const Icon(Icons.person_outlined, size: 45)
-                  ],
-                ),
+                validarImagen(servicio),
                 Container(
                   padding: const EdgeInsets.only(top: 20),
                   child: Container(
@@ -223,8 +218,11 @@ class _HistorialPagState extends State<HistorialPag> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         subTitulosDelServicio(subtitulo: "Destino"),
-                        textoDelServicio(
-                            texto: servicio.nombreDestino.toString()),
+                        SizedBox(
+                          width: size.width * 0.55,
+                          child: textoDelServicio(
+                              texto: servicio.nombreDestino.toString()),
+                        ),
                         const SizedBox(
                           height: 15,
                         ),
@@ -277,7 +275,7 @@ class _HistorialPagState extends State<HistorialPag> {
             );
           },
           child: Card(
-            color: const Color.fromRGBO(238, 246, 232, 1),
+            color: Theme.of(context).backgroundColor,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             margin: const EdgeInsets.all(15),
@@ -285,14 +283,7 @@ class _HistorialPagState extends State<HistorialPag> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Column(
-                  children: [
-                    Container(
-                        padding: EdgeInsets.only(left: size.width * 0.02),
-                        child: cuadroEstrella('5.0')),
-                    const Icon(Icons.drive_eta_outlined, size: 45)
-                  ],
-                ),
+                validarImagen(servicio),
                 Container(
                   padding: const EdgeInsets.only(top: 20),
                   child: Container(
@@ -301,8 +292,11 @@ class _HistorialPagState extends State<HistorialPag> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         subTitulosDelServicio(subtitulo: "Destino"),
-                        textoDelServicio(
-                            texto: servicio.nombreDestino.toString()),
+                        SizedBox(
+                          width: size.width * 0.5,
+                          child: textoDelServicio(
+                              texto: servicio.nombreDestino.toString()),
+                        ),
                         const SizedBox(
                           height: 15,
                         ),
@@ -334,6 +328,31 @@ class _HistorialPagState extends State<HistorialPag> {
           ),
         ),
       ],
+    );
+  }
+
+  ///  Valida la placa del vehiculo que va a prestar el servicio con una lista que se encuentra preCargada en el Bloc
+  Vehiculo _validarVehiculoServicioV(Servicio servicio) {
+    final vehiculos =
+        BlocProvider.of<PreserviciosBloc>(context).state.vehiculos;
+
+    for (var vehiculo in vehiculos) {
+      if (vehiculo.uid == servicio.idVehiculo) {
+        return vehiculo;
+      }
+    }
+    return Vehiculo();
+  }
+
+  Widget validarImagen(Servicio servicio) {
+    final vehiculo = _validarVehiculoServicioV(servicio);
+    final asset = (vehiculo.tipoVehiculo == TipoVehiculo.carro)
+        ? "img/icons/carro_icon.png"
+        : "img/icons/moto_icon.png";
+
+    return Image(
+      image: AssetImage(asset),
+      width: 75,
     );
   }
 

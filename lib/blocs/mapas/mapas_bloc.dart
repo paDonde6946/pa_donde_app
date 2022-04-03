@@ -99,8 +99,10 @@ class MapsBloc extends Bloc<MapsEvent, MapsState> {
       color: Theme.of(context).primaryColor,
       points: rutaDestino.puntos,
       width: 5,
-      startCap: Cap.roundCap,
+      startCap: Cap.buttCap,
       endCap: Cap.roundCap,
+      geodesic: true,
+      jointType: JointType.round,
     );
 
     /// Transformacion de la informacion para mostrar la distancia y duracion

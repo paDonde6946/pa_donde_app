@@ -232,8 +232,6 @@ class _VehiculoPagState extends State<VehiculoPag> {
               EditarVehiculo(
                 vehiculo: vehiculos[i],
               )));
-
-          // Navigator.pushNamed(context, 'editarVehiculo', arguments: vehiculos[i]);
         },
         child: CardVehiculo(
             icon: validarImagen(vehiculos[i]),

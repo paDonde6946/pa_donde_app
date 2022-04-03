@@ -72,10 +72,10 @@ class _RutaPagState extends State<RutaPag> {
                 polylines.removeWhere((key, value) => key == 'miRuta');
               }
 
-              // if (preServicio.servicio != null) {
-              //   BlocProvider.of<BusquedaBloc>(context)
-              //       .add(OnDesactivarMarcadorManual());
-              // }
+              if (preServicio.servicio != null) {
+                BlocProvider.of<BusquedaBloc>(context)
+                    .add(OnDesactivarMarcadorManual());
+              }
 
               return Stack(
                 children: [

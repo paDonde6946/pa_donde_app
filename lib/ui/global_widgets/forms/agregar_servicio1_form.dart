@@ -34,11 +34,11 @@ class _AgregarServicioParte1State extends State<AgregarServicioParte1> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    taminoLetra = size.width * 0.04;
+    taminoLetra = size.width * 0.038;
 
     validarExistenciaCampos();
     // Espacio entre cada input
-    const tamanioSeparador = 7.0;
+    const tamanioSeparador = 0.0;
     return Form(
       key: keyForm,
       child: Container(
@@ -154,7 +154,6 @@ class _AgregarServicioParte1State extends State<AgregarServicioParte1> {
     return TextFormField(
       keyboardType: TextInputType.number,
       controller: inputCupos,
-      scrollPadding: const EdgeInsets.all(1),
       cursorColor: Theme.of(context).primaryColor,
       onSaved: (value) => cupos = int.parse(value!),
       decoration: inputDecoration(
@@ -261,7 +260,7 @@ class _AgregarServicioParte1State extends State<AgregarServicioParte1> {
         padding: EdgeInsets.symmetric(horizontal: size.width * 0.006),
         width: size.width,
         child: Container(
-          height: 50,
+          height: 53,
           padding: EdgeInsets.symmetric(
               horizontal: size.width * 0.03, vertical: size.width * 0.04),
           child: Row(

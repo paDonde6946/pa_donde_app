@@ -24,7 +24,7 @@ class MapaView extends StatelessWidget {
 
     final CameraPosition initialCameraPosition = CameraPosition(
       target: initialLocalizacion,
-      zoom: 15,
+      zoom: 12,
     );
 
     final size = MediaQuery.of(context).size;

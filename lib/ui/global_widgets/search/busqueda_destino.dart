@@ -84,14 +84,14 @@ class BusquedaDestino extends SearchDelegate<BusquedaResultado> {
 
     return ListView(
       children: [
-        ListTile(
-          leading: const Icon(Icons.location_on_outlined),
-          title: const Text("Colocar ubicacion manulamente"),
-          onTap: () {
-            /// El usuario no cancelo pero si elijo la opcion manualmente
-            close(context, BusquedaResultado(cancelo: false, manual: true));
-          },
-        ),
+        // ListTile(
+        //   leading: const Icon(Icons.location_on_outlined),
+        //   title: const Text("Colocar ubicacion manulamente"),
+        //   onTap: () {
+        //     /// El usuario no cancelo pero si elijo la opcion manualmente
+        //     close(context, BusquedaResultado(cancelo: false, manual: true));
+        //   },
+        // ),
         ...historial.map((lugar) => ListTile(
               title: Text(lugar.text!),
               subtitle: Text(lugar.placeName!),

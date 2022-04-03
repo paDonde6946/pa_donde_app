@@ -126,8 +126,10 @@ class _AgregarServicioParte2State extends State<AgregarServicioParte2> {
 
   /// Crea el listado de los carros del usuario
   Widget listadoCarros() {
+    final size = MediaQuery.of(context).size;
+
     return Container(
-      margin: const EdgeInsets.only(top: 10),
+      margin: EdgeInsets.only(top: size.height * 0.03),
       child: BlocBuilder<PreserviciosBloc, PreserviciosState>(
         builder: (context, snapshot) {
           return ListView.builder(

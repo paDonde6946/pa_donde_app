@@ -88,7 +88,7 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
 
     return Scaffold(
       appBar: appBar(),
-      body: ListView(
+      body: Column(
         children: [
           cardDeServicio(),
           SizedBox(height: size.height * 0.01),
@@ -254,10 +254,11 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
     final size = MediaQuery.of(context).size;
 
     return Container(
+        height: size.height * 0.24,
         padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Column(
+        child: ListView(
           children: [
-            tituloDelServicio(titulo: 'Tus pasajeros'),
+            Center(child: tituloDelServicio(titulo: 'Tus pasajeros')),
             SizedBox(height: size.height * 0.015),
             pasajeros(),
             SizedBox(height: size.height * 0.015),

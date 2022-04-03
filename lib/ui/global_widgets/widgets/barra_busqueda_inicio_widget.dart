@@ -68,14 +68,20 @@ class _BuscadorBarraInicioState extends State<BuscadorBarraInicio> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                preServicioBloc.state.servicio.nombreOrigen ?? 'Origen',
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: preServicioBloc.state.servicio.nombreOrigen != null
-                      ? Colors.black
-                      : Theme.of(context).primaryColor,
-                  fontSize: size.width * 0.04,
+              Expanded(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    preServicioBloc.state.servicio.nombreOrigen ?? 'Origen',
+                    // overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: TextStyle(
+                      color: preServicioBloc.state.servicio.nombreOrigen != null
+                          ? Colors.black
+                          : Theme.of(context).primaryColor,
+                      fontSize: size.width * 0.04,
+                    ),
+                  ),
                 ),
               ),
               const Icon(Icons.push_pin_outlined)
