@@ -147,14 +147,18 @@ class _DetalleServicioPagState extends State<DetalleServicioPag> {
           funtionContinuar: () async {
             final servicioBloc = BlocProvider.of<ServicioBloc>(context);
 
-            servicioBloc.buscarYactualizarServicioGenerales(servicio);
-
-            servicioBloc.actualizarServicioPostulado(servicio);
-
             final validar =
                 await ServicioRServicio().postularseServicio(servicio.uid);
             Navigator.of(context, rootNavigator: true).pop(context);
             if (validar) {
+              servicioBloc.buscarYactualizarServicioGenerales(servicio);
+
+              /// Obtiene los servicios que se ha postulado el usuario
+              final serviciosPostulados =
+                  await ServicioRServicio().darServiciosPostuladosPorUsuario();
+              BlocProvider.of<ServicioBloc>(context)
+                  .add(OnActualizarServiciosPostulados(serviciosPostulados));
+
               mostrarShowDialogCargando(
                   context: context, titulo: 'Postulandose...');
               await Future.delayed(const Duration(seconds: 2));

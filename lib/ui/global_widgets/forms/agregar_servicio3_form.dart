@@ -109,7 +109,7 @@ class _AgregarServicioParte3State extends State<AgregarServicioParte3> {
                   .jumpToPage(2);
             },
             icon: const Icon(Icons.arrow_back_ios_sharp)),
-        const Text("Seleccione un precio para el servicio"),
+        const Text("Seleccione el valor del auxilio que desea recibir"),
         Container(width: 40)
       ],
     );
