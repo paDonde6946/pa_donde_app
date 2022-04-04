@@ -119,14 +119,15 @@ class _AgregarServicioParte1State extends State<AgregarServicioParte1> {
         servicioBloc.cantidadCupos =
             int.parse(inputCupos.text.replaceAll(" ", ""));
         if (servicioBloc.cantidadCupos <= 0 ||
-            servicioBloc.cantidadCupos >= 6) {
+            servicioBloc.cantidadCupos >= 5) {
           mostrarShowDialogInformativo(
               context: context,
               titulo: 'Cupos',
               contenido:
-                  "La cantidad de cupos no es valida. Debe de ingresar un valor entre 1 y 5");
+                  "La cantidad de cupos no es valida. Debe de ingresar un valor entre 1 y 4");
         } else {
-          if (diferenciaHoras > 24 && fecha2 != '' && hora2 != '') {
+          if (diferenciaHoras < 0 ||
+              diferenciaHoras > 24 && fecha2 != '' && hora2 != '') {
             mostrarShowDialogInformativo(
                 context: context,
                 titulo: 'Fecha del Servicio',
@@ -185,7 +186,6 @@ class _AgregarServicioParte1State extends State<AgregarServicioParte1> {
   /// Configuracion del pop up para mostrar el calendario
   _seleccionarFechaServicio() async {
     DateTime selectedDate = DateTime.now();
-
     DateTime? _fechaDada = await showDatePicker(
       context: context,
       initialDate: selectedDate, // Refer step 1
@@ -207,8 +207,12 @@ class _AgregarServicioParte1State extends State<AgregarServicioParte1> {
       },
     );
 
+    print(_fechaDada);
     if (_fechaDada != null) {
       setState(() {
+        final servicioBloc =
+            BlocProvider.of<PreserviciosBloc>(context).state.servicio;
+        servicioBloc.fechayhora = null;
         final fechaModificada = DateTime.parse(_fechaDada.toString());
         fecha2 = fechaModificada.toString().split(" ")[0];
       });

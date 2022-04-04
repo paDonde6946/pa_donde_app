@@ -4,6 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/blocs/blocs.dart';
+import 'package:pa_donde_app/data/models/servicio_modelo.dart';
+import 'package:pa_donde_app/data/models/vehiculo_modelo.dart';
+import 'package:pa_donde_app/global/enums/tipo_vehiculo_enum.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/informativo_show.dart';
 //---------------------------------------------------------------------
 
@@ -77,6 +80,31 @@ class _AgregarServicioParte2State extends State<AgregarServicioParte2> {
     }
   }
 
+  ///  Valida la placa del vehiculo que va a prestar el servicio con una lista que se encuentra preCargada en el Bloc
+  Vehiculo _validarVehiculoServicioV(String placa) {
+    final vehiculos =
+        BlocProvider.of<PreserviciosBloc>(context).state.vehiculos;
+
+    for (var vehiculo in vehiculos) {
+      if (vehiculo.placa == placa) {
+        return vehiculo;
+      }
+    }
+    return Vehiculo();
+  }
+
+  Widget validarImagen(String placa) {
+    final vehiculo = _validarVehiculoServicioV(placa);
+    final asset = (vehiculo.tipoVehiculo == TipoVehiculo.carro)
+        ? "img/icons/carro_icon.png"
+        : "img/icons/moto_icon.png";
+
+    return Image(
+      image: AssetImage(asset),
+      width: 75,
+    );
+  }
+
   /// Se crea la card general para poder mostrar los datos especificos de un carro
   Widget _cardCarro(String nombre, int posicion) {
     final size = MediaQuery.of(context).size;
@@ -94,10 +122,7 @@ class _AgregarServicioParte2State extends State<AgregarServicioParte2> {
           child: Row(
             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(
-                width: size.width * 0.1,
-                child: Icon(Icons.drive_eta_outlined, size: size.width * 0.10),
-              ),
+              SizedBox(width: size.width * 0.1, child: validarImagen(nombre)),
               Container(
                 padding: const EdgeInsets.only(left: 30),
                 width: size.width * 0.6,
