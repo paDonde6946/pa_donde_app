@@ -121,13 +121,15 @@ class _FormEditarContraseniaState extends State<FormEditarContrasenia> {
     final response = await usuarioServicio
         .cambiarContrasenia(inputControllerContrasenia.text.trim());
 
-    // ignore: unnecessary_null_comparison
-    if (response == null) {
-      customShapeSnackBar(context: context, titulo: 'Información invalida');
-    } else {
-      final usuario = BlocProvider.of<UsuarioBloc>(context).state.usuario;
-      usuario.cambioContrasenia = 0;
-      BlocProvider.of<UsuarioBloc>(context).add(OnActualizarUsuario(usuario));
+    if (mounted) {
+      // ignore: unnecessary_null_comparison
+      if (response == null) {
+        customShapeSnackBar(context: context, titulo: 'Información invalida');
+      } else {
+        final usuario = BlocProvider.of<UsuarioBloc>(context).state.usuario;
+        usuario.cambioContrasenia = 0;
+        BlocProvider.of<UsuarioBloc>(context).add(OnActualizarUsuario(usuario));
+      }
     }
   }
 }
