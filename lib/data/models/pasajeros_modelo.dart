@@ -8,8 +8,8 @@ class Pasajero {
   String? nombre;
 
   factory Pasajero.fromJson(dynamic json) => Pasajero(
-        id: json[0].toString(),
-        nombre: json[1],
+        id: json["_id"].toString(),
+        nombre: json["nombre"],
       );
 
   Map<String, dynamic> toJson() => {
