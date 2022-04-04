@@ -109,10 +109,12 @@ class _InicioSesionPagState extends State<InicioSesionPag> {
 
   /// Widget para UI de la pantalla, semicirculo verde
   Widget semicirculoSuperior() {
+    final size = MediaQuery.of(context).size;
+
     return Positioned(
-      bottom: 70,
-      left: 100,
-      right: 210,
+      bottom: size.width * 0.15,
+      left: size.width * 0.26,
+      right: size.width * 0.505,
       child: Container(
         height: 50,
         width: 80,
@@ -134,10 +136,12 @@ class _InicioSesionPagState extends State<InicioSesionPag> {
 
   /// Widget para UI de la pantalla, semicirculo blanco
   Widget semicirculoInferior() {
+    final size = MediaQuery.of(context).size;
+
     return Positioned(
-      bottom: 20,
-      left: 202,
-      right: 110,
+      bottom: size.width * 0.04,
+      left: size.width * 0.494,
+      right: size.width * 0.27,
       child: Container(
         padding: const EdgeInsets.only(bottom: 40),
         height: 70,
