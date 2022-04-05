@@ -56,8 +56,11 @@ class ServicioRServicio {
       HttpHeaders.contentTypeHeader: 'application/json',
     };
 
-    final body = servicioToJson(servicio);
-
+    var body = servicioToJson(servicio);
+    var uidVehiculo = servicio.idVehiculo.uid;
+    var textoRemplazar = '{"placa":null,"uid":"$uidVehiculo"}';
+    var textoRemplazado = '"$uidVehiculo"';
+    body = body.replaceAll(textoRemplazar, textoRemplazado);
     final response = await http.post(url, headers: headers, body: body);
 
     if (response.statusCode == 200) {
