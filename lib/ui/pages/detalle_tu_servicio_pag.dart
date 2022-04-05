@@ -104,7 +104,6 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
   PreferredSizeWidget appBar() {
     final size = MediaQuery.of(context).size;
 
-    callbackFunction;
     return AppBar(
         centerTitle: true,
         foregroundColor: Colors.black,

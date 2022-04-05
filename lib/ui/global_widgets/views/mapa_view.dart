@@ -42,8 +42,9 @@ class MapaView extends StatelessWidget {
           myLocationButtonEnabled: false,
           zoomControlsEnabled: false,
           polylines: polylines,
-          onMapCreated: (controller) =>
-              mapaBloc.add(OnMapaInicializadoEvent(controller)),
+          onMapCreated: (controller) {
+            mapaBloc.add(OnMapaInicializadoEvent(controller));
+          },
           onCameraMove: (position) => mapaBloc.centroMapa = position.target,
           markers: markers,
         ),

@@ -19,7 +19,7 @@ part 'mapas_state.dart';
 class MapsBloc extends Bloc<MapsEvent, MapsState> {
   final LocalizacionBloc localizacionBloc;
 
-  GoogleMapController? _googleMapController;
+  GoogleMapController? googleMapController;
   LatLng? centroMapa;
 
   StreamSubscription<LocalizacionState>? localizacionStateSubscricion;
@@ -54,15 +54,19 @@ class MapsBloc extends Bloc<MapsEvent, MapsState> {
 
   /// Evento para poder controlar el mapa cuando inicia y establecer el estilo del mismo
   void _onInitMapa(OnMapaInicializadoEvent event, Emitter<MapsState> emit) {
-    _googleMapController = event.controller;
-    _googleMapController!.setMapStyle(jsonEncode(estiloMapaTheme));
+    googleMapController = event.controller;
+    final marcadorActual = Map<String, Marker>.from(state.markers);
+    final polylineActual = Map<String, Polyline>.from(state.polylines);
+    add(OnMostrarPolylineEvent(polylineActual, marcadorActual));
+
+    googleMapController!.setMapStyle(jsonEncode(estiloMapaTheme));
     emit(state.copyWith(estaMapaInicializado: true));
   }
 
   /// Evento que permite ubicar al usuario en el mapa
   void moverCamara(LatLng nuevaLocalizacion) {
     final camaraActualizar = CameraUpdate.newLatLng(nuevaLocalizacion);
-    _googleMapController?.animateCamera(camaraActualizar);
+    googleMapController?.animateCamera(camaraActualizar);
   }
 
   /// Evento que permite seguir el usuario
@@ -140,6 +144,27 @@ class MapsBloc extends Bloc<MapsEvent, MapsState> {
     final marcadorActual = Map<String, Marker>.from(state.markers);
     marcadorActual['inicial'] = marcadorInicial;
     marcadorActual['final'] = marcadorFinal;
+
+    add(OnMostrarPolylineEvent(polylineActual, marcadorActual));
+  }
+
+  Future dibujarRutaPolylineSinMarker(
+      BuildContext context, RutaDestino rutaDestino) async {
+    final ruta = Polyline(
+      polylineId: const PolylineId("ruta"),
+      color: Theme.of(context).primaryColor,
+      points: rutaDestino.puntos,
+      width: 5,
+      startCap: Cap.buttCap,
+      endCap: Cap.roundCap,
+      geodesic: true,
+      jointType: JointType.round,
+    );
+
+    final polylineActual = Map<String, Polyline>.from(state.polylines);
+    polylineActual['ruta'] = ruta;
+
+    final marcadorActual = Map<String, Marker>.from(state.markers);
 
     add(OnMostrarPolylineEvent(polylineActual, marcadorActual));
   }

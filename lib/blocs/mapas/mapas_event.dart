@@ -27,6 +27,6 @@ class OnRutaAlternarUsuario extends MapsEvent {}
 
 class OnMostrarPolylineEvent extends MapsEvent {
   final Map<String, Polyline> polylines;
-  final Map<String, Marker> markers;
+  final Map<String, Marker>? markers;
   const OnMostrarPolylineEvent(this.polylines, this.markers);
 }

@@ -248,7 +248,7 @@ class _DetalleHistorialServicioPagState
 
     return FutureBuilder(
       builder: (context, snapshot) {
-        mapaBloc.dibujarRutaPolyline(context, destino);
+        mapaBloc.dibujarRutaPolylineSinMarker(context, destino);
         return SlidingUpPanel(
           margin: const EdgeInsets.all(15),
           maxHeight: size.height * 0.45,

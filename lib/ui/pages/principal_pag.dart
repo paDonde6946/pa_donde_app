@@ -48,7 +48,7 @@ class _PrincipalPagState extends State<PrincipalPag> {
   Widget build(BuildContext context) {
     validarCalificarConductor();
     validarCambioContrasenia();
-
+    refrescar();
     return Scaffold(appBar: appBar(), body: body());
   }
 
