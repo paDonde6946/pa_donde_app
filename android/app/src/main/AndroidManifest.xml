@@ -20,7 +20,7 @@
 
    <application
    
-        android:label="pa_donde_app"
+        android:label="Pa Donde"
         android:icon="@mipmap/ic_launcher">
 
         <meta-data android:name="com.google.android.geo.API_KEY"
