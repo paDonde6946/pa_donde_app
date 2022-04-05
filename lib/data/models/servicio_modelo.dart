@@ -14,7 +14,7 @@ class Servicio {
   String? _nombreOrigen;
   String? _nombreDestino;
   String? _polylineRuta;
-  String? _idVehiculo;
+  IdVehiculo? _idVehiculo;
   String? _fechayhora;
   int? _cantidadCupos;
   String? _auxilioEconomico;
@@ -32,7 +32,7 @@ class Servicio {
       String? pNombreDestino,
       String? pPolylineRuta,
       String? pFechayhora,
-      String? pIdVehiculo,
+      IdVehiculo? pIdVehiculo,
       int? pCantidadCupos,
       String? pAuxilioEconomico,
       String? pDistancia,
@@ -65,7 +65,7 @@ class Servicio {
       pNombreDestino: json["nombreDestino"],
       pPolylineRuta: json["polylineRuta"],
       pFechayhora: json["fechayhora"],
-      pIdVehiculo: json["idVehiculo"],
+      pIdVehiculo: IdVehiculo.fromJson(json["idVehiculo"]),
       pCantidadCupos: json["cantidadCupos"],
       pAuxilioEconomico: json["idAuxilioEconomico"],
       pDistancia: json["distancia"],
@@ -82,7 +82,7 @@ class Servicio {
         "nombreDestino": nombreDestino,
         "polylineRuta": polylineRuta,
         "fechayhora": fechayhora.toString(),
-        "idVehiculo": idVehiculo,
+        "idVehiculo": idVehiculo.toJson(),
         "cantidadCupos": cantidadCupos,
         "idAuxilioEconomico": auxilioEconomico,
         "distancia": distancia,
@@ -181,4 +181,24 @@ class Servicio {
   set nombreConductor(pNombreConductor) {
     _nombreConductor = pNombreConductor;
   }
+}
+
+class IdVehiculo {
+  IdVehiculo({
+    this.placa,
+    this.uid,
+  });
+
+  String? placa;
+  String? uid;
+
+  factory IdVehiculo.fromJson(Map<String, dynamic> json) => IdVehiculo(
+        placa: json["placa"],
+        uid: json["uid"] ?? json["_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "placa": placa,
+        "uid": uid,
+      };
 }

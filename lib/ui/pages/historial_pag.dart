@@ -184,7 +184,7 @@ class _HistorialPagState extends State<HistorialPag> {
 
   Widget cardDeServicioUsuario(Servicio servicio) {
     final size = MediaQuery.of(context).size;
-    final placa = _validarVehiculoServicio(servicio.idVehiculo);
+    final placa = _validarVehiculoServicio(servicio.idVehiculo.uid);
     final auxilio = _validarPrecioServicio(servicio.auxilioEconomico);
     final fecha = servicio.fechayhora.split("T");
 
@@ -246,7 +246,7 @@ class _HistorialPagState extends State<HistorialPag> {
                       height: 5,
                     ),
                     subTitulosDelServicio(subtitulo: "Placa"),
-                    textoDelServicio(texto: placa),
+                    textoDelServicio(texto: servicio.idVehiculo.placa),
                   ],
                 ),
               ],
@@ -259,7 +259,7 @@ class _HistorialPagState extends State<HistorialPag> {
 
   Widget cardDeServicioConductor(Servicio servicio) {
     final size = MediaQuery.of(context).size;
-    final placa = _validarVehiculoServicio(servicio.idVehiculo);
+    final placa = _validarVehiculoServicio(servicio.idVehiculo.uid);
     final auxilio = _validarPrecioServicio(servicio.auxilioEconomico);
     final fecha = servicio.fechayhora.split("T");
     return Column(
@@ -337,7 +337,7 @@ class _HistorialPagState extends State<HistorialPag> {
         BlocProvider.of<PreserviciosBloc>(context).state.vehiculos;
 
     for (var vehiculo in vehiculos) {
-      if (vehiculo.uid == servicio.idVehiculo) {
+      if (vehiculo.uid == servicio.idVehiculo.uid) {
         return vehiculo;
       }
     }

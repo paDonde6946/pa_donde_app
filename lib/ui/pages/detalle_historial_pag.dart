@@ -32,7 +32,7 @@ class _DetalleHistorialServicioPagState
   }
 
   Widget body() {
-    final placa = _validarVehiculoServicio(servicio.idVehiculo);
+    final placa = _validarVehiculoServicio(servicio.idVehiculo.uid);
     final auxilio = _validarPrecioServicio(servicio.auxilioEconomico);
     final fecha = servicio.fechayhora.split("T");
     return Column(

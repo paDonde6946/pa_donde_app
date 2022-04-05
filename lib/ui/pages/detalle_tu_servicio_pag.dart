@@ -158,7 +158,7 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     subTitulosDelServicio(subtitulo: "Placa"),
-                    textoDelServicio(texto: placa),
+                    textoDelServicio(texto: servicio.idVehiculo.placa),
                     const SizedBox(height: 6),
                     subTitulosDelServicio(subtitulo: "Valor servicio"),
                     textoDelServicio(texto: precio),
@@ -195,7 +195,7 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
         BlocProvider.of<PreserviciosBloc>(context).state.vehiculos;
 
     for (var vehiculo in vehiculos) {
-      if (vehiculo.uid == servicio.idVehiculo) {
+      if (vehiculo.uid == servicio.idVehiculo.uid) {
         return vehiculo.placa;
       }
     }
