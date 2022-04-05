@@ -175,17 +175,24 @@ class _DetalleHistorialServicioPagState
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               subTitulosDelServicio(subtitulo: "Origen"),
-                              textoDelServicio(texto: origen),
+                              SizedBox(
+                                  width: size.width * 0.45,
+                                  child: textoDelServicio(texto: origen)),
                               SizedBox(
                                 height: size.height * 0.01,
                               ),
                               subTitulosDelServicio(subtitulo: "Destino"),
-                              textoDelServicio(texto: destino),
+                              SizedBox(
+                                  width: size.width * 0.45,
+                                  child: textoDelServicio(texto: destino)),
                               SizedBox(
                                 height: size.height * 0.01,
                               ),
-                              subTitulosDelServicio(subtitulo: "Conductor"),
-                              textoDelServicio(texto: nombreConductor),
+                              // subTitulosDelServicio(subtitulo: "Conductor"),
+                              // SizedBox(
+                              //     width: size.width * 0.45,
+                              //     child:
+                              //         textoDelServicio(texto: nombreConductor)),
                             ],
                           ),
                         ),

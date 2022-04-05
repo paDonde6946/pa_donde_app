@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -71,21 +72,51 @@ class _PrincipalPagState extends State<PrincipalPag> {
     final serviciosPostulados =
         BlocProvider.of<ServicioBloc>(context).state.serviciosPostulados;
 
-    return Stack(
-      children: [
-        Column(
+    return RefreshIndicator(
+        child: Stack(
           children: [
-            serviciosDelUsuario.isEmpty
-                ? Container()
-                : mostrarServiciosDelUsuario(),
-            serviciosPostulados.isEmpty
-                ? Container()
-                : mostrarServiciosPostulados(),
+            Column(
+              children: [
+                serviciosDelUsuario.isEmpty
+                    ? Container()
+                    : mostrarServiciosDelUsuario(),
+                serviciosPostulados.isEmpty
+                    ? Container()
+                    : mostrarServiciosPostulados(),
+              ],
+            ),
+            mostrarPanelServiciosGenerales(),
           ],
         ),
-        mostrarPanelServiciosGenerales(),
-      ],
-    );
+        onRefresh: refrescar);
+  }
+
+  Future<void> refrescar() async {
+    await traerDatos();
+    setState(() {});
+  }
+
+  Future traerDatos() async {
+    /// Obtiene los servicios que han sido creados por el usuario
+    final serviciosDelUsuario =
+        await ServicioRServicio().darServiciosCreadosPorUsuario();
+
+    BlocProvider.of<ServicioBloc>(context)
+        .add(OnActualizarServiciosDelUsuario(serviciosDelUsuario));
+
+    /// Obtiene los servicios que se ha postulado el usuario
+    final serviciosPostulados =
+        await ServicioRServicio().darServiciosPostuladosPorUsuario();
+
+    BlocProvider.of<ServicioBloc>(context)
+        .add(OnActualizarServiciosPostulados(serviciosPostulados));
+
+    /// Obtiene los servicios que generales que el usuario puede postularse
+    final serviciosGenerales =
+        await ServicioRServicio().darServiciosGenerales();
+
+    BlocProvider.of<ServicioBloc>(context)
+        .add(OnActualizarServiciosGenerales(serviciosGenerales));
   }
 
   /// Valida si el usuario ya realizo un cambio de contraseña, por el método del olvido de contraseña
