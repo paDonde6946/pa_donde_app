@@ -96,9 +96,11 @@ class _FormEditarContraseniaState extends State<FormEditarContrasenia> {
 
   /// Se crea el boton registro que es el encargado de validar la información y redirigir a la siguiente página
   Widget _crearBtnInicioSesion() {
+    final size = MediaQuery.of(context).size;
+
     return Center(
       child: BtnAnaranja(
-          tamanioLetra: 17,
+          tamanioLetra: size.width * 0.036,
           function: validarContrasenia,
           titulo: 'Editar contraseña'),
     );

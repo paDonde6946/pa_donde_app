@@ -58,7 +58,6 @@ class MapsBloc extends Bloc<MapsEvent, MapsState> {
     final marcadorActual = Map<String, Marker>.from(state.markers);
     final polylineActual = Map<String, Polyline>.from(state.polylines);
     add(OnMostrarPolylineEvent(polylineActual, marcadorActual));
-
     googleMapController!.setMapStyle(jsonEncode(estiloMapaTheme));
     emit(state.copyWith(estaMapaInicializado: true));
   }
@@ -83,7 +82,7 @@ class MapsBloc extends Bloc<MapsEvent, MapsState> {
       ActualizarUsuarioPolylineEvent event, Emitter<MapsState> emit) {
     final miRuta = Polyline(
       polylineId: const PolylineId("miRuta"),
-      color: Colors.black,
+      color: Colors.white,
       width: 5,
       startCap: Cap.roundCap,
       endCap: Cap.roundCap,
@@ -163,6 +162,14 @@ class MapsBloc extends Bloc<MapsEvent, MapsState> {
 
     final polylineActual = Map<String, Polyline>.from(state.polylines);
     polylineActual['ruta'] = ruta;
+
+    final marcadorActual = Map<String, Marker>.from(state.markers);
+
+    add(OnMostrarPolylineEvent(polylineActual, marcadorActual));
+  }
+
+  Future desDibujarRutaPolylineSinMarker(BuildContext context) async {
+    final polylineActual = Map<String, Polyline>.from(state.polylines);
 
     final marcadorActual = Map<String, Marker>.from(state.markers);
 
