@@ -207,7 +207,6 @@ class _AgregarServicioParte1State extends State<AgregarServicioParte1> {
       },
     );
 
-    print(_fechaDada);
     if (_fechaDada != null) {
       setState(() {
         final servicioBloc =

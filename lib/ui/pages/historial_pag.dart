@@ -184,7 +184,7 @@ class _HistorialPagState extends State<HistorialPag> {
 
   Widget cardDeServicioUsuario(Servicio servicio) {
     final size = MediaQuery.of(context).size;
-    final placa = _validarVehiculoServicio(servicio.idVehiculo.uid);
+    // final placa = _validarVehiculoServicio(servicio.idVehiculo.uid);
     final auxilio = _validarPrecioServicio(servicio.auxilioEconomico);
     final fecha = servicio.fechayhora.split("T");
 

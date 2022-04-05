@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/models/usuario_modelo.dart';
-import 'package:pa_donde_app/data/services/autencicacion_servicio.dart';
 
 import 'package:pa_donde_app/data/services/usuario_servicio.dart';
 import 'package:pa_donde_app/global/regexp/regexp_locales.dart';
@@ -13,7 +11,6 @@ import 'package:pa_donde_app/ui/global_widgets/inputs/input_form_redondo.dart'
     as input_redondo;
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
 
-import 'package:pa_donde_app/blocs/usuario/usuario_bloc.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/confirmacion_show.dart';
 
 import 'package:pa_donde_app/ui/utils/snack_bars.dart';

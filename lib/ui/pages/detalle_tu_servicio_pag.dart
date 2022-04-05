@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
+import 'package:pa_donde_app/ui/global_widgets/views/mapa_view_mostrar.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -22,7 +23,6 @@ import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja_icono.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/validacion_show.dart';
-import 'package:pa_donde_app/ui/global_widgets/views/mapa_view.dart';
 import 'package:pa_donde_app/ui/helpers/helpers.dart';
 import 'package:pa_donde_app/ui/pages/chat_pag.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/calificar_show.dart';
@@ -119,7 +119,7 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
   Widget cardDeServicio() {
     final fecha = servicio.fechayhora.split("T");
     final precio = _validarPrecioServicio();
-    final placa = _validarVehiculoServicio();
+    // final placa = _validarVehiculoServicio();
     final size = MediaQuery.of(context).size;
     return Card(
       color: Theme.of(context).backgroundColor,
@@ -190,17 +190,17 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
   }
 
   ///  Valida la placa del vehiculo que va a prestar el servicio con una lista que se encuentra preCargada en el Bloc
-  String _validarVehiculoServicio() {
-    final vehiculos =
-        BlocProvider.of<PreserviciosBloc>(context).state.vehiculos;
+  // String _validarVehiculoServicio() {
+  //   final vehiculos =
+  //       BlocProvider.of<PreserviciosBloc>(context).state.vehiculos;
 
-    for (var vehiculo in vehiculos) {
-      if (vehiculo.uid == servicio.idVehiculo.uid) {
-        return vehiculo.placa;
-      }
-    }
-    return '';
-  }
+  //   for (var vehiculo in vehiculos) {
+  //     if (vehiculo.uid == servicio.idVehiculo.uid) {
+  //       return vehiculo.placa;
+  //     }
+  //   }
+  //   return '';
+  // }
 
   /// Muestra el mapa con la ruta establecida de destino.
   Widget _mostrarMapa() {
@@ -222,7 +222,7 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
 
     return FutureBuilder(
       builder: (context, snapshot) {
-        mapaBloc.dibujarRutaPolylineSinMarker(context, destino);
+        mapaBloc.dibujarRutaPolyline(context, destino);
         return SlidingUpPanel(
           margin: const EdgeInsets.all(15),
           maxHeight: size.height * 0.278,
@@ -235,7 +235,7 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
             return BlocBuilder<MapsBloc, MapsState>(
                 builder: (context, mapState) {
               Map<String, Polyline> polylines = Map.from(mapState.polylines);
-              return MapaView(
+              return MapaViewMostrar(
                   initialLocalizacion: latLngLista[latLngLista.length - 1],
                   markers: mapState.markers.values.toSet(),
                   polylines: polylines.values.toSet());
