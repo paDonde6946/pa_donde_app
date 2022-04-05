@@ -73,22 +73,24 @@ class _PrincipalPagState extends State<PrincipalPag> {
         BlocProvider.of<ServicioBloc>(context).state.serviciosPostulados;
 
     return RefreshIndicator(
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                serviciosDelUsuario.isEmpty
-                    ? Container()
-                    : mostrarServiciosDelUsuario(),
-                serviciosPostulados.isEmpty
-                    ? Container()
-                    : mostrarServiciosPostulados(),
-              ],
-            ),
-            mostrarPanelServiciosGenerales(),
-          ],
-        ),
-        onRefresh: refrescar);
+      child: Stack(
+        children: [
+          Column(
+            children: [
+              serviciosDelUsuario.isEmpty
+                  ? Container()
+                  : mostrarServiciosDelUsuario(),
+              serviciosPostulados.isEmpty
+                  ? Container()
+                  : mostrarServiciosPostulados(),
+            ],
+          ),
+          mostrarPanelServiciosGenerales(),
+        ],
+      ),
+      onRefresh: refrescar,
+      color: Theme.of(context).primaryColor,
+    );
   }
 
   Future<void> refrescar() async {
@@ -322,7 +324,9 @@ class _PrincipalPagState extends State<PrincipalPag> {
         },
       );
     }
-    return sinServicios("No existen servicios generales en el momento");
+    return ListView(
+      children: [sinServicios("No existen servicios generales en el momento")],
+    );
   }
 
   Widget sinServicios(String nombre) {

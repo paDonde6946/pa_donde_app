@@ -51,8 +51,8 @@ class _AgregarServicioParte2State extends State<AgregarServicioParte2> {
             onPressed: () {
               final servicioBloc = BlocProvider.of<PreserviciosBloc>(context);
               if (seleccion >= 0) {
-                servicioBloc.servicio!.idVehiculo.uid =
-                    servicioBloc.vehiculos![seleccion].uid;
+                servicioBloc.servicio!.idVehiculo =
+                    IdVehiculo(uid: servicioBloc.vehiculos![seleccion].uid);
                 servicioBloc.add(OnCrearServicio(servicioBloc.servicio!));
                 servicioBloc.controller!.jumpToPage(3);
               } else {
@@ -71,7 +71,7 @@ class _AgregarServicioParte2State extends State<AgregarServicioParte2> {
   void validarContieneDatos() {
     final servicioBloc = BlocProvider.of<PreserviciosBloc>(context);
 
-    if (servicioBloc.servicio!.idVehiculo.uid != null) {
+    if (servicioBloc.servicio!.idVehiculo != null) {
       int aux = 0;
       for (var vehiculo in servicioBloc.vehiculos!) {
         if (vehiculo.uid == servicioBloc.servicio!.idVehiculo.uid)
