@@ -83,7 +83,7 @@ class MapsBloc extends Bloc<MapsEvent, MapsState> {
       ActualizarUsuarioPolylineEvent event, Emitter<MapsState> emit) {
     final miRuta = Polyline(
       polylineId: const PolylineId("miRuta"),
-      color: Colors.black,
+      color: Colors.white,
       width: 5,
       startCap: Cap.roundCap,
       endCap: Cap.roundCap,

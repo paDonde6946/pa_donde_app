@@ -142,7 +142,7 @@ class _DetalleServicioPagState extends State<DetalleServicioPag> {
         mostrarShowDialogValidar(
           context: context,
           titulo: '¿Desea postularse al servicio?',
-          contenido: 'Se apartara un cupo para que pueda tomar el servicio',
+          contenido: 'Se apartará un cupo para que pueda tomar el servicio',
           icono: Icons.check_box_outlined,
           funtionContinuar: () async {
             final servicioBloc = BlocProvider.of<ServicioBloc>(context);

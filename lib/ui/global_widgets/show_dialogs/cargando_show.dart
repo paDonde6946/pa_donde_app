@@ -26,7 +26,7 @@ mostrarShowDialogCargando({@required BuildContext? context, String? titulo}) {
                         padding: const EdgeInsets.only(bottom: 16)),
                     Padding(
                         child: Text(
-                          'Porfavor espere ...',
+                          'Por favor espere ...',
                           style: TextStyle(
                               fontSize: 20,
                               color: Theme.of(context).primaryColorLight),

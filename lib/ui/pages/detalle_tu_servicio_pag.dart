@@ -565,6 +565,9 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
   }
 
   Widget textoDelServicio({texto}) {
-    return Text(texto.toString());
+    return Text(
+      texto.toString(),
+      overflow: TextOverflow.ellipsis,
+    );
   }
 }

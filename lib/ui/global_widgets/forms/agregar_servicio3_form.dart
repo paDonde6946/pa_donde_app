@@ -71,13 +71,17 @@ class _AgregarServicioParte3State extends State<AgregarServicioParte3> {
                   mostrarShowDialogConfirmar(
                       context: context,
                       titulo: "Servicio",
-                      contenido: "Su servicio ha sido creeado",
+                      contenido: "Su servicio ha sido creado",
                       paginaRetorno: 'validarInicioSesion');
 
                   servicioBloc.add(OnCrearServicio(Servicio()));
 
                   BlocProvider.of<PaginasBloc>(context)
                       .add(const OnCambiarPaginaPrincipal(PrincipalPag(), 0));
+
+                  BlocProvider.of<MapsBloc>(context)
+                      .googleMapController!
+                      .dispose();
 
                   setState(() {});
                 } else {
