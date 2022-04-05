@@ -225,8 +225,8 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
         mapaBloc.dibujarRutaPolyline(context, destino);
         return SlidingUpPanel(
           margin: const EdgeInsets.all(15),
-          maxHeight: size.height * 0.282,
-          minHeight: size.height * 0.282,
+          maxHeight: size.height * 0.278,
+          minHeight: size.height * 0.278,
           parallaxEnabled: true,
           parallaxOffset: .5,
           panelBuilder: (sc) =>
