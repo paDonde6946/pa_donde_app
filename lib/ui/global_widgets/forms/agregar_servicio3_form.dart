@@ -79,6 +79,9 @@ class _AgregarServicioParte3State extends State<AgregarServicioParte3> {
                   BlocProvider.of<PaginasBloc>(context)
                       .add(const OnCambiarPaginaPrincipal(PrincipalPag(), 0));
 
+                  BlocProvider.of<MapsBloc>(context)
+                      .desDibujarRutaPolylineSinMarker(context);
+
                   setState(() {});
                 } else {
                   customShapeSnackBar(
