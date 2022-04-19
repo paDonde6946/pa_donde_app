@@ -88,7 +88,7 @@ class _RutaPagState extends State<RutaPag> {
                     polylines: preServicio.servicio != null
                         ? polylines.values.toSet()
                         : <Polyline>{},
-                    markers: preServicio.servicio != null
+                    markers: preServicio.servicio?.polylineRuta != null
                         ? mapaState.markers.values.toSet()
                         : <Marker>{},
                   ),

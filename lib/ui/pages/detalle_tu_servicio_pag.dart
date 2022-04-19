@@ -253,7 +253,7 @@ class _DetalleTuServicioState extends State<DetalleTuServicio> {
     final size = MediaQuery.of(context).size;
 
     return Container(
-        height: size.height * 0.24,
+        height: size.height * 0.2,
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: ListView(
           children: [

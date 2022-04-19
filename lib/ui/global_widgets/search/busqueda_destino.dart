@@ -111,7 +111,7 @@ class BusquedaDestino extends SearchDelegate<BusquedaResultado> {
                       descripcion: lugar.placeName,
                     ));
                 mapaBloc.add(const OnRutaAlternarUsuario(true));
-                // busquedaBloc.add(OnDesactivarMarcadorManual());
+                busquedaBloc.add(OnDesactivarMarcadorManual());
               },
             ))
       ],
