@@ -68,6 +68,9 @@ class _AgregarServicioParte3State extends State<AgregarServicioParte3> {
                     .crearServicio(servicioBloc.servicio!);
 
                 if (servicioEnvio) {
+                  BlocProvider.of<MapsBloc>(context)
+                      .desDibujarRutaPolylineSinMarker(context);
+
                   mostrarShowDialogConfirmar(
                       context: context,
                       titulo: "Servicio",

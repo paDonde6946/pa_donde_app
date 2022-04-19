@@ -76,10 +76,10 @@ class _RutaPagState extends State<RutaPag> {
                 marcadorActual.removeWhere((key, value) => key == 'final');
               }
 
-              if (preServicio.servicio != null) {
-                BlocProvider.of<BusquedaBloc>(context)
-                    .add(OnDesactivarMarcadorManual());
-              }
+              // if (preServicio.servicio != null) {
+              //   BlocProvider.of<BusquedaBloc>(context)
+              //       .add(OnDesactivarMarcadorManual());
+              // }
 
               return Stack(
                 children: [

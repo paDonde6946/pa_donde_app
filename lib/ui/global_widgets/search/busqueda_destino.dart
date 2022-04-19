@@ -59,7 +59,7 @@ class BusquedaDestino extends SearchDelegate<BusquedaResultado> {
                     context,
                     BusquedaResultado(
                       cancelo: false,
-                      manual: false,
+                      manual: true,
                       posicion: LatLng(lugar.center![1], lugar.center![0]),
                       nombreDestino: lugar.text,
                       descripcion: lugar.placeName,
@@ -80,6 +80,8 @@ class BusquedaDestino extends SearchDelegate<BusquedaResultado> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
+    final busquedaBloc = BlocProvider.of<BusquedaBloc>(context);
+
     final historial =
         BlocProvider.of<BusquedaBloc>(context).state.historialDestino;
     final mapaBloc = BlocProvider.of<MapsBloc>(context);
@@ -109,6 +111,7 @@ class BusquedaDestino extends SearchDelegate<BusquedaResultado> {
                       descripcion: lugar.placeName,
                     ));
                 mapaBloc.add(const OnRutaAlternarUsuario(true));
+                // busquedaBloc.add(OnDesactivarMarcadorManual());
               },
             ))
       ],

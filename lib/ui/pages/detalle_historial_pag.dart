@@ -7,7 +7,7 @@ import 'package:pa_donde_app/blocs/blocs.dart';
 import 'package:pa_donde_app/data/models/ruta_destino_modelo.dart';
 import 'package:pa_donde_app/data/models/servicio_modelo.dart';
 import 'package:pa_donde_app/data/response/busqueda_response.dart';
-import 'package:pa_donde_app/ui/global_widgets/views/mapa_view.dart';
+import 'package:pa_donde_app/ui/global_widgets/views/mapa_view_mostrar.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class DetalleHistorialServicioPag extends StatefulWidget {
@@ -261,7 +261,7 @@ class _DetalleHistorialServicioPagState
             return BlocBuilder<MapsBloc, MapsState>(
                 builder: (context, mapState) {
               Map<String, Polyline> polylines = Map.from(mapState.polylines);
-              return MapaView(
+              return MapaViewMostrar(
                   initialLocalizacion: latLngLista[0],
                   markers: mapState.markers.values.toSet(),
                   polylines: polylines.values.toSet());
