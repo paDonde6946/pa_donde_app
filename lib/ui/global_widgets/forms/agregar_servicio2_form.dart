@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/blocs/blocs.dart';
+import 'package:pa_donde_app/data/models/servicio_modelo.dart';
 import 'package:pa_donde_app/data/models/vehiculo_modelo.dart';
 import 'package:pa_donde_app/global/enums/tipo_vehiculo_enum.dart';
 import 'package:pa_donde_app/ui/global_widgets/show_dialogs/informativo_show.dart';
