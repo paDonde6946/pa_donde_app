@@ -90,6 +90,8 @@ class _InicioPagState extends State<InicioPag> {
       color: Theme.of(context).primaryColor,
       backgroundColor: Colors.white,
       onTap: (index) {
+        BlocProvider.of<MapsBloc>(context)
+            .add(const OnRutaAlternarUsuario(false));
         navigatorKey.currentState!.maybePop();
         _currentIndex = index;
         // BlocProvider.of<PreserviciosBloc>(context)

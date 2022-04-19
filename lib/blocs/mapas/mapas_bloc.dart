@@ -32,11 +32,15 @@ class MapsBloc extends Bloc<MapsEvent, MapsState> {
     on<OnDetenerSeguirUsuario>(
         (event, emit) => emit(state.copyWith(seguirUsuario: false)));
 
-    on<OnRutaAlternarUsuario>((event, emit) =>
-        emit(state.copyWith(mostrarMiRuta: !state.mostrarMiRuta)));
+    on<OnRutaAlternarUsuario>(
+        (event, emit) => emit(state.copyWith(mostrarMiRuta: event.validar)));
 
     on<OnMostrarPolylineEvent>((event, emit) => emit(
         state.copyWith(polylines: event.polylines, markers: event.markers)));
+
+    on<OnMostrarDetallePolylineEvent>((event, emit) => emit(state.copyWith(
+        polylines: event.polylinesDetalle, markers: event.markersDetalle)));
+
     //
     localizacionStateSubscricion =
         localizacionBloc.stream.listen((localizacionState) {
@@ -150,7 +154,7 @@ class MapsBloc extends Bloc<MapsEvent, MapsState> {
   Future dibujarRutaPolylineSinMarker(
       BuildContext context, RutaDestino rutaDestino) async {
     final ruta = Polyline(
-      polylineId: const PolylineId("ruta"),
+      polylineId: const PolylineId("rutaDetalle"),
       color: Theme.of(context).primaryColor,
       points: rutaDestino.puntos,
       width: 5,
@@ -165,7 +169,7 @@ class MapsBloc extends Bloc<MapsEvent, MapsState> {
 
     final marcadorActual = Map<String, Marker>.from(state.markers);
 
-    add(OnMostrarPolylineEvent(polylineActual, marcadorActual));
+    add(OnMostrarDetallePolylineEvent(polylineActual, marcadorActual));
   }
 
   Future desDibujarRutaPolylineSinMarker(BuildContext context) async {
@@ -173,7 +177,7 @@ class MapsBloc extends Bloc<MapsEvent, MapsState> {
 
     final marcadorActual = Map<String, Marker>.from(state.markers);
 
-    add(OnMostrarPolylineEvent(polylineActual, marcadorActual));
+    add(const OnMostrarPolylineEvent({}, {}));
   }
 
   @override

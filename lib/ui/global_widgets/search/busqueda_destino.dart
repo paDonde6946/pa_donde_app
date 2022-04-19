@@ -68,6 +68,7 @@ class BusquedaDestino extends SearchDelegate<BusquedaResultado> {
                 busquedaBloc.add(OnAgregarHistorialDestionoEvent(lugar));
                 busquedaBloc.add(OnDesactivarMarcadorManual());
                 mapaBloc.moverCamara(nuevaLocalizacion);
+                mapaBloc.add(const OnRutaAlternarUsuario(true));
               },
             );
           },
@@ -81,6 +82,7 @@ class BusquedaDestino extends SearchDelegate<BusquedaResultado> {
   Widget buildSuggestions(BuildContext context) {
     final historial =
         BlocProvider.of<BusquedaBloc>(context).state.historialDestino;
+    final mapaBloc = BlocProvider.of<MapsBloc>(context);
 
     return ListView(
       children: [
@@ -106,6 +108,7 @@ class BusquedaDestino extends SearchDelegate<BusquedaResultado> {
                       nombreDestino: lugar.text,
                       descripcion: lugar.placeName,
                     ));
+                mapaBloc.add(const OnRutaAlternarUsuario(true));
               },
             ))
       ],

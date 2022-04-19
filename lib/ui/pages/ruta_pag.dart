@@ -67,9 +67,13 @@ class _RutaPagState extends State<RutaPag> {
           return BlocBuilder<MapsBloc, MapsState>(
             builder: (context, mapaState) {
               Map<String, Polyline> polylines = Map.from(mapaState.polylines);
+              final marcadorActual =
+                  Map<String, Marker>.from(mapaState.markers);
 
-              if (!mapaState.mostrarMiRuta) {
-                polylines.removeWhere((key, value) => key == 'miRuta');
+              if (mapaState.mostrarMiRuta == false) {
+                polylines.removeWhere((key, value) => key == 'ruta');
+                marcadorActual.removeWhere((key, value) => key == 'inicial');
+                marcadorActual.removeWhere((key, value) => key == 'final');
               }
 
               if (preServicio.servicio != null) {
@@ -84,7 +88,9 @@ class _RutaPagState extends State<RutaPag> {
                     polylines: preServicio.servicio != null
                         ? polylines.values.toSet()
                         : <Polyline>{},
-                    markers: mapaState.markers.values.toSet(),
+                    markers: preServicio.servicio != null
+                        ? mapaState.markers.values.toSet()
+                        : <Marker>{},
                   ),
                   SafeArea(
                       child: Container(

@@ -23,7 +23,7 @@ class BtnAlternarRutaUsuario extends StatelessWidget {
             maxRadius: 25,
             child: IconButton(
                 onPressed: () {
-                  mapaBloc.add(OnRutaAlternarUsuario());
+                  //   mapaBloc.add(OnRutaAlternarUsuario());
                 },
                 icon: const Icon(Icons.more_horiz_rounded,
                     color: Colors.black87))),

@@ -7,6 +7,7 @@ class MapsState extends Equatable {
 
   // Polylines
   final Map<String, Polyline> polylines;
+  final Map<String, Polyline> polylinesDetalle;
   /*
     'mi_ruta': {
       id: polylineId Google,
@@ -17,6 +18,7 @@ class MapsState extends Equatable {
   */
 
   final Map<String, Marker> markers;
+  final Map<String, Marker> markersDetalle;
 
   const MapsState({
     this.estaMapaInicializado = false,
@@ -24,8 +26,12 @@ class MapsState extends Equatable {
     this.mostrarMiRuta = false,
     Map<String, Polyline>? polylines,
     Map<String, Marker>? markers,
+    Map<String, Polyline>? polylinesDetalle,
+    Map<String, Marker>? markersDetalle,
   })  : polylines = polylines ?? const {},
-        markers = markers ?? const {};
+        polylinesDetalle = polylinesDetalle ?? const {},
+        markers = markers ?? const {},
+        markersDetalle = markersDetalle ?? const {};
 
   MapsState copyWith({
     bool? estaMapaInicializado,
@@ -33,6 +39,8 @@ class MapsState extends Equatable {
     bool? mostrarMiRuta,
     Map<String, Polyline>? polylines,
     Map<String, Marker>? markers,
+    Map<String, Polyline>? polylinesDetalle,
+    Map<String, Marker>? markersDetalle,
   }) =>
       MapsState(
         estaMapaInicializado: estaMapaInicializado ?? this.estaMapaInicializado,
@@ -40,9 +48,18 @@ class MapsState extends Equatable {
         mostrarMiRuta: mostrarMiRuta ?? this.mostrarMiRuta,
         polylines: polylines ?? this.polylines,
         markers: markers ?? this.markers,
+        polylinesDetalle: polylinesDetalle ?? this.polylinesDetalle,
+        markersDetalle: markersDetalle ?? this.markersDetalle,
       );
 
   @override
-  List<Object> get props =>
-      [estaMapaInicializado, seguirUsuario, mostrarMiRuta, polylines, markers];
+  List<Object> get props => [
+        estaMapaInicializado,
+        seguirUsuario,
+        mostrarMiRuta,
+        polylines,
+        markers,
+        polylinesDetalle,
+        markersDetalle
+      ];
 }

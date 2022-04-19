@@ -23,10 +23,21 @@ class ActualizarUsuarioPolylineEvent extends MapsEvent {
   const ActualizarUsuarioPolylineEvent(this.usuarioLocalizaciones);
 }
 
-class OnRutaAlternarUsuario extends MapsEvent {}
+class OnRutaAlternarUsuario extends MapsEvent {
+  final bool validar;
+
+  const OnRutaAlternarUsuario(this.validar);
+}
 
 class OnMostrarPolylineEvent extends MapsEvent {
   final Map<String, Polyline> polylines;
   final Map<String, Marker>? markers;
   const OnMostrarPolylineEvent(this.polylines, this.markers);
+}
+
+class OnMostrarDetallePolylineEvent extends MapsEvent {
+  final Map<String, Polyline> polylinesDetalle;
+  final Map<String, Marker>? markersDetalle;
+  const OnMostrarDetallePolylineEvent(
+      this.polylinesDetalle, this.markersDetalle);
 }

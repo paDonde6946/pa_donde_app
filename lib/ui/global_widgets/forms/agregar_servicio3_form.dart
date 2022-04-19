@@ -80,7 +80,7 @@ class _AgregarServicioParte3State extends State<AgregarServicioParte3> {
                       .add(const OnCambiarPaginaPrincipal(PrincipalPag(), 0));
 
                   BlocProvider.of<MapsBloc>(context)
-                      .desDibujarRutaPolylineSinMarker(context);
+                      .add(const OnRutaAlternarUsuario(false));
 
                   setState(() {});
                 } else {
