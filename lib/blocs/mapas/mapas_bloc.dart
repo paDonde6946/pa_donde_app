@@ -189,7 +189,6 @@ class MapsBloc extends Bloc<MapsEvent, MapsState> {
     final polylineActual = Map<String, Polyline>.from(state.polylines);
     polylineActual['ruta'] = ruta;
     polylineActual.removeWhere((key, value) => key == 'miRuta');
-    final marcadorActual = Map<String, Marker>.from(state.markers);
 
     add(const OnMostrarPolylineEvent({}, {}));
   }

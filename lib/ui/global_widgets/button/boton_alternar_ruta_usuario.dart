@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
-import 'package:pa_donde_app/blocs/blocs.dart';
 //---------------------------------------------------------------------
 
 class BtnAlternarRutaUsuario extends StatelessWidget {
@@ -10,8 +8,6 @@ class BtnAlternarRutaUsuario extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mapaBloc = BlocProvider.of<MapsBloc>(context);
-
     return Material(
       elevation: 10,
       color: Colors.transparent,
