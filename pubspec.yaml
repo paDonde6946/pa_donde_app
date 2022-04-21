@@ -56,6 +56,8 @@ dependencies:
   geolocator: ^8.0.0
 
   flutter_bloc: ^8.0.0
+
+  url_launcher: ^6.0.20
   
   bloc: ^8.0.1
 

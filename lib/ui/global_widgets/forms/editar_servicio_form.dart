@@ -169,11 +169,12 @@ class _EditarServicioFormState extends State<EditarServicioForm> {
   /// Input - Cupos disponibles en el carro o moto
   Widget _crearCupos() {
     return TextFormField(
+      cursorColor: Theme.of(context).primaryColor,
+
       keyboardType: TextInputType.number,
       initialValue: servicio.cantidadCupos.toString(),
       // controller: inputCupos,
       scrollPadding: const EdgeInsets.all(1),
-      cursorColor: Theme.of(context).primaryColor,
       onChanged: (value) => cupos = value,
       onSaved: (value) => cupos = value!,
       decoration: inputDecoration(

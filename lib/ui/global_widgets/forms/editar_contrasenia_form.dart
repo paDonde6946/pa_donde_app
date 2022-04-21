@@ -69,7 +69,7 @@ class _FormEditarContraseniaState extends State<FormEditarContrasenia> {
   /// Input - Campo de la contraseña
   Widget _crearContrasenia(BuildContext context) {
     return TextFormField(
-      style: styleInput,
+      cursorColor: Theme.of(context).primaryColor,
       scrollPadding: const EdgeInsets.all(1),
       obscureText: true,
       onChanged: (value) => inputControllerContrasenia.text = value,
@@ -83,7 +83,7 @@ class _FormEditarContraseniaState extends State<FormEditarContrasenia> {
   /// Input - Campo confirmarción de la contraseña
   Widget _crearConContrasenia() {
     return TextFormField(
-      style: styleInput,
+      cursorColor: Theme.of(context).primaryColor,
       scrollPadding: const EdgeInsets.all(1),
       obscureText: true,
       onChanged: (value) => inputControllerConContrasenia.text = value,

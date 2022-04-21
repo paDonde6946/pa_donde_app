@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/data/models/usuario_modelo.dart';
 
 import 'package:pa_donde_app/data/services/usuario_servicio.dart';
+import 'package:pa_donde_app/global/entorno_variable_global.dart';
 import 'package:pa_donde_app/global/regexp/regexp_locales.dart';
 
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
@@ -16,6 +18,7 @@ import 'package:pa_donde_app/ui/global_widgets/show_dialogs/confirmacion_show.da
 import 'package:pa_donde_app/ui/utils/snack_bars.dart';
 import 'package:pa_donde_app/ui/utils/validaciones_generales.dart'
     as validaciones_generales;
+import 'package:url_launcher/url_launcher.dart';
 //---------------------------------------------------------------------
 
 class FormRegistroUsuario extends StatefulWidget {
@@ -41,7 +44,7 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
   TextEditingController inputControllerContrasenia = TextEditingController();
   TextEditingController inputControllerCedula = TextEditingController();
 
-  final styleInput = const TextStyle(height: 0.4);
+  bool validarPolitica = false;
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +74,8 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
             const SizedBox(height: tamanioSeparador),
             _crearConContrasenia(),
             const SizedBox(height: tamanioSeparador),
+            _crearCheckPoltica(),
+            const SizedBox(height: tamanioSeparador),
             _crearBotonRegistro(usuario),
             const SizedBox(height: tamanioSeparador),
           ],
@@ -99,6 +104,12 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
     }
 
     try {
+      if (inputControllerTelefono.text.length < 10) {
+        customShapeSnackBar(
+            context: context,
+            titulo: 'El número de celular debe de tener 10 dígitos');
+        return;
+      }
       usuario.celular = int.parse(inputControllerTelefono.value.text);
     } catch (e) {
       customShapeSnackBar(
@@ -124,11 +135,35 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
       return;
     }
 
+    if (!RegExpLocales.expresionSoloLetras
+        .hasMatch(inputControllerNombre.text)) {
+      customShapeSnackBar(
+          context: context,
+          titulo: 'El nombre no debe de contener caracteres especiales');
+      return;
+    }
+
+    if (!RegExpLocales.expresionSoloLetras
+        .hasMatch(inputControllerApellido.text)) {
+      customShapeSnackBar(
+          context: context,
+          titulo: 'El apellido no debe de contener caracteres especiales');
+      return;
+    }
+
     if (!validaciones_generales
         .validarEmailDominio(inputControllerCorreo.text.trim())) {
       customShapeSnackBar(
           context: context,
-          titulo: "Solo se permiten correos de la universidad");
+          titulo:
+              "Solo se permiten correos institucionales (@unbosque.edu.co)");
+      return;
+    }
+
+    if (!validarPolitica) {
+      customShapeSnackBar(
+          context: context,
+          titulo: "Debe de aceptar las políticas de privacidad");
       return;
     }
 
@@ -145,7 +180,7 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
     if (response[0] == false) {
       customShapeSnackBar(context: context, titulo: "Error al registrarse");
     } else {
-      mostrarShowDialogCargando(context: context, titulo: 'REGISTRO EXITO');
+      mostrarShowDialogCargando(context: context, titulo: 'REGISTRO ÉXITOSO');
       await Future.delayed(const Duration(seconds: 1));
       Navigator.pop(context);
 
@@ -153,7 +188,7 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
           context: context,
           titulo: "Registro",
           contenido:
-              "Para completar su registro verifique el correo que ingreso, para confirmar su registro",
+              "Para completar su registro verifique el correo que ingresó, para confirmar su registro",
           paginaRetorno: 'validarInicioSesion');
     }
   }
@@ -165,7 +200,7 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
   ///  Input - Campo del nombre
   Widget _crearNombre(Usuario usuario) {
     return TextFormField(
-      style: styleInput,
+      cursorColor: Theme.of(context).primaryColor,
       controller: inputControllerNombre,
       decoration: input_redondo.inputDecorationRedondo(
           'Nombre', 'Ingrese su nombre', context, Colors.white),
@@ -179,21 +214,25 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
   ///  Input - Campo del nombre
   Widget _crearCedula(Usuario usuario) {
     return TextFormField(
-      style: styleInput,
-      // controller: inputControllerCedula,
+      keyboardType: TextInputType.number,
+      cursorColor: Theme.of(context).primaryColor,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(10),
+      ],
       decoration: input_redondo.inputDecorationRedondo(
           'Cédula', 'Ingrese su cédula', context, Colors.white),
       onSaved: (value) => inputControllerCedula.text = value!,
       onChanged: (value) => inputControllerCedula.text = value,
-      validator: (value) =>
-          (value!.isEmpty) ? 'Es Obligatorio este campo' : null,
+      validator: (value) => (validaciones_generales.isNumber(value!))
+          ? null
+          : 'Solo se permiten números',
     );
   }
 
   ///  Input - Campo del apellido
   Widget _crearApellido(Usuario usuario) {
     return TextFormField(
-      style: styleInput,
+      cursorColor: Theme.of(context).primaryColor,
       controller: inputControllerApellido,
       decoration: input_redondo.inputDecorationRedondo(
           'Apellido', 'Ingrese su apellido', context, Colors.white),
@@ -207,29 +246,31 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
   /// Input - Campo número de celular
   Widget _crearNumCelular(Usuario usuario) {
     return TextFormField(
-      style: styleInput,
-      // controller: inputControllerTelefono,
+      cursorColor: Theme.of(context).primaryColor,
       onSaved: (value) => inputControllerTelefono.text = value!,
       onChanged: (value) => inputControllerTelefono.text = value,
       keyboardType: TextInputType.number,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(10),
+      ],
       decoration: input_redondo.inputDecorationRedondo('Número de celular',
           'Ingrese su número celular', context, Colors.white),
       validator: (value) => (validaciones_generales.isNumber(value!))
           ? null
-          : 'Solo se perminten números',
+          : 'Solo se permiten números',
     );
   }
 
   /// Input - Campo correo eléctronico
   Widget _crearEmail() {
     return TextFormField(
-      style: styleInput,
+      cursorColor: Theme.of(context).primaryColor,
       controller: inputControllerCorreo,
       keyboardType: TextInputType.emailAddress,
       decoration: input_redondo.inputDecorationRedondo(
           'Correo institucional', 'Ingrese su correo', context, Colors.white),
-      onSaved: (value) => usuario.correo = value,
-      onChanged: (value) => usuario.correo = value,
+      onSaved: (value) => usuario.correo = value!.trim(),
+      onChanged: (value) => usuario.correo = value.trim(),
       validator: (value) => (validaciones_generales.validarEmail(value) ||
               !validaciones_generales.validarEmailDominio(value))
           ? 'El correo ingresado no es valido'
@@ -240,7 +281,7 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
   /// Input - Campo de la contraseña
   Widget _crearContrasenia() {
     return TextFormField(
-      style: styleInput,
+      cursorColor: Theme.of(context).primaryColor,
       controller: inputControllerContrasenia,
       scrollPadding: const EdgeInsets.all(1),
       obscureText: true,
@@ -256,7 +297,7 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
   /// Input - Campo confirmarción de la contraseña
   Widget _crearConContrasenia() {
     return TextFormField(
-      style: styleInput,
+      cursorColor: Theme.of(context).primaryColor,
       controller: inputControllerConContrasenia,
       scrollPadding: const EdgeInsets.all(1),
       obscureText: true,
@@ -266,6 +307,49 @@ class _FormRegistroUsuarioState extends State<FormRegistroUsuario> {
       validator: (value) =>
           (value!.isEmpty) ? 'El correo ingresado no es valido' : null,
     );
+  }
+
+  Widget _crearCheckPoltica() {
+    return CheckboxListTile(
+        title: GestureDetector(
+          onTap: _launchURL,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Acepta las políticas de",
+                style: TextStyle(color: Colors.white),
+              ),
+              Row(
+                children: const [
+                  Text(
+                    "privacidad ",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  Text(
+                    " (Ver)",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        controlAffinity: ListTileControlAffinity.leading,
+        activeColor: Colors.white,
+        checkColor: Colors.black,
+        value: validarPolitica,
+        onChanged: (value) {
+          setState(() {
+            validarPolitica = value!;
+          });
+        });
+  }
+
+  void _launchURL() async {
+    if (!await launch(EntornoVariable.urlPoliticaPrivacidad)) {
+      throw 'No se pudo encontrar  $EntornoVariable.urlPoliticaPrivacidad';
+    }
   }
 
   ///_____________________________________________________________________

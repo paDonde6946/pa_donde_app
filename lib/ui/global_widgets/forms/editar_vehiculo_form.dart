@@ -46,7 +46,6 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
   TextEditingController inputControllerModelo = TextEditingController();
   TextEditingController inputControllerAnio = TextEditingController();
 
-  final styleInput = const TextStyle(height: 0.4);
   bool color = false;
   // ignore: prefer_const_constructors
   Size size = Size(0, 0);
@@ -201,6 +200,7 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
   ///  Input - Campo de la Placa del Vehiculo
   Widget _crearPlaca(Vehiculo vehiculo) {
     return TextFormField(
+      cursorColor: Theme.of(context).primaryColor,
       initialValue: vehiculo.placa,
       decoration: inputDecoration('Placa', 'Placa del vehículo', context,
           Theme.of(context).primaryColor, null, size.height * 0.03),
@@ -214,6 +214,7 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
   ///  Input - Campo del color del vehiculo
   Widget _crearColor(Vehiculo vehiculo) {
     return TextFormField(
+      cursorColor: Theme.of(context).primaryColor,
       initialValue: vehiculo.color,
       decoration: inputDecoration('Color', 'Color del vehículo', context,
           Theme.of(context).primaryColor, null, size.height * 0.03),
@@ -227,6 +228,7 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
   /// Input - Campo de la marca del vehiculo
   Widget _crearMarca(Vehiculo vehiculo) {
     return TextFormField(
+      cursorColor: Theme.of(context).primaryColor,
       initialValue: vehiculo.marca,
       keyboardType: TextInputType.text,
       decoration: inputDecoration('Marca', 'Marca del vehículo', context,
@@ -240,6 +242,7 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
   Widget _crearModelo(Vehiculo vehiculo) {
     return TextFormField(
       initialValue: vehiculo.modelo,
+      cursorColor: Theme.of(context).primaryColor,
       scrollPadding: const EdgeInsets.all(1),
       onSaved: (value) => vehiculo.modelo = value,
       onChanged: (value) => vehiculo.modelo = value,
@@ -253,6 +256,7 @@ class _FormEditarVehiuloState extends State<FormEditarVehiulo> {
   /// Input - Campo del año del vehiculo
   Widget _crearAnio(Vehiculo vehiculo) {
     return TextFormField(
+      cursorColor: Theme.of(context).primaryColor,
       initialValue: vehiculo.anio,
       keyboardType: TextInputType.number,
       scrollPadding: const EdgeInsets.all(1),

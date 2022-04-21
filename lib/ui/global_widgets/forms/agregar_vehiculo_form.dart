@@ -41,7 +41,6 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
 
   Size size = const Size(0, 0);
 
-  final styleInput = const TextStyle(height: 0.4);
   bool esMoto = false;
   @override
   Widget build(BuildContext context) {
@@ -228,6 +227,7 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
   ///  Input - Campo de la Placa del Vehiculo
   Widget _crearPlaca(Vehiculo vehiculo) {
     return TextFormField(
+      cursorColor: Theme.of(context).primaryColor,
       controller: inputControllerPlaca,
       decoration: inputDecoration('Placa', 'Placa del vehículo', context,
           Theme.of(context).primaryColor, null, size.height * 0.023),
@@ -241,6 +241,7 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
   ///  Input - Campo del color del vehiculo
   Widget _crearColor(Vehiculo vehiculo) {
     return TextFormField(
+      cursorColor: Theme.of(context).primaryColor,
       controller: inputControllerColor,
       decoration: inputDecoration('Color', 'Color del vehículo', context,
           Theme.of(context).primaryColor, null, size.height * 0.023),
@@ -254,6 +255,7 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
   /// Input - Campo de la marca del vehiculo
   Widget _crearMarca() {
     return TextFormField(
+      cursorColor: Theme.of(context).primaryColor,
       controller: inputControllerMarca,
       keyboardType: TextInputType.text,
       decoration: inputDecoration('Marca', 'Marca del vehículo', context,
@@ -268,6 +270,7 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
   /// Input - Campo del modelo del vehiculo
   Widget _crearModelo() {
     return TextFormField(
+      cursorColor: Theme.of(context).primaryColor,
       controller: inputControllerModelo,
       scrollPadding: const EdgeInsets.all(1),
       onSaved: (value) => vehiculo.modelo = value,
@@ -283,6 +286,7 @@ class _FormAgregarVehiuloState extends State<FormAgregarVehiulo> {
   /// Input - Campo del año del vehiculo
   Widget _crearAnio() {
     return TextFormField(
+      cursorColor: Theme.of(context).primaryColor,
       controller: inputControllerAnio,
       scrollPadding: const EdgeInsets.all(1),
       onSaved: (value) => vehiculo.anio = value,

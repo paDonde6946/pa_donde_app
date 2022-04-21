@@ -81,6 +81,7 @@ class _RecuperarContraseniaFormState extends State<RecuperarContraseniaForm> {
   /// Input - Campo correo eléctronico
   Widget _crearEmail(BuildContext context) {
     return TextFormField(
+      cursorColor: Theme.of(context).primaryColor,
       controller: inputControllerCorreo,
       keyboardType: TextInputType.emailAddress,
       decoration: inputDecoration('Correo institucional', 'Ingresa tu correo',

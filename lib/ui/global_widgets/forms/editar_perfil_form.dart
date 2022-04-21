@@ -44,8 +44,6 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
   TextEditingController inputControllerApellido = TextEditingController();
   TextEditingController inputControllerTelefono = TextEditingController();
 
-  final styleInput = const TextStyle(height: 0.05);
-
   _FormEditarPerfilState(this.callbackFunction);
 
   @override
@@ -136,7 +134,7 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
   ///  Input - Campo del nombre
   Widget _crearNombre() {
     return TextFormField(
-      style: styleInput,
+      cursorColor: Theme.of(context).primaryColor,
       initialValue: usuario.nombre,
       decoration: inputDecoration('', 'Ingresa tu nombre', context,
           Theme.of(context).primaryColor, null, 0),
@@ -150,7 +148,7 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
   ///  Input - Campo del apellido
   Widget _crearApellido() {
     return TextFormField(
-      style: styleInput,
+      cursorColor: Theme.of(context).primaryColor,
       initialValue: usuario.apellido,
       decoration: inputDecoration('', 'Ingresa tu apellido', context,
           Theme.of(context).primaryColor, null, 0),
@@ -164,7 +162,7 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
   /// Input - Campo número de celular
   Widget _crearNumCelular() {
     return TextFormField(
-        style: styleInput,
+        cursorColor: Theme.of(context).primaryColor,
         initialValue: usuario.celular.toString(),
         onSaved: (value) => inputControllerTelefono.text = value!,
         onChanged: (value) => inputControllerTelefono.text = value,
@@ -184,7 +182,6 @@ class _FormEditarPerfilState extends State<FormEditarPerfil> {
     inputControllerCorreo.text = usuario.correo;
     return TextFormField(
       enabled: false,
-      style: styleInput,
       initialValue: usuario.correo,
       keyboardType: TextInputType.emailAddress,
       decoration: inputDecoration('', 'Ingrese su correo', context,

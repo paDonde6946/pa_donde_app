@@ -10,4 +10,7 @@ class EntornoVariable {
   static String socketURL = Platform.isAndroid
       ? 'http://3.139.6.165:3001/'
       : 'http://3.139.6.165:3001/';
+
+  static String urlPoliticaPrivacidad =
+      'http://ec2-3-139-6-165.us-east-2.compute.amazonaws.com/#/politicasDePrivacidad';
 }

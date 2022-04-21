@@ -11,7 +11,13 @@ class RegExpLocales {
         multiLine: false,
       );
   static RegExp get expresionContrasenia => RegExp(
-        r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$",
+        r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$#¡~`¿':;\{}^()_+-@$=!%*?.,<>&])([A-Za-z\d$@$!%*?&\s]|[^ ]){8,15}$",
+        caseSensitive: false,
+        multiLine: false,
+      );
+
+  static RegExp get expresionSoloLetras => RegExp(
+        r"[a-zA-Z ]{2,254}",
         caseSensitive: false,
         multiLine: false,
       );
