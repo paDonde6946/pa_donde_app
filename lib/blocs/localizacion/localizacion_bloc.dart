@@ -41,7 +41,7 @@ class LocalizacionBloc extends Bloc<LocalizacionEvent, LocalizacionState> {
       add(OnNuevaLocalizacionUsuarioEvent(
           LatLng(posicion.latitude, posicion.longitude)));
     } catch (e) {
-      gpsBloc.preguntarGpsAcceso();
+      // gpsBloc.preguntarGpsAcceso();
     }
   }
 

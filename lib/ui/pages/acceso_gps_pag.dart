@@ -71,7 +71,7 @@ class _AccesoGPSPagState extends State<AccesoGPSPag>
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          "Es necesario el GPS para usar esta app!",
+          "PaDonde recopila datos de ubicación para permitir el seguimiento del estado físico cuando el aplicativo esta en uso o en segundo plano. Para poder crear servicios y trazar rutas.",
           style: TextStyle(fontSize: size.width * 0.04),
         ),
         SizedBox(height: size.height * 0.04),
