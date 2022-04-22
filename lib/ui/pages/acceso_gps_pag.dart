@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/informativo_show.dart';
 import 'package:permission_handler/permission_handler.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +21,7 @@ class AccesoGPSPag extends StatefulWidget {
 
 class _AccesoGPSPagState extends State<AccesoGPSPag>
     with WidgetsBindingObserver {
+  bool validarPregunta = false;
   @override
   void initState() {
     // Pendiente de los cambios de los estados de la misma APK
@@ -40,8 +42,10 @@ class _AccesoGPSPagState extends State<AccesoGPSPag>
     if (state == AppLifecycleState.resumed) {
       if (await Permission.location.isGranted) {
         SchedulerBinding.instance!.addPostFrameCallback((_) {
-          Navigator.of(context)
-              .push(navegarMapaFadeIn(context, const CargandoGPSPag()));
+          if (mounted) {
+            Navigator.of(context)
+                .push(navegarMapaFadeIn(context, const CargandoGPSPag()));
+          }
         });
       }
     }
@@ -49,6 +53,7 @@ class _AccesoGPSPagState extends State<AccesoGPSPag>
 
   @override
   Widget build(BuildContext context) {
+    //mostrarDenegacion();
     return Scaffold(
       body: Center(child: BlocBuilder<GpsBloc, GpsState>(
         builder: (context, state) {
@@ -63,6 +68,20 @@ class _AccesoGPSPagState extends State<AccesoGPSPag>
     );
   }
 
+  mostrarDenegacion() {
+    final gpsBloc = BlocProvider.of<GpsBloc>(context);
+
+    if (gpsBloc.validar == false) {
+      mostrarShowDialogInformativo(
+        context: context,
+        titulo: 'Ubicación',
+        contenido:
+            'Al denegar este permiso no podrá hacer uso determinadas funcionalidades del aplicativo como la creación y visualización del servicio',
+      );
+      validarPregunta = false;
+    }
+  }
+
   /// Contiene el boton para poder solicitar acceso al GPS
   Widget _contenedorBody() {
     final size = MediaQuery.of(context).size;
@@ -70,18 +89,26 @@ class _AccesoGPSPagState extends State<AccesoGPSPag>
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          "PaDonde recopila datos de ubicación para permitir el seguimiento del estado físico cuando el aplicativo esta en uso o en segundo plano. Para poder crear servicios y trazar rutas.",
-          style: TextStyle(fontSize: size.width * 0.04),
+        Padding(
+          padding: const EdgeInsets.all(30.0),
+          child: Text(
+            "PaDonde recopila datos de la ubicación para permitir el seguimiento del estado físico cuando el aplicativo esta en uso o en segundo plano. Para poder crear servicios y trazar rutas.",
+            textAlign: TextAlign.justify,
+            style: TextStyle(
+              fontSize: size.width * 0.04,
+            ),
+          ),
         ),
         SizedBox(height: size.height * 0.04),
         SizedBox(
           width: size.width * 0.5,
           child: BtnAnaranja(
-            titulo: "Solicitar Acceso",
+            titulo: "Solicitar acceso",
             function: () async {
               final gpsBloc = BlocProvider.of<GpsBloc>(context);
-              gpsBloc.preguntarGpsAcceso();
+              await gpsBloc.preguntarGpsAcceso();
+              validarPregunta = true;
+              mostrarDenegacion();
             },
           ),
         )

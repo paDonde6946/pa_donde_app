@@ -10,6 +10,7 @@ part 'gps_state.dart';
 class GpsBloc extends Bloc<GpsEvent, GpsState> {
   ///
   StreamSubscription? gpsServicioSuscripcion;
+  bool? validar = false;
 
   GpsBloc()
       : super(const GpsState(
@@ -17,6 +18,9 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
     /// Va a cambiar los estados cuando se llame.
     on<GpsYPermisoEvent>((event, emit) => emit(state.copyWith(
           pEstaGpsHabilitado: event.estaGpsHabilitado,
+          pTieneGpsPermisoOtorgado: event.tieneGpsPerimisoOtorgados,
+        )));
+    on<OnTienePermiso>((event, emit) => emit(state.copyWith(
           pTieneGpsPermisoOtorgado: event.tieneGpsPerimisoOtorgados,
         )));
 
@@ -69,6 +73,8 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
 
     switch (estado) {
       case PermissionStatus.granted:
+        add(const OnTienePermiso(true));
+        validar = true;
 
         ///
         add(GpsYPermisoEvent(
@@ -79,11 +85,12 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
       case PermissionStatus.denied:
       case PermissionStatus.restricted:
       case PermissionStatus.limited:
-      case PermissionStatus.permanentlyDenied:
         add(GpsYPermisoEvent(
           estaGpsHabilitado: state.estaGpsHabilitado,
           tieneGpsPerimisoOtorgados: false,
         ));
+        break;
+      case PermissionStatus.permanentlyDenied:
         openAppSettings();
     }
   }

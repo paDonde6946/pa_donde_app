@@ -17,3 +17,9 @@ class GpsYPermisoEvent extends GpsEvent {
     required this.tieneGpsPerimisoOtorgados,
   });
 }
+
+class OnTienePermiso extends GpsEvent {
+  final bool tieneGpsPerimisoOtorgados;
+
+  const OnTienePermiso(this.tieneGpsPerimisoOtorgados);
+}

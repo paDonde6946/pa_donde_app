@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pa_donde_app/data/services/notificaciones_push_servicio.dart';
+import 'package:pa_donde_app/ui/pages/inicio_pag.dart';
 import 'package:provider/provider.dart';
 
 //------------------IMPORTACIONES LOCALES------------------------------
@@ -67,8 +69,6 @@ class _FormInicioSesionState extends State<FormInicioSesion> {
     }
 
     mostrarShowDialogCargando(context: context, titulo: 'INICIANDO SESIÓN');
-    await Future.delayed(const Duration(seconds: 1));
-    Navigator.pop(context);
 
     // Validar informacion con el backend
     AutenticacionServicio autenticacionServicio =
@@ -83,6 +83,8 @@ class _FormInicioSesionState extends State<FormInicioSesion> {
         inputControllerContrasenia.text.trim(),
         tokenMensajes);
     if (response == null) {
+      Navigator.pop(context);
+      await Future.delayed(const Duration(seconds: 1));
       customShapeSnackBar(context: context, titulo: 'Información invalida');
     } else {
       FocusScope.of(context).unfocus();
@@ -133,14 +135,14 @@ class _FormInicioSesionState extends State<FormInicioSesion> {
       BlocProvider.of<ServicioBloc>(context)
           .add(OnActualizarServiciosGenerales(serviciosGenerales));
 
-      // SchedulerBinding.instance!.addPostFrameCallback((_) {
-      //   Navigator.push(
-      //       context,
-      //       PageRouteBuilder(
-      //           pageBuilder: (context, __, ___) => const InicioPag(),
-      //           transitionDuration: const Duration(milliseconds: 10)));
-      // });
-      Navigator.pushNamed(context, 'inicio');
+      SchedulerBinding.instance!.addPostFrameCallback((_) {
+        Navigator.push(
+            context,
+            PageRouteBuilder(
+                pageBuilder: (context, __, ___) => const InicioPag(),
+                transitionDuration: const Duration(milliseconds: 10)));
+      });
+      // Navigator.pushNamed(context, 'inicio');
     }
   }
 
