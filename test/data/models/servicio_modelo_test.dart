@@ -25,7 +25,7 @@ void main() {
     expect(servicio.nombreDestino, "Hayuelos Centro Comercial");
     expect(servicio.polylineRuta,
         "acjzG`pbmlCwMkRfh@i^r|@zrArFpRvOfFxPiEjGmNsJiXin@_No}Gs`IurN{bOotFqxHkeFinEibEqsCiI}SvCsb@");
-    expect(servicio.idVehiculo.uid, "6190885bf803e870847c6e73");
+    expect(servicio.idVehiculo.uid, "6248a5b102b5f3964add2c03");
     expect(servicio.fechayhora, "2022-03-07T18:00:00.000Z");
     expect(servicio.cantidadCupos, 2);
     expect(servicio.auxilioEconomico, "61f1f9e3d41447b8ea79d2e9");

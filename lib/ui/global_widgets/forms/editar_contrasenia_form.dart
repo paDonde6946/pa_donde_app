@@ -5,6 +5,7 @@ import 'package:pa_donde_app/blocs/blocs.dart';
 //------------------IMPORTACIONES LOCALES------------------------------
 import 'package:pa_donde_app/ui/global_widgets/button/boton_anaranja.dart';
 import 'package:pa_donde_app/ui/global_widgets/inputs/input_form.dart';
+import 'package:pa_donde_app/ui/global_widgets/show_dialogs/cargando_show.dart';
 import 'package:pa_donde_app/ui/global_widgets/text/formulario_texto.dart';
 
 import 'package:pa_donde_app/data/services/usuario_servicio.dart';
@@ -113,10 +114,9 @@ class _FormEditarContraseniaState extends State<FormEditarContrasenia> {
           context: context, titulo: 'Las contraseñas no coinciden');
       return;
     }
-    // mostrarShowDialogCargando(
-    //     context: context, titulo: 'Guardando Información');
+    mostrarShowDialogCargando(
+        context: context, titulo: 'Guardando Información');
     await Future.delayed(const Duration(seconds: 1));
-    Navigator.pop(context);
 
     // Validar informacion con el backend
     UsuarioServicio usuarioServicio = UsuarioServicio();
@@ -131,6 +131,8 @@ class _FormEditarContraseniaState extends State<FormEditarContrasenia> {
         final usuario = BlocProvider.of<UsuarioBloc>(context).state.usuario;
         usuario.cambioContrasenia = 0;
         BlocProvider.of<UsuarioBloc>(context).add(OnActualizarUsuario(usuario));
+        Navigator.pop(context);
+        Navigator.pop(context);
       }
     }
   }

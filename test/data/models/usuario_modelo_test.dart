@@ -37,7 +37,7 @@ void main() {
     usuarioTest.nombre = "Felipe";
     usuarioTest.apellido = "Martinez";
     usuarioTest.celular = 123455;
-
+    usuarioTest.cedula = 124578900;
     usuarioTest.correo = "felipe@unbosque.edu.co";
     usuarioTest.contrasenia = "asdfwa43";
     usuarioTest.cambioContrasenia = 0;
@@ -54,6 +54,7 @@ void main() {
       "nombre": "Felipe",
       "apellido": "Martinez",
       "celular": 123455,
+      "cedula": 124578900,
       "contrasenia": "asdfwa43",
       "cambio_contrasenia": 0,
       "calificacionConductor": 3.4,

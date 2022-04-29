@@ -34,7 +34,7 @@ void main() {
     expect(inicioSesionResponse.usuario.nombre, usuarioTest.nombre);
     expect(inicioSesionResponse.usuario.apellido, usuarioTest.apellido);
     expect(inicioSesionResponse.usuario.celular, usuarioTest.celular);
-    expect(inicioSesionResponse.usuario.cambio_contrasenia,
+    expect(inicioSesionResponse.usuario.cambioContrasenia,
         usuarioTest.cambioContrasenia);
 
     expect(inicioSesionResponse.token,

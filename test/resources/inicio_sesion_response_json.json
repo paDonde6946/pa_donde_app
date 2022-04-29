@@ -9,7 +9,12 @@
         "estado": 1,
         "createdAt": "2021-10-06T03:49:18.624Z",
         "updatedAt": "2021-10-07T14:23:04.131Z",
+        "calificacionConductor": 0,
+        "calificacionUsuario": 4,
         "cambio_contrasenia": 1,
+        "ultimoServicioSinCalificar": null,
+        "fotoLicencia": "imagenes/615d1cbe1bdb739218899103/LICENCIA_CONDUCCION_615d1cbe1bdb739218899103.png",
+        "cedula": 1002222,
         "uid": "asdfsdg34"
     },
     "token": "2MTVkMWNiZTFiZGI3MzkyMTg4OTkxMDCpd5jb4i9LuXn6qQmx-k70x8"

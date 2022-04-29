@@ -3,12 +3,22 @@
     "nombreDestino": "Hayuelos Centro Comercial",
     "polylineRuta": "acjzG`pbmlCwMkRfh@i^r|@zrArFpRvOfFxPiEjGmNsJiXin@_No}Gs`IurN{bOotFqxHkeFinEibEqsCiI}SvCsb@",
     "fechayhora": "2022-03-07T18:00:00.000Z",
-    "idVehiculo": "6190885bf803e870847c6e73",
+    "idVehiculo": {
+        "_id": "6248a5b102b5f3964add2c03",
+        "placa": "JVT185"
+    },
     "cantidadCupos": 2,
     "distancia": "4451.591",
     "duracion": "775.477",
     "idAuxilioEconomico": "61f1f9e3d41447b8ea79d2e9",
     "estado": 2,
+    "pasajeros": [{
+        "pasajero": {
+            "_id": "6268275be1f9552652ef5195",
+            "nombre": "Hernan Dario"
+        },
+        "_id": "62682c6be1f9552652ef52f7"
+    }],
     "nombreConductor": "Hernan",
     "uid": "122345"
 }

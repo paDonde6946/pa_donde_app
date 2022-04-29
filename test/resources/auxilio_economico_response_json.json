@@ -1,0 +1,24 @@
+{
+    "ok": true,
+    "auxilioEconomico": [{
+            "estado": 1,
+            "valor": 0,
+            "uid": "61f1f9a0d41447b8ea79d2e8"
+        },
+        {
+            "estado": 1,
+            "valor": 1000,
+            "uid": "61f1f9e3d41447b8ea79d2e9"
+        },
+        {
+            "estado": 1,
+            "valor": 2000,
+            "uid": "61f1f9e5d41447b8ea79d2ea"
+        },
+        {
+            "estado": 1,
+            "valor": 3000,
+            "uid": "61f1f9e7d41447b8ea79d2eb"
+        }
+    ]
+}
